@@ -1,0 +1,110 @@
+@import "../../root.css";
+#user{
+    position: relative;
+}
+.scrollable {
+    height: 100%;
+    overflow: auto;
+}
+.scroll-view{
+    
+    height: calc(100% + 100px);
+}
+#user .activities h2 {
+    margin-top: 10px;
+}
+#user .info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#user .option {
+    display: flex;
+    flex-direction: column;
+}
+
+#user .goal {
+    position: relative;
+}
+
+
+#user .graph::-webkit-scrollbar {
+    background-color: var(--background-dark);
+    border-radius: 50px;
+}
+
+#user .graph::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 50px;
+}
+
+#user .graph-container {
+
+    max-width: 800px;
+}
+
+#user .graph {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-x: scroll;
+
+}
+
+#user .graph-point {
+    background-color: red;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+#user .line-connect {
+    stroke-width: 1;
+}
+
+#user .line-vertical {
+    stroke: rgb(168, 168, 168);
+    stroke-width: 1;
+}
+
+#user .graph svg {
+    /* transform: rotateZ(180deg); */
+    background-color: var(--background-medium);
+    min-width: 100%;
+}
+
+#user text {
+    fill: var(--foreground);
+}
+
+#user .months {
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin-top: 5px;
+    background-color: rgba(255, 0, 0, 0);
+}
+
+#user .month {
+    position: absolute;
+    top: 8px;
+    color: rgb(218, 218, 218);
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+#user canvas {
+    background-color: var(--background-dark);
+    width: 300px;
+    aspect-ratio: 16/9;
+}
+
+
+@media(width <=600px) {
+    #user .days {
+        display: flex;
+        flex-direction: column;
+    }
+}

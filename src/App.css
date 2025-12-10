@@ -1,0 +1,116 @@
+@import "./root.css";
+.page {
+    padding: 20px;
+    padding-bottom: 60px;
+}
+.page > .header{
+    border-bottom: 1px solid;
+    margin-bottom: 10px;
+}
+.form {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 40px;
+    background-color: var(--background-dark);
+    width: 100%;
+}
+#header .nav-links {
+    display: flex;
+    gap: 30px;
+}
+.logo {
+    font-family: Gummy;
+    font-weight: 500;
+}
+.logo span{
+    color: var(--primary);
+    /* text-decoration: line-through; */
+}
+.button-icon{
+    cursor: pointer;
+}
+button.google-button  {
+    position: relative;
+}
+button.google-button svg{
+    position: absolute;
+    left: 10px;
+    width: 24px;
+    height: 24px;
+}
+
+#message {
+    padding: 10px 15px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    transition: 1s;
+    z-index: 2;
+}
+#message.success{
+    background-color: rgba(1, 109, 1, 0.9);
+}
+#message.warning{
+    background-color: rgba(226, 203, 0, 0.9);
+}
+#message.error {
+    background-color:  rgba(179, 0, 0, 0.9);
+}
+#message.hidden {
+        transform: translateY(-100%);
+        transition-duration: 1s;
+}
+@media(max-width: 500px){
+    .page{
+        padding: 10px;
+        padding-bottom: 60px;
+    }
+    #header .logo {
+        font-size: 26px;
+    }
+    #header .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+    button.google-button svg {
+        position: absolute;
+        left: 10px;
+        width: 20px;
+        height: 20px;
+    }
+}
+@media(min-width: 700px){
+    #root{
+        align-items: center;
+    }
+    .page{
+            width: 600px;
+
+    }
+}
+#auth-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 10px; */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#auth-page>h1{
+    padding-bottom: 10px;
+    padding-top: 40px;
+    text-align: center;
+}
+#auth-page .form p {
+    text-align: center;
+}

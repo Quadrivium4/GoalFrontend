@@ -1,0 +1,47 @@
+#friends{
+
+}
+#friends>.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#friends>.header .search{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px;
+
+}
+#friends .people {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+#friends .user {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 0px;
+    border-bottom: 1px solid var(--background-light);
+}
+
+#friends .friend {
+    border-radius: 10px 10px 0px 0px;
+    border: 1px solid rgb(88, 88, 88);
+    /* background-color: var(--background-medium); */
+}
+#friends .friend>.header{
+    border-radius: 10px 10px 0px 0px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    /* background-color: var(--background-dark); */
+    /* background-color: var(--background-medium); */
+}
+
+#friends .friend>.header span.goals{
+    font-family: Josefin;
+}

@@ -1,0 +1,84 @@
+@import "../../root.css";
+#stats .header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#stats .option {
+    display: flex;
+    flex-direction: column;
+}
+
+#stats .goal {
+    position: relative;
+}
+
+#stats .graph::-webkit-scrollbar{
+    background-color: var(--background-dark);
+    border-radius: 50px;
+}
+#stats .graph::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 50px;
+}
+#stats .graph-container {
+    padding: 15px 0px 0px 0px;
+    max-width: 800px;
+}
+#stats .graph{
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-x: scroll;
+
+}
+#stats .graph-point {
+    background-color: red;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+#stats .line-connect {
+    stroke-width: 1;
+}
+#stats .line-vertical{
+    stroke: rgb(168, 168, 168);
+    stroke-width: 1;
+}
+#stats .graph-container svg {
+    /* transform: rotateZ(180deg); */
+    background-color: var(--background-medium);
+    min-width: 100%;
+}
+#stats text {
+    fill: var(--foreground);
+}
+#stats .months {
+   position: relative;
+    display: flex;
+    width: 100%;
+    margin-top: 5px;
+    background-color: rgba(255, 0, 0, 0);
+}
+#stats .month {
+    position: absolute;
+    top: 7px;
+    color: rgb(218, 218, 218);
+    font-size: 13px;
+    text-transform: uppercase;
+}
+#stats canvas {
+    background-color: var(--background-dark);
+    width: 300px;
+    aspect-ratio: 16/9;
+}
+
+
+@media(width <= 600px){
+    #stats .days {
+        display: flex;
+        flex-direction: column;
+    }
+}
+

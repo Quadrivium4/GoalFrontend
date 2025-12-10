@@ -1,0 +1,134 @@
+@import "../../root.css";
+#goals{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#goals .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#goals .goals {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#goals .goals .goal{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--background-light);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+#goals .goals .goal .info{
+    display: flex;
+    justify-content: space-between;
+}
+#goals .goals .goal .info p {
+    font-size: 16px;
+    font-weight: 100;
+    font-family: Josefin;
+}
+#goals .goals .goal > .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10px;
+    width: 100%;
+}
+#goals .goals .goal .header .progress {
+    /* border-top-left-radius: 10px;
+    border-top-right-radius: 10px; */
+    transition: 1s;
+    height: 100%;
+    background-color: var(--primary);
+}
+#goals .goals .goal .sub-progresses {
+    display: flex;
+    flex-direction: column;
+
+
+    gap: 12px;
+}
+#goals .goals .goal .sub-progresses .day{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    gap: 12px;
+}
+#goals .goals .goal .sub-progresses .sub-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-bottom: 1px solid var(--background-light);
+    color: var(--foreground-dark);
+}
+#goals .goals .goal  .sub-progresses .sub-progress .header {
+    display: flex;
+    justify-content: space-between;
+    color: var(--foreground);
+}
+#goals .goals .goal .sub-progresses .sub-progress .main p{
+    width: 100%;
+}
+#goals .goals .goal .sub-progresses .sub-progress .main .sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+#goals .goals .goal>.footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#goals .goals .goal>.footer .edit-icon{
+    cursor: pointer;
+}
+#goals .goal .likes {
+
+}
+#goals .goal .likes .like {}
+
+
+
+.goal-skeleton{
+    background-color: rgba(255, 255, 255, 0.034);
+    position: relative;
+    height: 200px;
+    border-radius: 15px;
+}
+.goal-skeleton .circle {
+    width: 0px;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    background-color: transparent;
+    box-shadow: 0 0 100px 5px var(--background-light);
+    animation: skeletonSlide 0.7s infinite ease-in-out;
+}
+
+@keyframes skeletonSlide {
+    0% {
+        opacity: 0;
+        left: -100px;
+    }
+    50%{
+        opacity: 1;
+    }
+    to {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+@media(max-width: 600px){
+    #goals .goals .goal .info{
+        flex-direction: column;
+    }
+}

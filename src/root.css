@@ -1,0 +1,205 @@
+:root{
+    --primary: rgb(85, 199, 82);
+    --error: rgb(255, 40,40);
+    --background-light: rgb(88, 88, 88);
+    --background: rgb(44, 44, 44);
+    --background-medium: rgb(30, 30, 30);
+    --background-dark: rgb(20, 20, 20);
+    --foreground: rgb(224, 224, 224);
+    --foreground-light: rgb(255, 255, 255);
+    --foreground-dark: rgb(180,180,180)
+}
+@font-face {
+    font-family: Gummy;
+    src: url(../public/fonts/Gummy.ttf);
+}
+@font-face {
+    font-family: Josefin;
+    src: url(../public/fonts/JosefinSans-Regular.ttf);
+}
+@font-face {
+    font-family: Staatliches;
+    src: url(../public/fonts/Staatliches-Regular.ttf);
+}
+@font-face {
+    font-family: Bungee;
+    src: url(../public/fonts/Bungee-Bold.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: none;
+    background-color: transparent
+}
+h1,h2,h3,h4,h5,h6{
+    color: var(--foreground-light);
+    font-family: Gummy;
+    font-weight: 200;
+}
+h1{
+    font-size: 30px;
+}
+a{
+    all: unset;
+    cursor: pointer;
+    
+}
+p{
+    font-weight: 300;
+}
+p a {
+    font-weight: 600;
+    letter-spacing: 0.8px;
+}
+
+html{
+    height: 100%;
+}
+body{
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: Gummy;
+    padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    min-height: 100%;
+    display: flex;
+}
+body.no-scroll{
+    overflow: hidden;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+select {
+    appearance: none;
+    width: 100%;
+    display: flex;
+    color: var(--foreground);
+    background-color: var(--background-light);
+    padding: 10px 10px;
+    border-radius: 5px;
+    border-color: red;
+}
+select:focus-visible{
+    appearance: none;
+    outline: none;
+}
+
+input{
+    all: unset;
+    display: flex;
+    width: 100%;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: var(--background-light);
+}
+ textarea {
+    all: unset;
+    color: var(--foreground);
+    background-color: var(--background-medium);
+    padding: 10px;
+    display: flex;
+}
+input.error {
+    box-shadow: inset 0px 0px 10px 1px rgb(223, 61, 61);
+}
+::-webkit-scrollbar {
+    width: 17px;
+    padding: 10px;
+
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 8px var(--background);
+    background: var(--background-dark);
+    padding: 2px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--background-medium);
+    ;
+    box-shadow: inset 0 0 10px var(--background-light);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(33, 50, 100, 0.75);
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: var(--foreground);
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px var(--background-light);
+}
+button {
+    background-color: var(--primary);
+    color: rgb(255, 255, 255);
+    padding: 8px 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 4px;
+    box-shadow: inset 0 0 4px 1px var(--background-light);
+    transition: 250ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Gummy;
+    font-size: 16px;
+    /*box-shadow: 0 0 5px rgba(255, 255, 255, 0.267);*/
+}
+button:hover {
+    transition: 250ms;
+    opacity: 0.8;
+}
+button.outline {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary)
+}
+button.outline.error {
+    border: 1px solid var(--error);
+    color: var(--error);
+}
+button.outline.gray{
+    border: 1px solid var(--foreground-dark);
+    color: var(--foreground);
+}
+footer{
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--background-dark);
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    position: fixed;
+    bottom: 0;
+}
+#root {
+    position: relative;
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+@media(max-width: 600px){
+    button{
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+}

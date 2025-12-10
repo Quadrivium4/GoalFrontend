@@ -1,0 +1,24 @@
+.instructions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+    width: 100%;
+    max-width: 1000px;
+    padding: 30px 20px;
+    position: relative;
+}.instructions h1{
+    text-align: center;
+}
+.instructions p {
+    position: relative;
+    align-items: center;
+    gap: 8px;
+}
+.instructions p span {
+    color: var(--primary);
+}
+.instructions p .icon{
+    position: absolute;
+}
+
