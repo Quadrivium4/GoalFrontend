@@ -40,6 +40,7 @@ function DownloadPage() {
             <p>In Safari browser, tap on the share button <span className="icon"><MdIosShare  color={colors.primary} style={{marginLeft: 5}} size={20} className='icon'></MdIosShare></span></p>
             {/* <img src={iphoneImg1} alt='goals screenshot' className='app-screenshot1' /> */}
             <p>Then tap on '<span>Add to Home Screen</span>' and then on '<span>Add</span>'</p>
+    
             {/* <img src={iphoneImg2} alt='goals screenshot' className='app-screenshot1' /> */}
         </section>
         <section id='android'>

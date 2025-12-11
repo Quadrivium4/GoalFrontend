@@ -188,7 +188,6 @@ function Goals() {
           <h1>Goals</h1>
             <NotificationBell setPop={setPop} />
       </div>
-     <h2>bob</h2>
       <div className='goals'>
         {
           user.goals.length > 0 && daysLoading? <GoalSkeleton goals={user.goals} />:

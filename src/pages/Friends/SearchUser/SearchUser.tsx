@@ -5,13 +5,16 @@ import { TUser, useAuth, useUser } from "../../../context/AuthContext";
 import { usePop } from "../../../context/PopContext";
 import { RiUserAddLine, RiUserFollowLine } from "react-icons/ri";
 import { acceptFriendRequest, cancelFriendRequest, deleteFriend, getFriends, getUsers, sendFriendRequest, unfollow } from "../../../controllers/friends";
-import { useEffect, useState } from "react";
+import { EventHandler, MouseEventHandler, useEffect, useState } from "react";
 import { GenericAbortSignal } from "axios";
 import { colors } from "../../../constants";
 import { TDay } from "../../../controllers/days";
 import styles from "./SearchUser.module.css"
 import { wait } from "@testing-library/user-event/dist/utils";
 import { useMessage } from "../../../context/MessageContext";
+import Loader from "../../../components/Loader/Loader";
+import { getUser } from "../../../controllers/user";
+import { Link, useNavigate } from "react-router-dom";
 const offset = 20;
 export type TFilter = "followers" | "following" | "none" | "";
 const useUsers = () =>{
@@ -20,11 +23,27 @@ const useUsers = () =>{
     const [index, setIndex] = useState(0);
     const [searchText, setSearchText] = useState<string>();
     const [filter, setFilter] = useState<TFilter>()
+    
     useEffect(() =>{
-
         const controller = new AbortController()
-        console.log("index changed")
-        fetchUsers(searchText, controller.signal);
+        if(searchText && searchText[0] == "#"){
+            setLoading(true)
+            getUser(searchText.substring(1)).then(res =>{
+                setUsers([res]);
+                setLoading(false)
+            }).catch(err =>{
+                console.log(err);
+
+            }).finally(()=>{
+                setLoading(false)
+            })
+            
+        }else {
+            
+            console.log("index changed", index)
+            fetchUsers(searchText, controller.signal);
+        }
+        
         return () => {
             controller.abort()
         }
@@ -35,11 +54,11 @@ const useUsers = () =>{
         }
         console.log(query)
         setLoading(true)
-        await wait(1000)
+    
         getUsers(query).then(res =>{
             console.log("getting more users", index, offset, searchText)
             
-                        
+            console.log({res})
             setUsers(users => {
                 if(users.length > 20){
                     // console.log("slicing")
@@ -47,7 +66,7 @@ const useUsers = () =>{
                 }return [...users, ...res]})
             setLoading(false)
         }).catch(err =>{
-            console.log(err)
+            console.log({err})
         })
     }
     const search = async(text: string) =>{
@@ -59,6 +78,7 @@ const useUsers = () =>{
         }
     }
     const getMore = () =>{
+        if(loading) return console.log("already loading")
         console.log("more requested")
         setIndex(index + 1)
     }
@@ -136,7 +156,7 @@ export function FriendButton({friend}: {friend: TUser}){
     const {message} = useMessage()
     const type:TFriendType = getFriendType(user, friend);
     const [loading, setLoading] = useState(false);
-    console.log("friend type", {type})
+    //console.log("friend type", {type})
     const handleClick = () =>{
         setLoading(true);
         if(type === "following"){
@@ -182,7 +202,10 @@ export function FriendButton({friend}: {friend: TUser}){
         }
     }
     return (
-        <button className='outline gray' onClick={handleClick}>
+        <button className='outline gray' onClick={(e)=>{
+            e.stopPropagation();
+            handleClick()
+        }}>
         {
             loading? <p>loading...</p> :
             type === "requested"? <><p>requested</p> <RxCross2 size={iconSize} color={colors.error} /></>:
@@ -199,25 +222,26 @@ export default function SearchUser(){
     const {users, loading, getMore, search, addFilter} = useUsers();
     const {setPop} = usePop()
     const user = useUser()
+    const navigate = useNavigate()
     return (
     <> 
-        <input type='text' onChange={(e) => search(e.target.value)} placeholder='search' style={{marginTop: 15, marginBottom: 5}}></input>
+        <input type='text' onChange={(e) => search(e.target.value)} placeholder='search name or #id' style={{marginTop: 15, marginBottom: 5, textDecoration: "none"}}></input>
         <Select options={["following", "followers", "none"]} onSelect={addFilter} placeholder='filter' />
         <div className={styles.people} onScroll={(e) =>{
             const target = e.target as HTMLDivElement;
-            const bottom = Math.abs(target.scrollHeight - target.clientHeight - target.scrollTop) < 1
+            const bottom = Math.abs(target.scrollHeight - target.clientHeight - target.scrollTop) < 30
             //console.log("scrolling...", bottom, target.scrollHeight, target.scrollTop, target.clientHeight)
             if(bottom) {
                 console.log("BOTTOOM")
                 getMore()
             }
         }}>
-        {loading? <p>loading...</p> 
-        :users.length > 0? users.map(randomUser =>{
+        {users.length > 0? users.map(randomUser =>{
             //console.log("hey user", user)
             //if(randomUser._id == user._id) return null
             return (
-                <div key={randomUser._id} onClick={() =>setPop} className={styles.user}>
+                
+                <div key={randomUser._id} onClick={() =>navigate(`/user/${randomUser._id}`)} className={styles.user}>
                     
                     <ProfileIconLink profileImg={randomUser.profileImg} name={randomUser.name} _id={randomUser._id}/>
                     <div>
@@ -225,10 +249,16 @@ export default function SearchUser(){
                     <FriendButton friend={randomUser} />
                     </div>
                 </div>
-            )
-        }):<p>No users matched your search</p>
-        }
         
+            )
+        }): !loading? <p>No users matched your search</p>: null
+       
+        
+        }
+            <div style={{padding: 10}}>
+                 {loading?  <Loader size={30} /> : null}
+            </div>
+           
         </div>
         </>)
 }

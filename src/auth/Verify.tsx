@@ -1,16 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useMessage } from '../context/MessageContext';
 
 
 function Verify() {
     const {userId, token} = useParams();
     const {verify} = useAuth();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const {message }= useMessage();
+    const ref = useRef(false);
     useEffect(()=>{
-        if(userId && token) {
-          verify({id: userId, token:token});
-          navigate("/");
+        
+        
+        if(userId && token && !ref.current) {
+          ref.current = true;
+          verify({id: userId, token:token}).then(res =>{
+            navigate("/");
+          }).catch(err =>{
+            console.log("error");
+            message.error(err.message);
+            navigate("/");
+          })
         }
     },[])
   return (

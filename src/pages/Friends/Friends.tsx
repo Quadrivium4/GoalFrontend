@@ -18,6 +18,7 @@ function useLazyFriends (){
         const controller = new AbortController();
         getLazyFriends(index,controller.signal).then(newFriends =>{
             console.log(newFriends)
+            if(!newFriends) return;
             setFriends(prev => {
                 if(prev.length > 10){
                     console.log("slicing")

@@ -23,11 +23,11 @@ const PrivacyPolicy = () => {
             <section className={styles.section}>
                 <h3 className={styles.title}>Usage Data</h3>
                 <p>We also collect other type of data (such as name and profile image), You provide us, this data is public, so anyone has access to it</p>
-                <p>You can request a copy of this data. When the acccount is deleted, they will be completly and permanently deleted</p>
+                <p>You can request a copy of this data. When the acccount is deleted, they will be completly and permanently deleted.</p>
             </section>
             <section className={styles.section}>
                 <h3 className={styles.title}>Third party services</h3>
-                <p>We provide the option to use Google to login</p>
+                <p>We provide the option to use Google to login.</p>
                 <p>Images and other files are stored on Cloudinary.</p>
                 <p>For more information check out their privacy policy: </p>
                 <div className={styles.links}>

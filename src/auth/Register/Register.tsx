@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useMessage } from '../../context/MessageContext';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from "../Form.module.css"
+import styles from "./Register.module.css"
 import { CredentialResponse, GoogleLogin, useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google';
 import Login from '../Login';
 import GoogleButton from '../../components/GoogleButton';
@@ -22,8 +22,8 @@ function Register() {
 
 
   return (
-    <>
-      <h1>Register</h1>
+    <div className={styles.register}>
+      <h1 className={styles.title}>Register</h1>
       <div className={'form'} >
         <input onChange={(e) =>setName(e.target.value)} value={name} type='text' placeholder='username'></input>
         <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='email'></input>
@@ -31,6 +31,9 @@ function Register() {
         <button type='submit' onClick={()=>{
           register({name, email, password}).then(res =>{
               console.log(res)
+              message.success("We sent you a verification email");
+          }).catch(err =>{
+            message.error(err.message);
           })
           //console.log(response)
           //message.success("Email Sent!")
@@ -40,7 +43,7 @@ function Register() {
          <p>Already have an account? <Link to={"/login"}>Login</Link></p>
       </div>
       {/* <Login /> */}
-    </>
+    </div>
   );
 }
 

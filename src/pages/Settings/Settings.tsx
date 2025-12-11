@@ -6,7 +6,8 @@ import Pop from '../../components/Pop/Pop';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
 import { useAuth, useUser } from '../../context/AuthContext';
 import "./Settings.css";
-import { NotificationBell } from './Notifications/Notifications';
+import { NetButton, NotificationBell } from './Notifications/Notifications';
+import { useMessage } from '../../context/MessageContext';
 // function OldEditing() {
 //   const {editUser} = useAuth();
 //   const [pop, setPop] = useState<React.ReactNode>()
@@ -75,6 +76,7 @@ function Settings() {
   const [name, setName] = useState(user.name)
   const {updateUserProfileImage} = useAuth();
   const [isEditing, setIsEditing] = useState<"name" | false>();
+  const {message} = useMessage();
 
  
   const handleChange = () =>{
@@ -126,7 +128,7 @@ function Settings() {
       <div className='edit-bio'>
               <textarea className='bio' value={bio} onChange={(e) =>setBio(e.target.value)} placeholder='write something about you...'></textarea>
               
-              {user.bio !== bio &&<button onClick={()=> editUser({name: user.name, bio})}>save</button>}
+              {user.bio !== bio &&<NetButton request={async()=> await editUser({name: user.name, bio})}>save</NetButton>}
           </div>
      <div className="buttons">
            <button className='outline' onClick={async() =>{
@@ -136,10 +138,11 @@ function Settings() {
         window.location.replace("/")
         }}>logout</button>
         <button className="outline error" onClick={async() =>{
-        let res  = await deleteAccountRequest();
-        console.log("navigating")
-   
-        window.location.replace("/")
+        deleteAccountRequest().then(res =>{
+          message.success("We sent you an email to confim the account deletion")
+          console.log("navigating")
+          })
+        
         }}>Delete Account</button>
      </div>
      

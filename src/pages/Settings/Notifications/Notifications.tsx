@@ -96,7 +96,7 @@ export function Notifications(){
     </div>
   )
 }
-const NetButton = ({className = "", request, children}: { className?: string, request: () => Promise<void>, children: ReactNode }) => {
+export const NetButton = ({className = "", request, children}: { className?: string, request: () => Promise<void>, children: ReactNode }) => {
   const [loading, setLoading] = useState(false);
   return <button className={className} onClick={async() =>{
     if(loading) return console.log("already loading");

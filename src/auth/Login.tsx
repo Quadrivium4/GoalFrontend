@@ -6,6 +6,7 @@ import { useMessage } from '../context/MessageContext';
 import { AxiosError } from 'axios';
 import classes from "./Form.module.css"
 import GoogleButton from '../components/GoogleButton';
+import styles from "./Login.module.css"
 const errors = {
   INVALID_EMAIL: 1002,
   INVALID_PASSWORD: 1003,
@@ -34,8 +35,8 @@ function Login() {
       navigate("/");
   }
   return (
-    <>
-      <h1>Login</h1>
+    <div className={styles.login}>
+      <h1 className={styles.title}>Login</h1>
       <div className={'form'}>
         <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='email'></input>
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
@@ -47,7 +48,7 @@ function Login() {
         
         {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=> console.log("Error google login")}/> */}
       </div>
-    </>
+    </div>
   );
 }
 

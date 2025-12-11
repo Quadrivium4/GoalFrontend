@@ -2,6 +2,8 @@
     max-height: 300px;
     padding: 5px;
     overflow-y: auto;
+    min-height: 120px;
+    text-align: center;
 }
 
 .user {
