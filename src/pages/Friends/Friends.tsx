@@ -28,7 +28,7 @@ function useLazyFriends (){
         current.current = true;
         setLoading(true)
         try {
-             await wait(1000);
+             //await wait(1000);
             let newFriends = await getLazyFriends(index);
             if(!newFriends) return console.log("not friends");
             
