@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { RiSearchLine } from "react-icons/ri";
 import { Link } from 'react-router-dom';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
@@ -14,6 +14,7 @@ import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { wait } from '../../controllers/days';
 import Loader from '../../components/Loader/Loader';
 
+let cachedFriends:TLazyFriendsResponse = [];
 function useLazyFriends (){
     const [friends, setFriends] = useState<TLazyFriendsResponse>([]);
     const [index, setIndex] = useState(0);
@@ -21,11 +22,19 @@ function useLazyFriends (){
     const current = useRef<boolean |null>(null);
     
     useEffect(()=>{
+        console.log("getting friends")
         getFriends();
     }, [index])
+    
     const getFriends = async() =>{
         if(current.current) return;
         current.current = true;
+        if(cachedFriends.length > (index) * 20){
+            console.log("friends cached");
+            current.current = false;
+            return setFriends(cachedFriends);
+        } 
+        
         setLoading(true)
         try {
              //await wait(1000);
@@ -33,10 +42,12 @@ function useLazyFriends (){
             if(!newFriends) return console.log("not friends");
             
             setFriends(prev => {
-                if(prev.length > 10){
-                    console.log("slicing")
-                    return [...newFriends, ...(prev.slice(5))]
-                }return [...newFriends, ...prev]
+                // if(prev.length > 10){
+                //     console.log("slicing")
+                //     return [...newFriends, ...(prev.slice(5))]
+                // }
+                cachedFriends = [...newFriends, ...prev];
+                return [...newFriends, ...prev]
             })
            
         } catch (error) {
@@ -50,7 +61,7 @@ function useLazyFriends (){
     useEffect(() =>{
         return () => {
             console.log("unmount")
-            setFriends([])
+            //setFriends([])
         }
     },[])
     const getMore = () => setIndex(i =>i++)
@@ -142,16 +153,15 @@ export const usePullRefreshTouch = (onRefresh: ()=>any) =>{
    
 }
 function Friends() {
-    const user = useUser();
-    const {updateUser} = useAuth()
-    const {goals } = user;
+
     //const {days, today, addProgress} = useDays();
     const {setPop}= usePop()
     const {friends, getMore, index, loading, reload} = useLazyFriends();
-    usePullRefreshTouch(()=>reload());
+    //usePullRefreshTouch(()=>reload());
     useEffect(()=>{
+        console.log("---- reloading friends");
         //console.log("user changed", user)
-    },[user])
+    },[])
     return (
         <>
         <PageHeader title={"Friends"} action={<RiSearchLine onClick={() =>setPop(<SearchUser />)} size={24} />} />
@@ -161,7 +171,7 @@ function Friends() {
             
             <div className='friends-lazy' >
                 { friends.length< 1 && !loading ? <>
-                    <p style={{marginBottom: 5}}>No friends yet! {loading + ""}</p> <button onClick={() =>setPop(<SearchUser />)}>search now</button>
+                    <p style={{marginBottom: 5}}>No friends yet! </p>
                     </>: null}
                 {   loading? <Loader size={40} />: 
                     friends.length > 0? friends.map(friend =>{

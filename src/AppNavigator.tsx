@@ -11,6 +11,7 @@ import DeleteAccount from './shared/DeleteAccount';
 import Pop from './components/Pop/Pop';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 
+
 const Layout = () =>{
     let width = window.screen.width;
     width = window.innerWidth;

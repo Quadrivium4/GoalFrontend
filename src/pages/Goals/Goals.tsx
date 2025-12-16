@@ -192,6 +192,7 @@ function Goals() {
     const {goals, addProgress, daysLoading} = useDays();
     const {setPop} = usePop();
     useEffect(()=>{
+      console.log("------ Goals Render ----")
       //console.log("remount")
       // console.log(user)
       //console.log({goals})

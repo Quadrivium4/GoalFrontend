@@ -129,8 +129,8 @@ export function useNotifications(){
 
 export function NotificationBell({setPop}: {setPop: (content: React.ReactNode)=>void}){
   const {notifications, setNewNotification, newNotification, setNotifications, reload} = useNotifications();
-  usePullRefreshTouch(reload);
-  console.log({notifications})
+  //usePullRefreshTouch(reload);
+  //console.log({notifications})
   const openNotifications = () =>{
     setPop(<Notifications />);
     let ids = notifications.map(not => not._id);

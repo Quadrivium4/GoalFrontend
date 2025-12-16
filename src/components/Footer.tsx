@@ -4,6 +4,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { HiUserGroup } from "react-icons/hi"
 import BottomNavLink from './BottomNavLink';
 import styles from "./Footer.module.css"
+import { FaAdversal } from "react-icons/fa";
 
 const Footer = () =>{
     return (
