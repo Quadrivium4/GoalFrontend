@@ -6,8 +6,8 @@ import Select from '../../components/Select/Select';
 import Calendar from '../Stats/Calendar';
 import Graph, { getPercentage, getProgressColor } from '../Stats/Graph';
 import { useLocation, useParams } from 'react-router-dom';
-import { getUser } from '../../controllers/user';
-import { TUser } from '../../context/AuthContext';
+import { getProfile, getUser } from '../../controllers/user';
+import { TUser, useUser } from '../../context/AuthContext';
 import { StatsProvider } from '../../context/StatsContext';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
 import { Likes } from '../../components/Likes/Likes';
@@ -16,6 +16,9 @@ import { getDays } from '../../controllers/days';
 import Goals, { getGoalAmountString,  sumDaysProgress } from '../Goals/Goals';
 import GoalSkeleton from '../../components/GoalSkeleton';
 import UserDays from '../Friends/UserDays/UserDays';
+import { TProfile } from '../../controllers/friends';
+import { IoMdRefresh } from 'react-icons/io';
+import { PageHeader } from '../../components/PageHeader/PageHeader';
 function useScrollRefresh(ref: React.RefObject<HTMLDivElement>, onTrigger: Function){
     useEffect(()=>{
         const el = ref.current;
@@ -89,17 +92,29 @@ function appr(x: number) {
 function User() {
     const {userId} = useParams();
     const [user, setUser] = useState<TUser>();
+    const me = useUser()
     const [friends, setFriends] = useState<TUser[]>();
     const [goals, setGoals] = useState<TMyGoal[]>([]);
-    const [userLoading, setUserLoading] = useState(true);
-    const [goalsLoading, setGoalsLoading] = useState(true);
+    const [userLoading, setUserLoading] = useState(false);
+    const [goalsLoading, setGoalsLoading] = useState(false);
+    const you = useUser()
     const ref = useRef<HTMLDivElement>(null)
     //const hello = useScrollRefresh(ref, ()=>{})
     console.log({userId})
     useEffect(() =>{
        
+        
+  
+       fetchUser();
+       fetchDays();
+
+  
+        return () =>{
+        }
+    },[])
+    function fetchUser(){
+        if(userLoading) return;
         setUserLoading(true)
-        setGoalsLoading(true)
         if(userId) getUser(userId).then(res => {
             setUserLoading(false)
             setUser(res)
@@ -108,7 +123,11 @@ function User() {
             console.log("cannot load user")
         })
         
-        getDays(userId).then((res) =>{
+    }
+    function fetchDays(){
+        if(goalsLoading) return;
+        setGoalsLoading(true)
+          getDays(userId).then((res) =>{
             setGoals(res);
             setGoalsLoading(false);
         }
@@ -116,17 +135,22 @@ function User() {
              setGoalsLoading(false)
             console.log(err)
         })
-        return () =>{
-        }
-    },[])
-    if(userLoading) return <p>loading...</p>
+    }
+   
+    
     return (
-        <div id='user' className='page' onScroll={()=>{console.log("scro")}} ref={ref}>
+        <>
+        <PageHeader title={"Profile"} action={<IoMdRefresh size={24} onClick={()=>{
+                fetchUser();
+                fetchDays()
+            }}/>} goBack={() => window.history.back()}/>
+    
+        {userLoading? <p>loading..</p>: 
+        <div id='user' className='content' onScroll={()=>{console.log("scro")}} ref={ref}>
 
-            <div className="header">
-            <h1>Profile</h1>
-        </div>
-        {user? <div className='info'>
+           
+        {user? <>
+        <div className='info'>
             <ProfileIcon  name={user.name} _id={user._id} profileImg={user.profileImg} />
             <div>
                 <h2>{user.name}</h2>
@@ -134,16 +158,24 @@ function User() {
                 <p>{user.bio}</p>
                 <FriendButton friend={user}/>
             </div> 
-       </div>: <p>user not found</p>}
+       </div>
+       {user.profileType == "private" && !me.friends.find(f => f == user._id)? 
+        null:
        <div className='activities'>
         <h2>Goals</h2>
         {goalsLoading? <p>loading</p>: <UserDays days={goals} goals={user?.goals!} />}
         <h2>Stats</h2>
-        {user? <StatsProvider user={user}>
+       <StatsProvider user={user}>
             <Graph/>
-        </StatsProvider>: null}
+        </StatsProvider>
        </div>
+        }
+        </>: <p>user not found</p>}
+       
+
         </div>
+}
+        </>
     );
 }
 

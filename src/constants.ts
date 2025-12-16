@@ -4,8 +4,9 @@ export const protectedUrl = baseUrl + "/protected";
 export const assetsUrl = baseUrl + "/file/";
 export const dayInMilliseconds = 1000 * 60* 60 *24
 export const colors = {
-    primary: "rgb(85, 199, 82)",
-    error: "rgb(255, 40,40)"
+    primary: "rgb(53, 182, 49)",
+    error: "rgba(190, 45, 45, 1)",
+    backgroundDark: "rgb(20,20,20)"
 }
 export const todayDate = Date.now();
 export const userColors = [

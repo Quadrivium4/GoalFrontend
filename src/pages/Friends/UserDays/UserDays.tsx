@@ -85,7 +85,7 @@ export default function UserDays({ days, goals }: {days: TMyGoal[], goals: TGoal
             let dayProgress = sumDoubleDayProgress(goal)
             let normalizedPercentage = normalizePercentage(getPercentage(goal.amount, dayProgress));
             return (
-                <div className={styles.day} >
+                <div className={styles.day} key={info._id}>
                     <div className={styles.header}>
                         <div className={styles['progress-bar']} style={{width: normalizedPercentage+ "%", backgroundColor: getProgressColor(normalizedPercentage)}}></div>
                         <div className={styles['title-box']}>
@@ -94,7 +94,7 @@ export default function UserDays({ days, goals }: {days: TMyGoal[], goals: TGoal
                     </div>
                     <p className={styles.subtitle}> {getAmountString(goal.amount, goal.type)}/{goal.frequency == "daily"?"day" : "week"} </p>
                     {
-                        goal.history.map(day =><Day day={day}/>)
+                        goal.history.map(day =><Day day={day} key={day._id}/>)
                     }
                     <div className={styles.footer}><p>Total: {getAmountString(dayProgress, goal.type)}</p></div>
                 </div>

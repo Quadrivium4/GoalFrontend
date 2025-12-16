@@ -1,9 +1,13 @@
 .point-pop {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .point-pop h2 {
     text-align: center;
+    
 }
 
 .point-pop>.info {

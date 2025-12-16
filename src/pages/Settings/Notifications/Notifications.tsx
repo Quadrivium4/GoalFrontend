@@ -4,6 +4,7 @@ import { useMessage } from "../../../context/MessageContext"
 import { getNotifications, ignoreFriendRequest, acceptFriendRequest, readNotifications } from "../../../controllers/friends"
 import { sameDay, isYesterday, getDate, getTime } from "../../Goals/Goals"
 import styles from "./Notifications.module.css";
+import { usePullRefreshTouch } from "../../Friends/Friends"
 export type TNotification =  {
     _id: string,
     date: number,
@@ -20,6 +21,7 @@ type TNotificationContextProps = {
   newNotification: boolean,
   setNotifications: React.Dispatch<React.SetStateAction<TNotification[]>>,
   setNewNotification: React.Dispatch<React.SetStateAction<boolean>>,
+  reload: () => Promise<void>
 
 }
 const isNewNotification = (notifications: TNotification[]) =>{
@@ -44,8 +46,18 @@ export const NotificationProvider = ({children}: {children: React.ReactNode}) =>
         console.log("err notifications")
       })
   },[])
-  
-  return <NotificationContext.Provider value={{notifications, newNotification, setNotifications, setNewNotification}}>{children}</NotificationContext.Provider>
+  async function reload() {
+    getNotifications().then(res =>{
+        console.log(res)
+        let isNew = isNewNotification(res)
+        if(isNew) setNewNotification(true)
+        setNotifications(res)
+
+      }).catch(err =>{
+        console.log("err notifications")
+      })
+  }
+  return <NotificationContext.Provider value={{notifications, newNotification, setNotifications, setNewNotification, reload}}>{children}</NotificationContext.Provider>
 }
 
 export function Notifications(){
@@ -83,8 +95,8 @@ export function Notifications(){
                 <p>{notification.from.name} wants to follow you!</p>
                 <div className='buttons' style={{display: "flex", gap: 10}}>
                   
-                  <NetButton className='outline' request={()=> handleAccept(notification.from.userId, index)}>accept</NetButton>
-                  <NetButton className='outline gray' request={()=>handleIgnore(notification.from.userId, index)}>ignore</NetButton>
+                  <NetButton request={()=> handleAccept(notification.from.userId, index)}>accept</NetButton>
+                  <NetButton className='outline' request={()=>handleIgnore(notification.from.userId, index)}>ignore</NetButton>
                 </div>
                 
             </>: 
@@ -96,12 +108,15 @@ export function Notifications(){
     </div>
   )
 }
-export const NetButton = ({className = "", request, children}: { className?: string, request: () => Promise<void>, children: ReactNode }) => {
+export const NetButton = ({className = "", request, children, onError}: { className?: string, request: () => Promise<void>, children: ReactNode, onError?: (err: any) =>any}) => {
   const [loading, setLoading] = useState(false);
   return <button className={className} onClick={async() =>{
     if(loading) return console.log("already loading");
     setLoading(true);
-    request().finally(()=>{
+    
+    request().catch(err =>{
+      if(onError)onError(err)
+    }).finally(()=>{
       setLoading(false);
     })
     }}>{loading ? "loading..." : children}</button>
@@ -113,7 +128,8 @@ export function useNotifications(){
 }
 
 export function NotificationBell({setPop}: {setPop: (content: React.ReactNode)=>void}){
-  const {notifications, setNewNotification, newNotification, setNotifications} = useNotifications();
+  const {notifications, setNewNotification, newNotification, setNotifications, reload} = useNotifications();
+  usePullRefreshTouch(reload);
   console.log({notifications})
   const openNotifications = () =>{
     setPop(<Notifications />);

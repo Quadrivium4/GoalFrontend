@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { RiSearchLine } from "react-icons/ri";
 import { Link } from 'react-router-dom';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
@@ -10,30 +10,43 @@ import { getLazyFriends, TLazyFriendsResponse } from '../../controllers/friends'
 import "./Friends.css";
 import SearchUser from './SearchUser/SearchUser';
 import UserDays from './UserDays/UserDays';
+import { PageHeader } from '../../components/PageHeader/PageHeader';
+import { wait } from '../../controllers/days';
+import Loader from '../../components/Loader/Loader';
 
 function useLazyFriends (){
     const [friends, setFriends] = useState<TLazyFriendsResponse>([]);
-    const [index, setIndex] = useState(0)
+    const [index, setIndex] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const current = useRef<boolean |null>(null);
+    
     useEffect(()=>{
-        const controller = new AbortController();
-        getLazyFriends(index,controller.signal).then(newFriends =>{
-            console.log(newFriends)
-            if(!newFriends) return;
+        getFriends();
+    }, [index])
+    const getFriends = async() =>{
+        if(current.current) return;
+        current.current = true;
+        setLoading(true)
+        try {
+             await wait(1000);
+            let newFriends = await getLazyFriends(index);
+            if(!newFriends) return console.log("not friends");
+            
             setFriends(prev => {
                 if(prev.length > 10){
                     console.log("slicing")
                     return [...newFriends, ...(prev.slice(5))]
                 }return [...newFriends, ...prev]
-            }
-            )
-        }).catch(err =>{
-            console.log("hello error", err)
-            //setFriends([])
-        })
-        return () =>{
-            controller.abort();
+            })
+           
+        } catch (error) {
+            console.log("error getting friends", error)
+        } finally{
+             current.current = null;
+             setLoading(false)
         }
-    }, [index])
+
+    }
     useEffect(() =>{
         return () => {
             console.log("unmount")
@@ -41,7 +54,13 @@ function useLazyFriends (){
         }
     },[])
     const getMore = () => setIndex(i =>i++)
-    return {friends, getMore, index}
+    const reload = () => {
+        if(current.current) return;
+        current.current = true// new AbortController();
+        setFriends([])
+        getFriends();
+    }
+    return {friends, getMore, index, loading, reload}
 }
 export function sumDoubleDayProgress(goal: TMyGoal){
     let amount = 0;
@@ -64,29 +83,87 @@ export function sumDoubleDayProgress(goal: TMyGoal){
 //     }
 //     return newLikes
 // }
+const usePullRefresh = (onRefresh: ()=>any) =>{
+    const touch = {
+        start: 0
+    }
+    useEffect(()=>{
+        window.addEventListener("mousedown", onStartTouch)
+         return ()=> {
+            window.removeEventListener("mouseup", onEndTouch);
+            window.removeEventListener("mousedown", onStartTouch);
+        }
+    },[])
+    function onStartTouch(e: MouseEvent){
+        console.log("start touch", e);
+        touch.start = e.clientY;
+        window.addEventListener("mouseup", onEndTouch)
+    }
+    function onEndTouch(e: MouseEvent){
+        console.log("end touch", e)
+        if( e.clientY  -touch.start> 100){
+            onRefresh()
+        }
+        window.removeEventListener("mouseup", onEndTouch)
+    }
+   
+}
+export const usePullRefreshTouch = (onRefresh: ()=>any) =>{
+    const touch = {
+        start: 0
+    }
+    useEffect(()=>{
+        window.addEventListener("touchstart", onStartTouch)
+         return ()=> {
+            window.removeEventListener("touchend", onEndTouch);
+            window.removeEventListener("touchstart", onStartTouch);
+        }
+    },[])
+    function onStartTouch(e: TouchEvent){
+        console.log("start touch", e);
+         if(e && e.touches && e.touches[0]){
+            touch.start = e.touches[0].clientY;
+        }
+        window.addEventListener("touchend", onEndTouch)
+    }
+    function onEndTouch(e: TouchEvent){
+        console.log("end touch", e)
+        console.log({touch})
+        if(e && e.changedTouches && e.changedTouches[0]){
+            let delta = e.changedTouches[0].clientY - touch.start;
+            console.log(e.changedTouches[0].clientY - touch.start)
 
+            if(delta > 100){
+                onRefresh()
+            }
+        }
+        window.removeEventListener("touchend", onEndTouch)
+    }
+   
+}
 function Friends() {
     const user = useUser();
     const {updateUser} = useAuth()
     const {goals } = user;
     //const {days, today, addProgress} = useDays();
     const {setPop}= usePop()
-    const {friends, getMore, index} = useLazyFriends();
-  
+    const {friends, getMore, index, loading, reload} = useLazyFriends();
+    usePullRefreshTouch(()=>reload());
     useEffect(()=>{
         //console.log("user changed", user)
     },[user])
     return (
-        <div className='page' id='friends' style={{overflow: "hidden"}}>
-            <div className='header'>
-               <h1>Friends</h1>
-                <div className='search'>
-                    <RiSearchLine onClick={() =>setPop(<SearchUser />)} size={30} color={colors.primary} />
-                </div>
-                
-            </div>
+        <>
+        <PageHeader title={"Friends"} action={<RiSearchLine onClick={() =>setPop(<SearchUser />)} size={24} />} />
+        
+        
+        <div className='content' id='friends' style={{overflow: "hidden"}} >
+            
             <div className='friends-lazy' >
-                {
+                { friends.length< 1 && !loading ? <>
+                    <p style={{marginBottom: 5}}>No friends yet! {loading + ""}</p> <button onClick={() =>setPop(<SearchUser />)}>search now</button>
+                    </>: null}
+                {   loading? <Loader size={40} />: 
                     friends.length > 0? friends.map(friend =>{
                         let goalsString = friend.goalsInfo.map((goal, i) =>  {
                             //console.log("hhhh", goal)
@@ -119,13 +196,12 @@ function Friends() {
                                 </div> */}
                             </div>
                         )
-                    }): <>
-                    <p style={{marginBottom: 5}}>No friends yet!</p> <button onClick={() =>setPop(<SearchUser />)}>search now</button>
-                    </>
+                    }): null
                     
                 }
             </div>
         </div>
+        </>
     );
 }
 

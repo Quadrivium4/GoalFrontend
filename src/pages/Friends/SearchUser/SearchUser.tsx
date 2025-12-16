@@ -4,7 +4,7 @@ import Select from "../../../components/Select/Select";
 import { TUser, useAuth, useUser } from "../../../context/AuthContext";
 import { usePop } from "../../../context/PopContext";
 import { RiUserAddLine, RiUserFollowLine } from "react-icons/ri";
-import { acceptFriendRequest, cancelFriendRequest, deleteFriend, getFriends, getUsers, sendFriendRequest, unfollow } from "../../../controllers/friends";
+import { acceptFriendRequest, cancelFriendRequest, deleteFriend, getFriends, getUsers, sendFriendRequest, TProfile, unfollow } from "../../../controllers/friends";
 import { EventHandler, MouseEventHandler, useEffect, useState } from "react";
 import { GenericAbortSignal } from "axios";
 import { colors } from "../../../constants";
@@ -13,12 +13,12 @@ import styles from "./SearchUser.module.css"
 import { wait } from "@testing-library/user-event/dist/utils";
 import { useMessage } from "../../../context/MessageContext";
 import Loader from "../../../components/Loader/Loader";
-import { getUser } from "../../../controllers/user";
+import { getProfile, getUser } from "../../../controllers/user";
 import { Link, useNavigate } from "react-router-dom";
 const offset = 20;
 export type TFilter = "followers" | "following" | "none" | "";
 const useUsers = () =>{
-    const [users, setUsers] = useState<TUser[]>([]);
+    const [users, setUsers] = useState<TProfile[]>([]);
     const [loading, setLoading] = useState(true);
     const [index, setIndex] = useState(0);
     const [searchText, setSearchText] = useState<string>();
@@ -28,7 +28,8 @@ const useUsers = () =>{
         const controller = new AbortController()
         if(searchText && searchText[0] == "#"){
             setLoading(true)
-            getUser(searchText.substring(1)).then(res =>{
+            getProfile(searchText.substring(1)).then(res =>{
+
                 setUsers([res]);
                 setLoading(false)
             }).catch(err =>{
@@ -140,25 +141,29 @@ const UnfollowPop = ({id, name, closePop}: {id:string, name: string, closePop:()
 const iconSize= 24;
 type TFriendType = "follower" | "following" | "requested" | "requesting" | "other";
 
-function getFriendType(user: TUser, friend: TUser) {
-    if(user.outgoingFriendRequests.includes(friend._id)) return "requested";
-    if(user.incomingFriendRequests.includes(friend._id)) return "requesting";
-    if(user.following.includes(friend._id)) return "following";
-    if(user.followers.includes(friend._id)) return "follower";
+function getFriendType(user: TUser, friendId: string ) {
+
+    if(user.outgoingFriendRequests.includes(friendId)) return "requested";
+    if(user.incomingFriendRequests.includes(friendId)) return "requesting";
+    if(user.following.includes(friendId)) return "following";
+    if(user.followers.includes(friendId)) return "follower";
   
     return "other"
 } 
 
-export function FriendButton({friend}: {friend: TUser}){
+export function FriendButton({friend}: {friend: TUser | TProfile}){
     const user = useUser();
     const {setPop} = usePop();
     const {updateUser} = useAuth()
     const {message} = useMessage()
-    const type:TFriendType = getFriendType(user, friend);
+    const type:TFriendType = getFriendType(user, friend._id);
     const [loading, setLoading] = useState(false);
+    useEffect(()=>{
+        //getUser()
+    },[])
     //console.log("friend type", {type})
     const handleClick = () =>{
-        setLoading(true);
+        
         if(type === "following"){
             setPop(<UnfollowPop id={friend._id} name={friend.name} closePop={()=>{
                 setPop(undefined);
@@ -168,6 +173,7 @@ export function FriendButton({friend}: {friend: TUser}){
             }/>)
 
         }else if(type === "requested"){
+            setLoading(true);
             cancelFriendRequest(friend._id).then(res=>{
                 updateUser(res);
                 setLoading(false);
@@ -177,12 +183,14 @@ export function FriendButton({friend}: {friend: TUser}){
                 setLoading(false);
             })
         }else if(type === "requesting"){
+            setLoading(true);
             acceptFriendRequest(friend._id).catch(err=>{
                 message.error(err.message)
             }).finally(()=>{
                 setLoading(false);
             })
         }else if(type === "follower"){
+            setLoading(true);
              sendFriendRequest(friend._id).then(res =>
                 updateUser(res)
             ).catch(err=>{
@@ -192,6 +200,7 @@ export function FriendButton({friend}: {friend: TUser}){
             })
         }else
             {
+                setLoading(true);
             sendFriendRequest(friend._id).then(res =>
                 updateUser(res)
             ).catch(err=>{
@@ -241,7 +250,7 @@ export default function SearchUser(){
             //if(randomUser._id == user._id) return null
             return (
                 
-                <div key={randomUser._id} onClick={() =>navigate(`/user/${randomUser._id}`)} className={styles.user}>
+                <div key={randomUser._id} onClick={() =>navigate(`/user/${randomUser._id}`,)} className={styles.user}>
                     
                     <ProfileIconLink profileImg={randomUser.profileImg} name={randomUser.name} _id={randomUser._id}/>
                     <div>

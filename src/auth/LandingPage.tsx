@@ -12,10 +12,12 @@ function LandingPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams()
-    const [prompt, setPropmpt] = useState<any>();
+    const [prompt, setPrompt] = useState<any>();
+
     const setEvent = (e: any) =>{
+        console.log(e);
         e.preventDefault();
-        setPropmpt(e);
+        setPrompt(e);
     }
     useEffect(()=>{
        // console.log("landing mounting")
@@ -25,8 +27,10 @@ function LandingPage() {
             window.removeEventListener("beforeinstallpropmpt", setEvent)
         }
     },[])
-    const handleDownload = () =>{
-        if(prompt) prompt.prompt();
+    const handleDownload = async () =>{
+        if(prompt) {
+            await prompt.prompt()
+        }
         else {
             navigate("/download")
         }
@@ -38,7 +42,6 @@ function LandingPage() {
             <div className='text'>
                 <h1>Set your goal</h1>
                 <p>stay motivated, work hard and you will achieve it!</p>
-                <p></p>
                 <div className='buttons'>
                      {window.matchMedia("(display-mode: standalone)").matches? <Link to={"/login"}><button>Login</button></Link>: <button onClick={handleDownload}>download</button>}
                     <Link to={"/register"}><button className='outline'>Sign up</button></Link>

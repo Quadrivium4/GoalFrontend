@@ -5,20 +5,26 @@ import Settings from './pages/Settings/Settings';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
 import Header from './components/Header';
-import Friends from './pages/Friends/Friends';
+import Friends, { usePullRefreshTouch } from './pages/Friends/Friends';
 import User from './pages/User/User';
 import DeleteAccount from './shared/DeleteAccount';
 import Pop from './components/Pop/Pop';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 
-const Layout = () =>(
+const Layout = () =>{
+    let width = window.screen.width;
+    width = window.innerWidth;
+    return (
     <>
-         {window.screen.width >= 500?<Header></Header> : null}
+         <Header></Header>
          <Pop />
+         <div className='page'>
          <Outlet />
-         {window.screen.width <= 500?<Footer></Footer> : null}
+         </div>
+         <Footer></Footer> 
     </>
 )
+}
 const appRouter = createBrowserRouter([{
     element: <Layout />, 
     children: [{
@@ -46,6 +52,7 @@ const appRouter = createBrowserRouter([{
 ]}]);
 
 const AppNavigator = () =>{
+    //usePullRefreshTouch(() => window.location.reload())
     return (
         <>
 

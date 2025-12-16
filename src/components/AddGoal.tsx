@@ -4,16 +4,25 @@ import Input from './Input/Input';
 import { useUser } from '../context/AuthContext';
 import { useDays } from '../context/DaysContext';
 import { TGoalAmountType } from '../controllers/days';
+import { useMatch } from 'react-router-dom';
+import { useMessage } from '../context/MessageContext';
+import { usePop } from '../context/PopContext';
 
-function AddGoal({closePop}: {closePop: () =>void}) {
+function AddGoal() {
     const user = useUser();
     const [title, setTitle] = useState("")
     const [selectedOption, setSelectedOption] = useState<TGoalAmountType | "">("");
     const [frequency, setFrequency] = useState<"daily" | "weekly" | "monthly" | "">("")
     const [amount, setAmount] = useState<number>();
     const {addGoal} = useDays();
+    const {message} = useMessage()
+    const {closePop} = usePop();
     const createGoal = () =>{
-        if(!title || !selectedOption || !frequency || !amount) return;
+        if(!title) return message.error("insert a valid title");
+        if(!frequency) return message.error("select a valid frequency");
+        if(!selectedOption) return message.error("select a valid amount type");
+        if(!amount) return message.error("select a valid amount");
+        //if(!title || !selectedOption || !frequency || !amount) return;
        addGoal({
             title,
             userId: user._id,

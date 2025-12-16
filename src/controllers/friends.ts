@@ -31,7 +31,13 @@ export type TLazyFriendsResponse = {
         goals: TMyGoal[],
         goalsInfo: TGoal[]
     }[]
-const getUsers= async({index, offset, search,filter, signal}: {index: number, search?: string, offset?: number,filter?: TFilter,  signal?: GenericAbortSignal}): Promise<TUser[]> =>{
+export type TProfile = {
+    _id: string,
+    name: string,
+    profileImg?: TFile,
+    visible: boolean
+}
+const getUsers= async({index, offset, search,filter, signal}: {index: number, search?: string, offset?: number,filter?: TFilter,  signal?: GenericAbortSignal}): Promise<TProfile[]> =>{
     
     const res =  await protectedApi.get("/users", {params:{
         index, 

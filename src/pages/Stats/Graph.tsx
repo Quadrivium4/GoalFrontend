@@ -6,7 +6,6 @@ import { getLastMonday, getNormalizedPercentage } from '../../utils';
 import dayController, { TGoalDays, TStat } from '../../controllers/days';
 import {  TDay, TDayGoal, TProgress, TStats } from '../../controllers/days';
 import { TUser, useUser } from '../../context/AuthContext';
-import Pop from '../../components/Pop/Pop';
 import { editGoalAmount, TGoal, TGoalForm } from '../../controllers/goals';
 import { formatDate, getAmountString, getGoalAmountString,  SingleGoal, sumDayProgress, sumDaysProgress } from '../Goals/Goals';
 import AddProgress from '../../components/AddProgress';
@@ -226,9 +225,10 @@ export function createGraphArray(stats: TDay[], goal: TGoal):TGraphPoint[] {
 
     return graphsArray
 }
-export function EditGoalAmount({goal, closePop, date}: {goal: TGoal, closePop: ()=>void, date: number}){
+export function EditGoalAmount({goal, date}: {goal: TGoal, date: number}){
     const user = useUser();
     const {updateStats} = useStats();
+    const {closePop} = usePop();
     const [amount, setAmount] = useState<number>(goal.amount);
     const createGoal = () =>{
         if(!amount) return;
@@ -254,6 +254,7 @@ export function EditGoalAmount({goal, closePop, date}: {goal: TGoal, closePop: (
         : goal.type=== "distance"? <Input.DistancePicker onSelect={setAmount} initialValue={goal.amount}/> 
         : <input placeholder='amount' type='number' onChange={(e)=> setAmount(parseInt(e.target.value))} value={amount || ""}></input>}
         <button onClick={createGoal}>save</button>
+        
     </div>)
 }
 

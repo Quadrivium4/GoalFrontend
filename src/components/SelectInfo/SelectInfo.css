@@ -1,0 +1,38 @@
+@import "../../root.css"; 
+
+.customSelect {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-light);
+    color: var(--foreground);
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    cursor: pointer;
+
+}
+.customSelect > p {
+    padding: 10px 10px;
+}
+.customSelect .placeholder {
+    color: rgb(117,117,117);
+}
+.customSelect .options-wrapper{
+    position: relative;
+}
+.customSelect .options {
+    display: none;
+    width: 100%;
+}
+.customSelect .active {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--foreground);
+    position: absolute;
+    background-color: var(--background-light);
+}
+.customSelect .option {
+    padding: 10px;
+}
+.customSelect .option:hover{
+    background-color: rgba(21, 255, 0, 0.123);
+}

@@ -70,7 +70,7 @@ function InputProgressValues({type, onChange, initial }: {type:TGoalAmountType, 
         </div>
         {type === "time" ? <Input.TimePicker onSelect={(value) => updateProgress(value)} initialValue={form.progress}/> 
         : type === "distance"? <Input.DistancePicker onSelect={updateProgress} initialValue={form.progress}/> 
-        : <input placeholder='progress' value={form.progress} type="number" onChange={(e)=> updateProgress(parseInt(e.target.value))} />}
+        : <input placeholder='progress' value={form.progress !=0? form.progress: undefined} type="number" onChange={(e)=> updateProgress(parseInt(e.target.value))} />}
             <textarea  placeholder='notes...' value={form.notes}onChange={(e)=> updateNotes(e.target.value)}></textarea>
             </>
     )

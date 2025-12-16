@@ -20,7 +20,7 @@ function EditAccount() {
 
      const handleChange = () =>{
       console.log("handle change")
-      editUser({name, bio}).then(()=>{
+      editUser({name, bio, profileType: "public"}).then(()=>{
 
       }).catch(err=>{
         console.log("error editing user")

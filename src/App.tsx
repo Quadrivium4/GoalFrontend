@@ -7,10 +7,10 @@ import { AuthProvider } from './context/AuthContext';
 import { MessageProvider } from './context/MessageContext';
 import Message from './components/Message';
 import { ErrorBoundary } from 'react-error-boundary';
-import Pop from './components/Pop/Pop';
 import { PopProvider } from './context/PopContext';
 import { GlobalProvider } from './GlobalState';
 import { NotificationProvider } from './pages/Settings/Notifications/Notifications';
+import { isMobile } from './utils';
 
 // function App() {
 //   return (
@@ -32,7 +32,10 @@ import { NotificationProvider } from './pages/Settings/Notifications/Notificatio
 
 function App() {
   return (
+
+
       <PopProvider >
+            
         <MessageProvider>
           <AuthProvider>
               <NotificationProvider >

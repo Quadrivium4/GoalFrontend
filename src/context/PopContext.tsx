@@ -8,21 +8,28 @@ type PopStateProps = {
     title?: string,
     content: React.ReactNode,
 }
-type PopContextProps = PopStateProps & {
+type PopContextProps = {pops: PopStateProps[]} & {
     setPop: (children: React.ReactNode, title?: string) => void,
-    closePop: () =>void
+    closePop: () => any
 } | null;
 const PopContext = createContext<PopContextProps>(null);
 
 const PopProvider = ({ children }: {children: ReactNode}) => {
-    const [state, setState] = useState<PopStateProps>({content: null});
+    const [state, setState] = useState<PopStateProps[]>([]);
     //const delay = 5000;
    const setPop = (children: React.ReactNode, title?: string) => {
-        setState({content: children, title})
+        setState((prev) => [...prev, {content: children, title}])
    }
-   const closePop = () => setState({content: undefined})
+   const closePop = () => {
+    setState(prev => {
+        console.log({prev})
+        const newState = prev.slice(0,-1);
+        console.log({newState})
+        return newState;
+    })
+   };
     return (
-        <PopContext.Provider value={{ ...state,setPop, closePop}}>
+        <PopContext.Provider value={{ setPop, closePop, pops: state}}>
             {children}
         </PopContext.Provider>
     );

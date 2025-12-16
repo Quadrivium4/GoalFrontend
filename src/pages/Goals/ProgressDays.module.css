@@ -3,7 +3,7 @@
 .sub-progresses {
     display: flex;
     flex-direction: column;
-    
+    width: 100%;
 
     gap: 12px;
 }
@@ -22,6 +22,11 @@
     gap: 5px;
     border-bottom: 1px solid var(--background-light);
     color: var(--foreground-dark);
+    transition: 250ms;
+    cursor: pointer;
+}
+.sub-progresses .sub-progress:hover {
+    opacity: 0.7;
 }
 
 .sub-progresses .sub-progress .header {

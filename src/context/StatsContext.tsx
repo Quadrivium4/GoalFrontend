@@ -59,7 +59,7 @@ const StatsProvider = ({ children, user}: {children: ReactNode, user: TUser}) =>
     }
     const reloadStats =async() =>{
         setState({...state, loading: true});
-        await wait(3000);
+        //await wait(3000);
         dayController.getStats(_id).then(data =>{
             // Goal in stats is updated!!
             let result: TGraph[] = createGraphArray(data)

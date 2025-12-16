@@ -3,10 +3,11 @@ import { RiTodoLine } from "react-icons/ri";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiUserGroup } from "react-icons/hi"
 import BottomNavLink from './BottomNavLink';
+import styles from "./Footer.module.css"
 
 const Footer = () =>{
     return (
-      <footer>
+      <footer className={styles.footer}>
         <BottomNavLink href='/' Icon={RiTodoLine}></BottomNavLink>
         <BottomNavLink href='/stats' Icon={IoStatsChartOutline}></BottomNavLink>
         <BottomNavLink href='/settings' Icon={IoSettingsOutline}></BottomNavLink>

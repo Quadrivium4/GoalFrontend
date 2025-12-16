@@ -3,11 +3,19 @@
 import { TLoginForm, TUser } from "../context/AuthContext"
 import { protectedApi } from "../utils"
 import { wait } from "./days";
+import { TProfile } from "./friends";
 export type TUserForm = {
     name: string,
-    bio: string
+    bio: string,
+    profileType: string
 }
 // }
+const getProfile = async(userId: string): Promise<TProfile> =>{
+  
+
+    const res = await protectedApi.get("/profile", {params: {id: userId}});
+    return res.data;
+}
 const getUser = async(userId: string): Promise<TUser> =>{
   
 
@@ -38,6 +46,7 @@ export  {
     uploadProfileImg,
     getUser,
     changeEmail,
+    getProfile,
     putUser
 }
 export default controller

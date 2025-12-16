@@ -4,7 +4,6 @@ import AddProgress from '../../components/AddProgress';
 import DeleteGoal from '../../components/DeleteGoal';
 import EditGoal from '../../components/EditGoal';
 import GoalSkeleton from '../../components/GoalSkeleton';
-import Pop from '../../components/Pop/Pop';
 import { useAuth, useUser } from '../../context/AuthContext';
 import { TMyGoal, useDays } from '../../context/DaysContext';
 import { usePop } from '../../context/PopContext';
@@ -15,11 +14,22 @@ import { getPercentage, getProgressColor } from '../Stats/Graph';
 import "./Goals.css";
 import ProgressDays from './ProgressDays';
 import { NotificationBell } from '../Settings/Notifications/Notifications';
+import { PageHeader } from '../../components/PageHeader/PageHeader';
+import { useStats } from '../../context/StatsContext';
+import { BsTrash } from 'react-icons/bs';
+import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
+import { RiFileEditLine } from 'react-icons/ri';
+import { FiEdit, FiPlus } from "react-icons/fi";
+import { SlOptionsVertical } from "react-icons/sl";
+import { GoPlus } from "react-icons/go";
+import { AiOutlinePlus} from "react-icons/ai";
+import { colors } from '../../constants';
+import { MdEdit } from 'react-icons/md';
 
 export function sameDay(date1: Date | number, date2: Date | number){
     date1 = new Date(date1);
     date2 = new Date(date2);
-    if(date1.getDay() === date2.getDay() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear()) return true
+    if(date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear()) return true
     return false
 }
 export function isYesterday(date1: Date | number){
@@ -142,24 +152,30 @@ export function SingleGoal({goal, setPop, closePop}: {goal: TMyGoal, setPop: (co
   let goalProgress = sumDaysProgress(goalDays);
   let progressWidth = getPercentage(goal.amount, goalProgress);
   let goalAmountString = getGoalAmountString(goal, goalProgress)
+  const {reloadStats} = useStats()
   return (
       <div className='goal'>
         <div className='header'><div className='progress' style={{width: progressWidth + "%", backgroundColor: getProgressColor(progressWidth)}}></div></div>
         <div className='info'>
           <h3>{goal.title}</h3>
           <p>{goalAmountString} {goal.frequency}</p>
+         
+          
         </div>
-        <ProgressDays history={goalDays} setPop={setPop} />
+        
+        <ProgressDays history={goalDays} setPop={setPop} onChange={reloadStats}/>
        
         <div className='footer'>
           <div style={{display: 'flex', gap: "5px"}}>
-            <button className='outline' onClick={() => setPop(<AddProgress goal={goal}  closePop={closePop}/>)}>add progress</button>
+            <AiOutlinePlus size={28} color={colors.primary} onClick={() => setPop(<AddProgress goal={goal} />)} className='icon-button' />
+            {/* <button className='outline' onClick={() => setPop(<AddProgress goal={goal}  closePop={closePop}/>)}>add progress</button> */}
           </div>
-          <div style={{display: 'flex', gap: "5px"}}>
+          <div style={{display: 'flex', gap: "15px"}}>
               {/* <MdOutlineModeEditOutline size={24} onClick={() =>setPop(<EditGoal goal={goal} closePop={() =>setPop(undefined)} />)} className='button-icon' /> */}
               {/* <MdDelete size={24} onClick={() =>setPop(<EditGoal goal={goal} closePop={() =>setPop(undefined)} />)} className='button-icon' /> */}
-            <button className='outline gray' onClick={() =>setPop(<EditGoal goal={goal} closePop={closePop} />)} >edit</button>
-            <button className='outline error' onClick={()=> setPop(<DeleteGoal goal={goal} closePop={closePop} />)}>delete</button>
+            <MdEdit size={22} onClick={()=> setPop(<EditGoal goal={goal} />)} className='icon-button'/>
+            <FaRegTrashAlt size={20} onClick={()=> setPop(<DeleteGoal goal={goal} />)} className='icon-button'/>
+          
           </div>
         </div>
       </div>
@@ -182,12 +198,11 @@ function Goals() {
       //worker.postMessage("hello")
     },[])
   return (
-    <div className='page' id='goals'>
+    <>
+   <PageHeader title="Home" action={<NotificationBell setPop={setPop}  />} />
+    <div className='content' id='goals'>
+       
       
-      <div className="header">
-          <h1>Goals</h1>
-            <NotificationBell setPop={setPop} />
-      </div>
       <div className='goals'>
         {
           user.goals.length > 0 && daysLoading? <GoalSkeleton goals={user.goals} />:
@@ -200,11 +215,12 @@ function Goals() {
 
       </div>
       <button onClick={() =>{
-        setPop(<AddGoal closePop={()=>setPop(undefined)} />)
+        setPop(<AddGoal/>)
       }}> new Goal</button>
     {/* <button onClick={()=> window.open('tel:+393478619432', '_system')}>error</button> */}
     {/* <Admin /> */}
     </div>
+    </>
   );
 }
 

@@ -4,17 +4,17 @@ import { usePop } from "../../context/PopContext";
 import { useLocation } from "react-router-dom";
 
 const Pop = ({children, toggle}: {children?: ReactNode, toggle?: () => void}) =>{
-    const {content, closePop, title} = usePop();
+    const {closePop, pops} = usePop();
     const location = useLocation();
     useEffect(()=>{
-        if(!children && !content) return;
+        if(pops.length == 0) return;
         document.body.style.overflow = "hidden";
         // document.documentElement.style.overflow = 'hidden'
         return () => {
             document.body.style.overflow = "unset";
             //document.documentElement.style.overflow = 'unset'
         }
-    },[children, content])
+    },[pops])
     useEffect(()=>{
         closePop();
     },[location])
@@ -23,12 +23,23 @@ const Pop = ({children, toggle}: {children?: ReactNode, toggle?: () => void}) =>
         if(toggle) toggle();
         else closePop()
     }
-    if(!children && !content) return null
+ 
     return (
-        <div id="pop-layer">
-            <div id="pop-up">
+        <>
+        {pops.map(pop =>{
+
+       
+        console.log("pop");
+        return <div key={Date.now() + Math.random()} id="pop-layer" onClick={(e)=>{
+            closePop()
+            console.log("click in parent");
+        }}>
+            <div id="pop-up" onClick={(e)=>{
+                e.stopPropagation();
+                console.log("click in pop")
+            }}>
                 <div className="header">
-                    <h2 className="title">{title}</h2>
+                    <h2 className="title">{pop.title}</h2>
                     <div id="close-pop" onClick={handleClick}>
                         <span className="n1"></span>
                         <span className="n2"></span>
@@ -37,10 +48,13 @@ const Pop = ({children, toggle}: {children?: ReactNode, toggle?: () => void}) =>
                 
                 <div id="pop-body">
                     {/* <p>{document.body.style.overflow}</p> */}
-                    {children || content}
+                    {pop.content}
                 </div>
             </div>
-        </div>)
+        </div>})}
+        </>
+        )
+
 }
 export default Pop
 

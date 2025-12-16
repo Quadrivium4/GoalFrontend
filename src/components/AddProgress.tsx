@@ -5,12 +5,14 @@ import {TDay, TProgress } from '../controllers/days';
 import { useDays } from '../context/DaysContext';
 import InputGoalValue from './Input/InputGoalValue';
 import { useStats } from '../context/StatsContext';
+import { usePop } from '../context/PopContext';
 
 
-function AddProgress({ goal,  closePop, date = Date.now(), onRes} : {goal: TGoal,  closePop: ()=>void, date?: number, onRes?: (res: TDay) =>void}) {
+function AddProgress({ goal, date = Date.now(), onRes} : {goal: TGoal,   date?: number, onRes?: (res: TDay) =>void}) {
     const {addProgress} = useDays();
     const {reloadStats, updateStats} = useStats()
     const [form, setForm] = useState<TProgress>({progress: 0, notes: "", likes: [], date: Date.now()});
+    const {closePop} = usePop();
     const updateGoalProgress = () =>{
         console.log({form})
         addProgress(goal._id,  form.progress, form.notes, form.date).then((res: TDay) =>{

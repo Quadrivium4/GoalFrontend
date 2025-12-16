@@ -1,5 +1,6 @@
 import AddProgress from "../../../components/AddProgress";
 import { useUser } from "../../../context/AuthContext";
+import { useDays } from "../../../context/DaysContext";
 import { usePop } from "../../../context/PopContext";
 import { useStats } from "../../../context/StatsContext";
 import { getGoalAmountString, sumDaysProgress } from "../../Goals/Goals";
@@ -17,6 +18,7 @@ const PointHeader = ({progressWidth}: {progressWidth: number}) =>{
 }
 export default function PointPop ({point}: {point: TGraphPoint}){
     const {reloadStats} = useStats()
+    const {loadDays} = useDays();
     const date = new Date(point.date);
     const now = new Date()
     const {setPop} = usePop();
@@ -34,10 +36,16 @@ export default function PointPop ({point}: {point: TGraphPoint}){
                 <p>{goalAmountString} {goal.frequency}</p>
             </div>
             <PointHeader progressWidth={progressWidth}/>
-            <ProgressDays history={point.history} setPop={setPop} onChange={reloadStats}/>
+            <ProgressDays history={point.history} setPop={setPop} onChange={() =>{
+                reloadStats();
+                loadDays()
+                }}/>
             {user._id === goal.userId? <div className={styles.buttons}>
-                <button className='outline' onClick={() => setPop(<AddProgress goal={point.goal}  closePop={()=>setPop(undefined)} date={date.getTime()} onRes={reloadStats}/>)}>add progress</button>
-                <button className='outline gray' onClick={() => setPop(<EditGoalAmount goal={point.goal}  date={point.date.getTime()} closePop={() => setPop(undefined)}/>)}>Edit goal</button>
+                <button className='outline' onClick={() => setPop(<AddProgress goal={point.goal}  date={date.getTime()} onRes={() =>{
+                reloadStats();
+                loadDays()
+                }}/>)}>add progress</button>
+                {/* <button className='outline gray' onClick={() => setPop(<EditGoalAmount goal={point.goal}  date={point.date.getTime()} />)}>Edit goal</button> */}
             </div>: null}
         </div>
     )

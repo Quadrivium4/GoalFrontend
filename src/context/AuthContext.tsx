@@ -30,7 +30,9 @@ export type TUser = {
     incomingFriendRequests: string[]
     notifications: TNotification[],
     followers: string[],
-    following: string[]
+    following: string[],
+    profileType: "public" | "private",
+    pro: boolean
 }
 type TAuthStateProps = {
     logged: boolean,

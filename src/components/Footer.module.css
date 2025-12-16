@@ -1,0 +1,17 @@
+.footer {
+    display: none;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--background-dark);
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+    padding-bottom: max(env(safe-area-inset-bottom), 10px);
+    bottom: 0;
+}
+@media(max-width: 500px){
+    .footer {
+        display: flex;
+    }
+}

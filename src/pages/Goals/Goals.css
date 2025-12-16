@@ -27,6 +27,16 @@
 #goals .goals .goal .info{
     display: flex;
     justify-content: space-between;
+    position: relative;
+}
+#goals .goals .goal .options{
+    position: absolute;
+    margin-top: 5px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 0px;
 }
 #goals .goals .goal .info p {
     font-size: 16px;
@@ -39,6 +49,9 @@
     left: 0;
     height: 10px;
     width: 100%;
+}
+#goals .goals .goal .icon-button{
+    cursor: pointer;
 }
 #goals .goals .goal .header .progress {
     /* border-top-left-radius: 10px;

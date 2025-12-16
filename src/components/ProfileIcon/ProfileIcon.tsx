@@ -11,7 +11,7 @@ export default function ProfileIcon({profileImg, name, _id, size}: {profileImg?:
     return (
        
        <div className={styles.profile} style={{width: size, height: size, backgroundColor: getRandomUserColor(_id)}} >
-            {profileImg?<img src={profileImg.url} style={{width: size, height: size}} />: <h1 style={{fontSize: size}}>{name[0]}</h1>}
+            {profileImg && profileImg.url?<img src={profileImg.url} style={{width: size, height: size}} />: <h1 style={{fontSize: size}}>{name[0]}</h1>}
         </div> 
 
     )

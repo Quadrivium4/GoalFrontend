@@ -1,11 +1,21 @@
 @import "./root.css";
 .page {
-    padding: 20px;
-    padding-bottom: 60px;
+    height: 100%;
+    max-width: 600px;
+    width: 100%;
+    align-items: center;
 }
 .page > .header{
     border-bottom: 1px solid;
     margin-bottom: 10px;
+    width: 100%;
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.page .content {
+    padding: 30px;
 }
 .form {
     display: flex;
@@ -15,14 +25,7 @@
     gap: 5px;
 }
 
-#header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 40px;
-    background-color: var(--background-dark);
-    width: 100%;
-}
+
 #header .nav-links {
     display: flex;
     gap: 30px;
@@ -50,11 +53,11 @@ button.google-button svg{
 
 #message {
     padding: 10px 15px;
-    position: absolute;
+    position: fixed;
     width: 100%;
     top: 0;
     transition: 1s;
-    z-index: 2;
+    z-index: 300;
 }
 #message.success{
     background-color: rgba(1, 109, 1, 0.9);
@@ -70,9 +73,23 @@ button.google-button svg{
         transition-duration: 1s;
 }
 @media(max-width: 500px){
-    .page{
-        padding: 10px;
-        padding-bottom: 60px;
+
+    .page > .header{
+       position: relative;
+        background-color: var(--background-dark);
+        padding: 10px 5px 10px 5px;
+        border-bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content:center;
+    }
+    .page > .header h1 {
+        font-size: 24px;
+
+    }
+    .page > .header > .action{
+        right: 10px;
+        position: absolute;
     }
     #header .logo {
         font-size: 26px;
@@ -86,15 +103,6 @@ button.google-button svg{
         left: 10px;
         width: 20px;
         height: 20px;
-    }
-}
-@media(min-width: 700px){
-    #root{
-        align-items: center;
-    }
-    .page{
-            width: 600px;
-
     }
 }
 #auth-page{

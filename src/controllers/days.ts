@@ -11,6 +11,7 @@ export type TLike = {
 export type TProgress = {
     date: number,
     progress: number,
+    
     notes: string,
     likes: TLike[]
 }

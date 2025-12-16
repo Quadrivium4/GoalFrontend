@@ -8,11 +8,12 @@ import LandingPage from './auth/LandingPage';
 import DeleteAccount from './shared/DeleteAccount';
 import DownloadPage from './auth/DownloadPage';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
+import { colors } from './constants';
 
 const Layout = () =>(
     <>
          <Header></Header>
-        <Outlet />
+            <Outlet />
          
          <Footer></Footer>
     </>
@@ -56,7 +57,7 @@ const authRouter = createBrowserRouter([{
 
 export const Header = () =>{
     return (
-    <div id="header">
+    <div id="header" style={{backgroundColor: colors.backgroundDark, width: "100%", padding: 8}}>
         <a href='/'><h1 className="logo">G<span>o</span>al</h1></a>
         <div className="nav-links">
 
@@ -70,7 +71,7 @@ export const Footer = () =>{
         <p>@{new Date().getFullYear()} Goal</p>
         <p>All rights reserved</p>
         <Link to={"/privacy-policy"}>Privacy Policy</Link>
-        <p>Email: goal.getinfo@gmail.com</p>
+        <p>Email: support@goalapp.it</p>
         {/* <a href='/'><h1 className="logo">G<span>o</span>al</h1></a> */}
       </div>
     )
