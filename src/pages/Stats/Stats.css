@@ -1,4 +1,7 @@
 @import "../../root.css";
+#stats {
+    
+}
 #stats .header{
     display: flex;
     align-items: center;
