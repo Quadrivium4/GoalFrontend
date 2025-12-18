@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDays } from '../context/DaysContext';
 import { usePop } from '../context/PopContext';
 import { TGoal } from '../controllers/goals';
-import { NetButton } from '../pages/Settings/Notifications/Notifications';
+import { NetButton } from './NetButton/NetButton';
 
 function DeleteGoal({ goal}: { goal: TGoal}) {
     const {closePop} = usePop()

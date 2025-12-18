@@ -40,7 +40,7 @@ function ChangeEmail() {
         <h2>Change Email</h2>
         <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='new email'></input>
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
-        <button type='submit' onClick={handleChange}>Submit</button>
+        <button onClick={handleChange}>Submit</button>
       </div>
     </>
   );

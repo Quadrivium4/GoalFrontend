@@ -10,17 +10,30 @@ import User from './pages/User/User';
 import DeleteAccount from './shared/DeleteAccount';
 import Pop from './components/Pop/Pop';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
+import Loader from './components/Loader/Loader';
+import { useAppLoading } from './context/AppLoadingContext';
 
-
+const LoadingLayer = () =>{
+    const {loading} = useAppLoading();
+    return <div style={{position: "fixed", width: "100%", height: "100%", overflow: "hidden", zIndex: 1000, backgroundColor: "rgba(0,0,0,0.5)", display: loading? "none": "none"}}>
+        <Loader size={50}/>
+    </div>
+}
 const Layout = () =>{
     let width = window.screen.width;
     width = window.innerWidth;
     return (
     <>
          <Header></Header>
+         <LoadingLayer />
          <Pop />
-         <div className='page'>
-         <Outlet />
+         <div id='app-spinner' style={{maxHeight: 0, overflow: "hidden",  transition: "max-height 0.3s"}}> <Loader size={30}/></div>
+        
+         <div id='page'>
+            
+            <div className='page-content'>
+                <Outlet />
+            </div>
          </div>
          <Footer></Footer> 
     </>

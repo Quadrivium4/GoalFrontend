@@ -19,6 +19,7 @@ import UserDays from '../Friends/UserDays/UserDays';
 import { TProfile } from '../../controllers/friends';
 import { IoMdRefresh } from 'react-icons/io';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
+import Loader from '../../components/Loader/Loader';
 function useScrollRefresh(ref: React.RefObject<HTMLDivElement>, onTrigger: Function){
     useEffect(()=>{
         const el = ref.current;
@@ -145,11 +146,11 @@ function User() {
                 fetchDays()
             }}/>} goBack={() => window.history.back()}/>
     
-        {userLoading? <p>loading..</p>: 
+       
         <div id='user' className='content' onScroll={()=>{console.log("scro")}} ref={ref}>
 
-           
-        {user? <>
+           {userLoading?<div ><Loader size={40}></Loader></div> : 
+        user? <>
         <div className='info'>
             <ProfileIcon  name={user.name} _id={user._id} profileImg={user.profileImg} />
             <div>
@@ -174,7 +175,7 @@ function User() {
        
 
         </div>
-}
+
         </>
     );
 }

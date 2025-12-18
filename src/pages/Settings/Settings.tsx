@@ -6,12 +6,13 @@ import ImageUpload from '../../components/ImageUpload';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
 import { useAuth, useUser } from '../../context/AuthContext';
 import "./Settings.css";
-import { NetButton, NotificationBell } from './Notifications/Notifications';
+import {  NotificationBell } from './Notifications/Notifications';
 import { useMessage } from '../../context/MessageContext';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import Select from '../../components/Select/Select';
 import VisibilityInfo from './VisibiltiyInfo';
 import { usePop } from '../../context/PopContext';
+import { NetButton } from '../../components/NetButton/NetButton';
 
 // function OldEditing() {
 //   const {editUser} = useAuth();
@@ -123,7 +124,10 @@ function Settings() {
             }
            
           </div>
-          <div className='edit' onClick={()=>setPop(<ChangeEmail />)}>
+          <div className='edit' onClick={()=>{
+            if(user.googleLogin) return message.error("you are logged in with google cannot change email");
+            setPop(<ChangeEmail />)}
+            }>
                 <p>{user.email}</p>
                 <MdOutlineModeEditOutline  />
             </div>

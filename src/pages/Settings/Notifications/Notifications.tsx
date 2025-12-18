@@ -5,6 +5,8 @@ import { getNotifications, ignoreFriendRequest, acceptFriendRequest, readNotific
 import { sameDay, isYesterday, getDate, getTime } from "../../Goals/Goals"
 import styles from "./Notifications.module.css";
 import { usePullRefreshTouch } from "../../Friends/Friends"
+import { NetButton } from "../../../components/NetButton/NetButton"
+import { wait } from "@testing-library/user-event/dist/utils"
 export type TNotification =  {
     _id: string,
     date: number,
@@ -108,19 +110,7 @@ export function Notifications(){
     </div>
   )
 }
-export const NetButton = ({className = "", request, children, onError}: { className?: string, request: () => Promise<void>, children: ReactNode, onError?: (err: any) =>any}) => {
-  const [loading, setLoading] = useState(false);
-  return <button className={className} onClick={async() =>{
-    if(loading) return console.log("already loading");
-    setLoading(true);
-    
-    request().catch(err =>{
-      if(onError)onError(err)
-    }).finally(()=>{
-      setLoading(false);
-    })
-    }}>{loading ? "loading..." : children}</button>
-}
+
 export function useNotifications(){
   const notificationContext = useContext(NotificationContext);
   if(!notificationContext) throw new Error("notification context must be used inside provider")
@@ -129,7 +119,9 @@ export function useNotifications(){
 
 export function NotificationBell({setPop}: {setPop: (content: React.ReactNode)=>void}){
   const {notifications, setNewNotification, newNotification, setNotifications, reload} = useNotifications();
-  //usePullRefreshTouch(reload);
+
+
+
   //console.log({notifications})
   const openNotifications = () =>{
     setPop(<Notifications />);
@@ -141,6 +133,7 @@ export function NotificationBell({setPop}: {setPop: (content: React.ReactNode)=>
   }
   return (
   <div className={styles["notification-bell"]}>
+
       <FaRegBell size={24} onClick={openNotifications}/>
       {newNotification && <div className={styles.point}></div>}
   </div>)

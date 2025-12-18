@@ -29,6 +29,7 @@ export type TUser = {
     outgoingFriendRequests: string[],
     incomingFriendRequests: string[]
     notifications: TNotification[],
+    googleLogin: boolean,
     followers: string[],
     following: string[],
     profileType: "public" | "private",

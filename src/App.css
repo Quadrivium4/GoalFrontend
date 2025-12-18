@@ -1,11 +1,22 @@
 @import "./root.css";
-.page {
+#page {
     height: 100%;
     max-width: 600px;
     width: 100%;
+    display: flex;
     align-items: center;
+    overflow: auto;
+    background-color: var(--background);
+   
 }
-.page > .header{
+#page .page-content {
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+height: 100%;
+    width: 100%;
+}
+#page .page-content > .header{
     border-bottom: 1px solid;
     margin-bottom: 10px;
     width: 100%;
@@ -14,7 +25,7 @@
     align-items: center;
     justify-content: space-between;
 }
-.page .content {
+#page .content {
     padding: 30px;
 }
 .form {

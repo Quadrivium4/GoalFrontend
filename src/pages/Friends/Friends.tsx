@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RiSearchLine } from "react-icons/ri";
 import { Link } from 'react-router-dom';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
@@ -13,6 +13,8 @@ import UserDays from './UserDays/UserDays';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { wait } from '../../controllers/days';
 import Loader from '../../components/Loader/Loader';
+import GoalSkeleton from '../../components/GoalSkeleton';
+import FriendSkeleton from '../../components/FriendSkeleton/FriendSkeleton';
 
 let cachedFriends:TLazyFriendsResponse = [];
 function useLazyFriends (){
@@ -25,17 +27,10 @@ function useLazyFriends (){
         console.log("getting friends")
         getFriends();
     }, [index])
-    
-    const getFriends = async() =>{
-        if(current.current) return;
-        current.current = true;
-        if(cachedFriends.length > (index) * 20){
-            console.log("friends cached");
-            current.current = false;
-            return setFriends(cachedFriends);
-        } 
-        
+    const fetchFriends = async() =>{
+         
         setLoading(true)
+        //await wait(1000)
         try {
              //await wait(1000);
             let newFriends = await getLazyFriends(index);
@@ -58,6 +53,16 @@ function useLazyFriends (){
         }
 
     }
+    const getFriends = async() =>{
+        if(current.current) return;
+        current.current = true;
+        if(cachedFriends.length > (index) * 20){
+            console.log("friends cached");
+            current.current = false;
+            return setFriends(cachedFriends);
+        } 
+       await fetchFriends();
+    }
     useEffect(() =>{
         return () => {
             console.log("unmount")
@@ -65,11 +70,13 @@ function useLazyFriends (){
         }
     },[])
     const getMore = () => setIndex(i =>i++)
-    const reload = () => {
+    const reload = async() => {
+        console.log("reloading lazy friends")
         if(current.current) return;
         current.current = true// new AbortController();
         setFriends([])
-        getFriends();
+        await fetchFriends();
+        current.current = false;
     }
     return {friends, getMore, index, loading, reload}
 }
@@ -94,50 +101,44 @@ export function sumDoubleDayProgress(goal: TMyGoal){
 //     }
 //     return newLikes
 // }
-const usePullRefresh = (onRefresh: ()=>any) =>{
+
+export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.RefObject<HTMLDivElement> ) =>{
     const touch = {
         start: 0
     }
-    useEffect(()=>{
-        window.addEventListener("mousedown", onStartTouch)
-         return ()=> {
-            window.removeEventListener("mouseup", onEndTouch);
-            window.removeEventListener("mousedown", onStartTouch);
-        }
-    },[])
-    function onStartTouch(e: MouseEvent){
-        console.log("start touch", e);
-        touch.start = e.clientY;
-        window.addEventListener("mouseup", onEndTouch)
-    }
-    function onEndTouch(e: MouseEvent){
-        console.log("end touch", e)
-        if( e.clientY  -touch.start> 100){
-            onRefresh()
-        }
-        window.removeEventListener("mouseup", onEndTouch)
-    }
+    
    
-}
-export const usePullRefreshTouch = (onRefresh: ()=>any) =>{
-    const touch = {
-        start: 0
-    }
     useEffect(()=>{
-        window.addEventListener("touchstart", onStartTouch)
+        const root = document.getElementById("page");
+         console.log("root", root)
+        if(!root) return;
+        
+        root.addEventListener("touchstart", onStartTouch)
          return ()=> {
-            window.removeEventListener("touchend", onEndTouch);
-            window.removeEventListener("touchstart", onStartTouch);
+            if(!root) return;
+            root.removeEventListener("touchend", onEndTouch);
+            root.removeEventListener("touchstart", onStartTouch);
         }
     },[])
+    function onTouchMove(e: TouchEvent){
+    //      
+    }
     function onStartTouch(e: TouchEvent){
+        const root = document.getElementById("page");
+        console.log("touch")
+        if(!root) return;
+        if(root.scrollTop > 10) return;
+        console.log('scroll top', {div: root.scrollTop, root: document.getElementById("root")?.scrollTop});
         console.log("start touch", e);
          if(e && e.touches && e.touches[0]){
             touch.start = e.touches[0].clientY;
         }
-        window.addEventListener("touchend", onEndTouch)
+        root.addEventListener("touchmove", onTouchMove)
+        root.addEventListener("touchend", onEndTouch)
     }
-    function onEndTouch(e: TouchEvent){
+    async function onEndTouch(e: TouchEvent){
+        const root = document.getElementById("page");
+         if(!root) return;
         console.log("end touch", e)
         console.log({touch})
         if(e && e.changedTouches && e.changedTouches[0]){
@@ -145,10 +146,21 @@ export const usePullRefreshTouch = (onRefresh: ()=>any) =>{
             console.log(e.changedTouches[0].clientY - touch.start)
 
             if(delta > 100){
-                onRefresh()
+               const spinner = document.getElementById("app-spinner");
+               console.log(spinner)
+               if(spinner){
+                 spinner.style.maxHeight = "50px";
+                 
+               }
+                //await wait(2000)
+                await onRefresh();
+                if(spinner){
+                 spinner.style.maxHeight = "0px";
+               }
             }
         }
-        window.removeEventListener("touchend", onEndTouch)
+         root.removeEventListener("touchmove", onTouchMove)
+        root.removeEventListener("touchend", onEndTouch)
     }
    
 }
@@ -157,7 +169,7 @@ function Friends() {
     //const {days, today, addProgress} = useDays();
     const {setPop}= usePop()
     const {friends, getMore, index, loading, reload} = useLazyFriends();
-    //usePullRefreshTouch(()=>reload());
+    usePullRefreshTouch(reload);
     useEffect(()=>{
         console.log("---- reloading friends");
         //console.log("user changed", user)
@@ -168,12 +180,12 @@ function Friends() {
         
         
         <div className='content' id='friends' style={{overflow: "hidden"}} >
-            
+        
             <div className='friends-lazy' >
                 { friends.length< 1 && !loading ? <>
                     <p style={{marginBottom: 5}}>No friends yet! </p>
                     </>: null}
-                {   loading? <Loader size={40} />: 
+                {   loading? <FriendSkeleton n={4} />: 
                     friends.length > 0? friends.map(friend =>{
                         let goalsString = friend.goalsInfo.map((goal, i) =>  {
                             //console.log("hhhh", goal)

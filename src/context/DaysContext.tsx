@@ -12,6 +12,7 @@ import { dayInMilliseconds, todayDate } from "../constants";
 import { getLastMonday, getToday, isToday, nextWeekTime } from "../utils";
 import { TUser, useAuth, useUser } from "./AuthContext";
 import { nextDayTime } from "./StatsContext";
+import { useAppLoading } from "./AppLoadingContext";
 type TDaysContext = {
     daysLoading: boolean,
     //today: TDay | null,
@@ -159,25 +160,28 @@ const getUpdatedGoals = (goals: TMyGoal[], updatedDay: TDay, updateGoal?: boolea
 const DaysContext = createContext<TDaysContext>(undefined)
 const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
     //const [goals, setGoals] = useState<TGoal[]>([]);
-    const  {updateUser, setLoading} = useAuth()
+    const  {updateUser} = useAuth()
     let user = useUser();
     if(me) user = me;
     //console.log({user})
-    const [daysLoading, setDaysLoading] = useState(true);
+    const {setLoading, loading} = useAppLoading();
     const [goals, setGoals] = useState<TMyGoal[]>([]);
     //const [today, setToday] = useState<TDay | null>(null)
     //const [loading, setLoading] = useState(true);
     useEffect(() =>{
-        if(!user.goals) return setDaysLoading(false);
+        if(!user.goals) return setLoading(false);
         loadDays();
     },[])
     const loadDays = async() =>{
-        dayController.getDays().then((goals) =>{
+        setLoading(true)
+        try {
+            let goals = await dayController.getDays();
             setGoals(goals);
-            setDaysLoading(false)
-        }).catch(err =>{
+            setLoading(false)
+        } catch (err) {
             console.log("error fetching days: ", err)
-        })
+        }
+
     }
     const addProgress = async(goalId: string, progress: number, notes: string, date: number)=>{
         setLoading(true)
@@ -372,7 +376,7 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
         setGoals(updatedGoals)
     }
     return (
-        <DaysContext.Provider value={{goals,addProgress,daysLoading, addGoal, editGoal, deleteGoal, editProgress, deleteProgress, likeProgress, unlikeProgress, loadDays}}>
+        <DaysContext.Provider value={{goals,addProgress,daysLoading: loading, addGoal, editGoal, deleteGoal, editProgress, deleteProgress, likeProgress, unlikeProgress, loadDays}}>
             {children}
         </DaysContext.Provider>
     )

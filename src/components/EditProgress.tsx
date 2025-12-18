@@ -3,7 +3,7 @@ import  {TProgress, TDay} from '../controllers/days';
 import { useDays } from '../context/DaysContext';
 import InputGoalValue from './Input/InputGoalValue';
 import { useMessage } from '../context/MessageContext';
-import { NetButton } from '../pages/Settings/Notifications/Notifications';
+import { NetButton } from './NetButton/NetButton';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { IconNetButton } from './IconNetButton/IconNetButton';
 import { colors } from '../constants';

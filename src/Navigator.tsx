@@ -6,6 +6,7 @@ import { DaysProvider } from './context/DaysContext';
 import { StatsProvider } from './context/StatsContext';
 import { createBrowserRouter, Link, RouterProvider, Routes } from 'react-router-dom';
 import DeleteAccount from './shared/DeleteAccount';
+import { AppLoadingProvider } from './context/AppLoadingContext';
 const commonRouter = createBrowserRouter([
     {
         path: "/delete-account/:id/:token",
@@ -37,11 +38,13 @@ const Navigator = () =>{
     return (
         <>
         {logged && user? 
-            <DaysProvider>
-                <StatsProvider user={user}>
-                    <AppNavigator />
-                </StatsProvider>
-            </DaysProvider>
+            <AppLoadingProvider>
+                <DaysProvider>
+                    <StatsProvider user={user}>
+                        <AppNavigator />
+                    </StatsProvider>
+                </DaysProvider>
+            </AppLoadingProvider>
         : loading ? null : <AuthNavigator/>}
 
         </>

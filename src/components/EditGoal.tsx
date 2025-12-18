@@ -6,7 +6,7 @@ import { useDays } from '../context/DaysContext';
 import { TGoal } from '../controllers/goals';
 import { TGoalAmountType } from '../controllers/days';
 import { usePop } from '../context/PopContext';
-import { NetButton } from '../pages/Settings/Notifications/Notifications';
+import { NetButton } from './NetButton/NetButton';
 
 function EditGoal({goal}: {goal: TGoal}) {
     const user = useUser();

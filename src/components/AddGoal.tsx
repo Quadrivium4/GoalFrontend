@@ -7,6 +7,7 @@ import { TGoalAmountType } from '../controllers/days';
 import { useMatch } from 'react-router-dom';
 import { useMessage } from '../context/MessageContext';
 import { usePop } from '../context/PopContext';
+import { NetButton } from './NetButton/NetButton';
 
 function AddGoal() {
     const user = useUser();
@@ -17,22 +18,21 @@ function AddGoal() {
     const {addGoal} = useDays();
     const {message} = useMessage()
     const {closePop} = usePop();
-    const createGoal = () =>{
+    const createGoal = async () =>{
         if(!title) return message.error("insert a valid title");
         if(!frequency) return message.error("select a valid frequency");
         if(!selectedOption) return message.error("select a valid amount type");
         if(!amount) return message.error("select a valid amount");
         //if(!title || !selectedOption || !frequency || !amount) return;
-       addGoal({
+       await addGoal({
             title,
             userId: user._id,
             frequency,
             amount,
             progress: 0,
             type: selectedOption
-        }).then(() =>{
-            closePop()
-        })
+        });
+        closePop()
     }
     return (
     <div className='form'>
@@ -47,7 +47,7 @@ function AddGoal() {
         {selectedOption === "time"? <Input.TimePicker onSelect={setAmount}/> 
         : selectedOption === "distance"? <Input.DistancePicker onSelect={setAmount} /> 
         : <input placeholder='amount' type='number' onChange={(e)=> setAmount(parseInt(e.target.value))} value={amount || ""}></input>}
-        <button onClick={createGoal}>add</button>
+        <NetButton request={createGoal}>add</NetButton>
     </div>
 );
 }

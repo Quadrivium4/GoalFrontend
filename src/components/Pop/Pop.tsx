@@ -40,10 +40,10 @@ const Pop = ({children, toggle}: {children?: ReactNode, toggle?: () => void}) =>
             }}>
                 <div className="header">
                     <h2 className="title">{pop.title}</h2>
-                    <div id="close-pop" onClick={handleClick}>
+                    {/* <div id="close-pop" onClick={handleClick}>
                         <span className="n1"></span>
                         <span className="n2"></span>
-                    </div>
+                    </div> */}
                 </div>
                 
                 <div id="pop-body">

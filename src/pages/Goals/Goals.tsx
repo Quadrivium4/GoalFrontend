@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import AddGoal from '../../components/AddGoal';
 import AddProgress from '../../components/AddProgress';
 import DeleteGoal from '../../components/DeleteGoal';
@@ -13,7 +13,7 @@ import { getTimeAmount } from '../../utils';
 import { getPercentage, getProgressColor } from '../Stats/Graph';
 import "./Goals.css";
 import ProgressDays from './ProgressDays';
-import { NotificationBell } from '../Settings/Notifications/Notifications';
+import { NotificationBell, useNotifications } from '../Settings/Notifications/Notifications';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import { useStats } from '../../context/StatsContext';
 import { BsTrash } from 'react-icons/bs';
@@ -25,6 +25,7 @@ import { GoPlus } from "react-icons/go";
 import { AiOutlinePlus} from "react-icons/ai";
 import { colors } from '../../constants';
 import { MdEdit } from 'react-icons/md';
+import { usePullRefreshTouch } from '../Friends/Friends';
 
 export function sameDay(date1: Date | number, date2: Date | number){
     date1 = new Date(date1);
@@ -186,11 +187,13 @@ export function SingleGoal({goal, setPop, closePop}: {goal: TMyGoal, setPop: (co
 function Goals() {
     const user = useUser();
     const {loading} = useAuth();
+    const contentRef = useRef<HTMLDivElement>(null);
 
     console.log("goals rendering")
     //const {goals } = user;
-    const {goals, addProgress, daysLoading} = useDays();
+    const {goals, addProgress, daysLoading, loadDays} = useDays();
     const {setPop} = usePop();
+    usePullRefreshTouch( loadDays)
     useEffect(()=>{
       console.log("------ Goals Render ----")
       //console.log("remount")
@@ -201,10 +204,10 @@ function Goals() {
   return (
     <>
    <PageHeader title="Home" action={<NotificationBell setPop={setPop}  />} />
-    <div className='content' id='goals'>
+    <div className='content' id='goals' >
        
       
-      <div className='goals'>
+      <div className='goals' ref={contentRef}>
         {
           user.goals.length > 0 && daysLoading? <GoalSkeleton goals={user.goals} />:
           goals?.length > 0? goals.map(goal=>{
