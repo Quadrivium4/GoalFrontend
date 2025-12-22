@@ -17,6 +17,7 @@ import { usePop } from '../../context/PopContext';
 import ProgressDays from '../Goals/ProgressDays';
 import PointPop from './PointPop/PointPop';
 import GraphSkeleton from './GraphSkeleton/GraphSkeleton';
+import { useStatsV2 } from '../../context/StatsContextV2';
 type TPoint = {
     x: number,
     y: number
@@ -194,7 +195,8 @@ export function createEmptyPoint(goal: TGoal, date: Date, i: number, frequency: 
         };
     return point;
 }
-export function createGraphArray(stats: TDay[], goal: TGoal):TGraphPoint[] {
+export type TPointDays = {[key: number] : TGraphPoint};
+export function createGraphArray(stats: TDay[], goal: TGoal):TPointDays {
     if(stats.length < 1) return [];
 
     let firstDay = stats[0];
@@ -212,6 +214,7 @@ export function createGraphArray(stats: TDay[], goal: TGoal):TGraphPoint[] {
     // empty days use latest goal amount
     let dayLatestGoal = daysArray[0].days[daysArray[0].days.length-1].goal;
     //console.log(goal.title, {maxProgress})
+    let result: TPointDays = {};
     daysArray.map(({date, days}, i) =>{
         let point: TGraphPoint;
         if(days.length > 0){
@@ -219,15 +222,15 @@ export function createGraphArray(stats: TDay[], goal: TGoal):TGraphPoint[] {
             point = createGraphPoint(dayLatestGoal, days, date, i,goal.frequency, maxProgress);
             
         }else point = createEmptyPoint(dayLatestGoal, date, i, goal.frequency, maxProgress)
-        
+        result[date.getTime()] = point;
         graphsArray.push(point)
     })
 
-    return graphsArray
+    return result
 }
 export function EditGoalAmount({goal, date}: {goal: TGoal, date: number}){
     const user = useUser();
-    const {updateStats} = useStats();
+    const {updateStats} = useStatsV2();
     const {closePop} = usePop();
     const [amount, setAmount] = useState<number>(goal.amount);
     const createGoal = () =>{
@@ -341,14 +344,16 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
 
 export type TGraph = {
     goal: TGoal,
-    points: TGraphPoint[]
+    points: {
+        [day: number]: TGraphPoint
+    }
 }
-function Graph() {
-    const {stats, reloadStats, loading} = useStats()
+function GraphV2() {
+    const {stats, reloadStats, loading} = useStatsV2()
     return (
         <div className='graphs'>
             
-            {loading? <GraphSkeleton graphs={stats}/>: stats.map((graph, i)=>{
+            {loading? <GraphSkeleton graphs={Object.values(stats)}/>: Object.entries(stats).map(([key, graph], i)=>{
                 //if(i == 0) console.log("RERENDER")
                 let {points, goal} = graph;
                 
@@ -356,7 +361,7 @@ function Graph() {
                     <div key={goal._id} className='graph-container'>
                         <h3>{goal.title}</h3>
                         
-                        {points.length > 0? <Svg graph={points} />: <p>no stats</p>}
+                        {Object.keys(points).length > 0? <Svg graph={Object.values(points)} />: <p>no stats</p>}
                     </div>
                 )
             })}
@@ -364,4 +369,4 @@ function Graph() {
     );
 }
 
-export default Graph;
+export default GraphV2;

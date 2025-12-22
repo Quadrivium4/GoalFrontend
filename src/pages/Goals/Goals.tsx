@@ -26,6 +26,7 @@ import { AiOutlinePlus} from "react-icons/ai";
 import { colors } from '../../constants';
 import { MdEdit } from 'react-icons/md';
 import { usePullRefreshTouch } from '../Friends/Friends';
+import { useStatsV2 } from '../../context/StatsContextV2';
 
 export function sameDay(date1: Date | number, date2: Date | number){
     date1 = new Date(date1);
@@ -147,13 +148,18 @@ export function formatTime(date: Date | number){
 export function getGoalAmountString(goal: TGoal, goalProgress: number){
   return  goal.type === "time"? getTimeAmount(goalProgress) + "/" +getTimeAmount(goal.amount) + " hours": goal.type === "distance"? goalProgress/1000 + "/" + goal.amount/1000 + "km": goal.amount;
 }
-export function SingleGoal({goal, setPop, closePop}: {goal: TMyGoal, setPop: (content: ReactNode) =>void, closePop: () => void}){
+export function SingleGoal({goal}: {goal: TMyGoal}){
   //console.log({goal})
   let goalDays =  goal.history;
   let goalProgress = sumDaysProgress(goalDays);
+  const {setPop} = usePop();
   let progressWidth = getPercentage(goal.amount, goalProgress);
   let goalAmountString = getGoalAmountString(goal, goalProgress)
-  const {reloadStats} = useStats()
+  useEffect(()=>{
+    console.log("Single goal rendering")
+  },[])
+  //const {reloadStats} = useStatsV2()
+  const reloadStats = () =>{}
   return (
       <div className='goal'>
         <div className='header'><div className='progress' style={{width: progressWidth + "%", backgroundColor: getProgressColor(progressWidth)}}></div></div>
@@ -164,7 +170,7 @@ export function SingleGoal({goal, setPop, closePop}: {goal: TMyGoal, setPop: (co
           
         </div>
         
-        <ProgressDays history={goalDays} setPop={setPop} onChange={reloadStats}/>
+        <ProgressDays history={goalDays} onChange={reloadStats}/>
        
         <div className='footer'>
           <div style={{display: 'flex', gap: "5px"}}>
@@ -186,12 +192,12 @@ export function SingleGoal({goal, setPop, closePop}: {goal: TMyGoal, setPop: (co
 //* VERSION 2 */
 function Goals() {
     const user = useUser();
-    const {loading} = useAuth();
     const contentRef = useRef<HTMLDivElement>(null);
 
     console.log("goals rendering")
     //const {goals } = user;
     const {goals, addProgress, daysLoading, loadDays} = useDays();
+    
     const {setPop} = usePop();
     usePullRefreshTouch( loadDays)
     useEffect(()=>{
@@ -212,8 +218,8 @@ function Goals() {
           user.goals.length > 0 && daysLoading? <GoalSkeleton goals={user.goals} />:
           goals?.length > 0? goals.map(goal=>{
             let {history, ...goalInfo} = goal;
-            if(!goal) return <SingleGoal goal={{...goalInfo, history: []}} setPop={setPop} closePop={() => setPop(undefined)} key={goalInfo._id}/>
-            return <SingleGoal goal={goal}  setPop={setPop} closePop={() => setPop(undefined)}  key={goalInfo._id}/>
+            if(!goal) return <SingleGoal goal={{...goalInfo, history: []}} key={goalInfo._id}/>
+            return <SingleGoal goal={goal} key={goalInfo._id}/>
           }): <p>no goals</p>
         }
 

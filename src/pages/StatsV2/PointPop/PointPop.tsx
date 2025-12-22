@@ -9,6 +9,7 @@ import { getGoalAmountString, sumDaysProgress } from "../../Goals/Goals";
 import ProgressDays from "../../Goals/ProgressDays";
 import { EditGoalAmount, getPercentage, getProgressColor, normalizePercentage, TGraph, TGraphPoint } from "../Graph";
 import styles from "./PointPop.module.css"
+import { useStatsV2 } from "../../../context/StatsContextV2";
 const PointHeader = ({progressWidth}: {progressWidth: number}) =>{
     useEffect(()=>{
         console.log({progressWidth})
@@ -21,17 +22,17 @@ const PointHeader = ({progressWidth}: {progressWidth: number}) =>{
         </div>: null}
         </>)
 }
-const getLatestPointHistory = (timestamp: number, goalId: string, stats: TGraph[]) =>{
-     let graph = stats.find(g =>{
-            return g.goal._id == goalId
-        });
-         console.log({graph})
-        let newPoint = graph?.points.find(p => p.date.getTime() == timestamp);
-        console.log({newPoint})
-        return newPoint?.history || [];
-}
+// const getLatestPointHistory = (timestamp: number, goalId: string, stats: TGraph[]) =>{
+//      let graph = stats.find(g =>{
+//             return g.goal._id == goalId
+//         });
+//          console.log({graph})
+//         let newPoint = graph?.points.find(p => p.date.getTime() == timestamp);
+//         console.log({newPoint})
+//         return newPoint?.history || [];
+// }
 export default function PointPop ({point}: {point: TGraphPoint}){
-    const {reloadStats,stats} = useStats()
+    const {reloadStats,stats} = useStatsV2()
     const {loadDays} = useDays();
     const date = new Date(point.date);
     const now = new Date()
@@ -41,19 +42,16 @@ export default function PointPop ({point}: {point: TGraphPoint}){
     //console.log(point)
     date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     //const [history, setHistory] = useState(point.history);
-    const [history, setHistory] = useState(getLatestPointHistory(point.date.getTime(), point.goal._id, stats));
+    const [history, setHistory] = useState(stats[point.goal._id].points[point.date.getTime()].history);
+
     useEffect(()=>{
-        let graph = stats.find(g =>{
-            return g.goal._id == point?.goal._id
-        });
-         console.log({graph})
-        let newPoint = graph?.points.find(p => p.date.getTime() == point?.date.getTime());
+        
+        let newPoint = stats[point.goal._id].points[point.date.getTime()];
         console.log({newPoint})
         if(!newPoint) return;
         setHistory(newPoint.history)
         console.log("reloading point pop", point);
     },[stats])
-    let goalDays =  point.history;
     let {goal } = point;
     const [goalProgress, setGoalProgress] = useState(sumDaysProgress(history));
     const [progressWidth, setProgressWidth] = useState(normalizePercentage(getPercentage(goal.amount, goalProgress)));

@@ -11,17 +11,17 @@ function ResetPassword() {
     const navigate = useNavigate()
     const{message} = useMessage();
     useEffect(()=>{
-        if(id && token) {
-            api.post('/delete-account', {id, token}).then(res =>{
-                message.success("account deleted succesfully");
-            }
+        // if(id && token) {
+        //     api.post('/delete-account', {id, token}).then(res =>{
+        //         message.success("account deleted succesfully");
+        //     }
                 
-            )
-        }
+        //     )
+        // }
     },[])
   return (
     <div>
-      <h1>Deleting account </h1>
+      <h1>ResetPassword </h1>
 
     </div>
   );

@@ -9,11 +9,9 @@ import { useUser } from '../../context/AuthContext';
 import { StatsProvider, useStats } from '../../context/StatsContext';
 import { IoMdRefresh } from "react-icons/io";
 import { PageHeader } from '../../components/PageHeader/PageHeader';
-import GraphV2 from '../StatsV2/Graph';
-import { useStatsV2 } from '../../context/StatsContextV2';
 function Stats() {
   const user = useUser()
-  const {reloadStats} = useStatsV2();
+  const {reloadStats} = useStats();
   
   useEffect(()=>{
     //console.log("stats rerender")
@@ -31,7 +29,7 @@ function Stats() {
 
     <div id='stats' className='content'>
 
-        <GraphV2 />
+        <Graph />
     </div>
     </>
   );

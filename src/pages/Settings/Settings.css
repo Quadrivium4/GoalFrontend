@@ -37,6 +37,7 @@
 #settings .info .text {
     display: flex;
     flex-direction: column;
+    min-width: 0px;
     gap: 5px;
 }
 #settings .info .edit-user {
@@ -68,6 +69,26 @@
     display: flex;
     gap: 5px;
     align-items: center;
+}
+#settings .info .edit-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#settings .info .edit-email {
+    flex-grow: 1;
+    min-width: 0px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    
+    overflow-x: auto ;
+}
+#settings .info .edit-email p{
+   
+}
+#settings .info .edit-email::-webkit-scrollbar { 
+    display: none;  /* Older Safari and Chromium */
 }
 #settings .info .edit svg {
     cursor: pointer;

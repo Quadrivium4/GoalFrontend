@@ -17,7 +17,7 @@ function EditProgress({day, progress,   onChange, progressIndex, dayIndex} : {da
     const {closePop} = usePop();
     const updateGoalProgress = async () =>{
         try {
-            let res = await editProgress({id: day._id, date: progress.date,progress: form.progress, notes: form.notes, newDate: form.date}, progressIndex, dayIndex, day.goal._id);
+            let res = await editProgress({id: day._id, date: progress.date,progress: form.progress, notes: form.notes, newDate: form.date});
 
             if(onChange) onChange(res);
             closePop();

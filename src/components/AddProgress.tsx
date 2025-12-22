@@ -7,11 +7,12 @@ import InputGoalValue from './Input/InputGoalValue';
 import { useStats } from '../context/StatsContext';
 import { usePop } from '../context/PopContext';
 import { NetButton } from './NetButton/NetButton';
+import { useStatsV2 } from '../context/StatsContextV2';
 
 
 function AddProgress({ goal, date = Date.now(), onRes} : {goal: TGoal,   date?: number, onRes?: (res: TDay) =>void}) {
     const {addProgress} = useDays();
-    const {reloadStats, updateStats} = useStats();
+    const {reloadStats, updateStats} = useStatsV2();
     const [form, setForm] = useState<TProgress>({progress: 0, notes: "", likes: [], date: Date.now()});
     const {closePop} = usePop();
     const updateGoalProgress = async () =>{

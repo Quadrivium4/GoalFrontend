@@ -18,6 +18,7 @@ function VerifyResetPassword() {
           isVerifing.current = true;
          verifyPassword({id: userId, token}).then((res)=>{
             isVerifing.current = false;
+            message.success("Verificatioon successful!")
             navigate("/");
          }).catch(err =>{
             console.log("error", err)

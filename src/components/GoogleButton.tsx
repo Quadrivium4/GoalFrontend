@@ -27,7 +27,7 @@ function GoogleButton({onSuccess = ()=>{}, onError= ()=>{}, children}: {onSucces
   return (
     <>
 
-        <button onClick={()=>{
+        <button style={{width: "100%"}} onClick={()=>{
             console.log("google clicked");
             glog();
             }} className='google-button outline'>

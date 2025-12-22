@@ -26,8 +26,9 @@ import styles from "./ProgressDays.module.css";
 import { MdOutlineThumbUpOffAlt } from "react-icons/md";
 import { postLike } from '../../controllers/likes';
 
-export default function ProgressDays({history, setPop, onChange}:{history: TDay[], setPop: (content: ReactNode)=> void, onChange?: (day: TDay)=>void}){
+export default function ProgressDays({history,  onChange}:{history: TDay[], onChange?: (day: TDay)=>void}){
     const user = useUser();
+    const {setPop} = usePop();
     const editProgress = () =>{
 
     }

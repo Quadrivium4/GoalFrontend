@@ -13,6 +13,9 @@ import Select from '../../components/Select/Select';
 import VisibilityInfo from './VisibiltiyInfo';
 import { usePop } from '../../context/PopContext';
 import { NetButton } from '../../components/NetButton/NetButton';
+import GoogleButton from '../../components/GoogleButton';
+import { api, protectedApi } from '../../utils';
+import { useLocation } from 'react-router-dom';
 
 // function OldEditing() {
 //   const {editUser} = useAuth();
@@ -75,7 +78,7 @@ import { NetButton } from '../../components/NetButton/NetButton';
 
 
 function Settings() {
-  const {logout, deleteAccountRequest, editUser} = useAuth();
+  const {logout, deleteAccountRequest, editUser, googleLogin} = useAuth();
   const {setPop} = usePop();
   const user = useUser();
   const [bio, setBio] = useState(user.bio)
@@ -117,19 +120,24 @@ function Settings() {
              {isEditing !== "name"?  
             <>
             <p>{name}</p>
-             <MdOutlineModeEditOutline />
+            <div className='edit-icon'>
+                  <MdOutlineModeEditOutline  />
+                </div>
             </>:<>  <input onChange={(e) =>setName(e.target.value)} autoFocus value={name} placeholder='name'></input>
               <button className='outline' onClick={handleChange}>save</button>
               </>
             }
            
           </div>
-          <div className='edit' onClick={()=>{
-            if(user.googleLogin) return message.error("you are logged in with google cannot change email");
+          <div className='edit-email' onClick={()=>{
+            if(user.googleLogin) return message.error("you are logged in with google, change login method");
             setPop(<ChangeEmail />)}
             }>
                 <p>{user.email}</p>
-                <MdOutlineModeEditOutline  />
+                <div className='edit-icon'>
+                  <MdOutlineModeEditOutline  />
+                </div>
+                
             </div>
         </div>
 
@@ -153,6 +161,17 @@ function Settings() {
               
             }}/>
           </div>
+          {}
+          <div style={{display: "flex", flexDirection: "column",  justifyContent: "space-between", paddingBottom: 5}} >
+             <p>Login method: {/*user.googleLogin? "google" : "email"*/}</p>
+             <Select options={["email", "google"]} placeholder='login method' selected={user.googleLogin? "google" : "email"} onSelect={(option)=>{
+              if(user.googleLogin && option == "email")setPop(<AddPassword />);
+              else if(!user.googleLogin && option == "google")setPop(<AddGoogleLogin />);
+             }}/>
+            </div>
+           
+            
+        
      <div className="buttons">
         <button className='outline error' onClick={() =>setPop(<LogOut />)}>logout</button>
         <button className="outline error" onClick={() =>setPop(<DeleteAccount />)}>delete account</button>
@@ -176,6 +195,47 @@ const DeleteAccount = () =>{
           <p>We are going to send you a confirmation email.</p>
           <NetButton className="outline error"  request={deleteAccount}>Delete account</NetButton>
           
+        </div>)
+}
+const AddPassword = () =>{
+   const {logout} = useAuth();
+     const {message} = useMessage();
+      const location = useLocation()
+       const [email, setEmail] = useState<string>(location.state?.email || "");
+       const [password, setPassword] = useState<string>("");
+  
+      const handleClick= async() =>{
+        try {
+          let res = protectedApi.post("/add-password", {email, password});
+           console.log({res})
+          await logout()
+          message.success("We have sent you a confirmatin email");
+        } catch (error) {
+          console.log(error)
+        }
+          
+          
+       }
+  return (<div>
+         <h1>Use Email to login</h1>
+      <div className='form'>
+        <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='email'></input>
+        <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='new password'></input>
+        <button onClick={handleClick}>Submit</button>
+        {/* <p>Don't have an account yet? <Link to={"/"}>Register</Link></p> */}
+       
+        {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=> console.log("Error google login")}/> */}
+      </div>
+        </div>)
+}
+const AddGoogleLogin = () =>{
+  
+  return (<div>
+         <h1>Use Google to login</h1>
+        <p>Change your login method to google login</p>
+  
+        <GoogleButton>Login with google</GoogleButton>
+   
         </div>)
 }
 const LogOut = () =>{
