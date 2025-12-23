@@ -103,9 +103,9 @@ function Calendar({frequency}:{frequency: "daily" | "weekly" | "monthly"}) {
   //       }
         
   //   }
-  //   console.log(w)
+  //   //-- console.log(w)
   //   w.map(week =>{
-  //       console.log({week})
+  //       //-- console.log({week})
   //       let weekResume: TWeek = {
   //           startDate: week[0].date,
   //           endDate: week[week.length-1].date,
@@ -129,7 +129,7 @@ function Calendar({frequency}:{frequency: "daily" | "weekly" | "monthly"}) {
   //       })
   //       weeksArray.push(weekResume);
   //   })
-  //   console.log({weeksArray})
+  //   //-- console.log({weeksArray})
   //   setWeeks(weeksArray)
   // },[days])
   // return (

@@ -13,9 +13,8 @@ import { colors } from './constants';
 const Layout = () =>(
     <>
          <Header></Header>
-         <div >
+
             <Outlet />
-         </div>
           
          
          <Footer></Footer>

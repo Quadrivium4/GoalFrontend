@@ -23,8 +23,10 @@ const useUsers = () =>{
     const [index, setIndex] = useState(0);
     const [searchText, setSearchText] = useState<string>();
     const [filter, setFilter] = useState<TFilter>()
+    const [hasMore, setHasMore] = useState(true);
     
     useEffect(() =>{
+       // if(!hasMore) return console.log("has no more users");
         const controller = new AbortController()
         if(searchText && searchText[0] == "#"){
             setLoading(true)
@@ -33,7 +35,7 @@ const useUsers = () =>{
                 setUsers([res]);
                 setLoading(false)
             }).catch(err =>{
-                console.log(err);
+                //-- console.log(err);
 
             }).finally(()=>{
                 setLoading(false)
@@ -41,7 +43,7 @@ const useUsers = () =>{
             
         }else {
             
-            console.log("index changed", index)
+            //-- console.log("index changed", index)
             fetchUsers(searchText, controller.signal);
         }
         
@@ -53,24 +55,29 @@ const useUsers = () =>{
         let query = {
             index, offset, search, filter, signal
         }
-        console.log(query)
+        //-- console.log(query)
         setLoading(true)
     
         getUsers(query).then(res =>{
-            console.log("getting more users", index, offset, searchText)
+            //-- console.log("getting more users", index, offset, searchText)
             
-            console.log({res})
+            //-- console.log({res})
             setUsers(users => {
+                if(res.length == 0){
+                    setHasMore(false);
+                    return users;
+                }
                 if(users.length > 20){
-                    // console.log("slicing")
+                    // //-- console.log("slicing")
                     // return [...(users.slice(10)), ...res]
                 }return [...users, ...res]})
             setLoading(false)
         }).catch(err =>{
-            console.log({err})
+            //-- console.log({err})
         })
     }
     const search = async(text: string) =>{
+        setHasMore(true);
         setUsers([])
         setSearchText(text)
         if(index > 0) setIndex(0)
@@ -79,11 +86,13 @@ const useUsers = () =>{
         }
     }
     const getMore = () =>{
-        if(loading) return console.log("already loading")
-        console.log("more requested")
+        if(!hasMore) return;
+        if(loading) return //-- console.log("already loading")
+        //-- console.log("more requested")
         setIndex(index + 1)
     }
     const addFilter = (type: TFilter) =>{
+        setHasMore(true)
         setUsers([]);
         if(index > 0) setIndex(0)
         setFilter(type)
@@ -161,7 +170,7 @@ export function FriendButton({friend}: {friend: TUser | TProfile}){
     useEffect(()=>{
         //getUser()
     },[])
-    //console.log("friend type", {type})
+    ////-- console.log("friend type", {type})
     const handleClick = () =>{
         
         if(type === "following"){
@@ -239,14 +248,14 @@ export default function SearchUser(){
         <div className={styles.people} onScroll={(e) =>{
             const target = e.target as HTMLDivElement;
             const bottom = Math.abs(target.scrollHeight - target.clientHeight - target.scrollTop) < 30
-            //console.log("scrolling...", bottom, target.scrollHeight, target.scrollTop, target.clientHeight)
+            ////-- console.log("scrolling...", bottom, target.scrollHeight, target.scrollTop, target.clientHeight)
             if(bottom) {
-                console.log("BOTTOOM")
+                //-- console.log("BOTTOOM")
                 getMore()
             }
         }}>
         {users.length > 0? users.map(randomUser =>{
-            //console.log("hey user", user)
+            ////-- console.log("hey user", user)
             //if(randomUser._id == user._id) return null
             return (
                 

@@ -124,7 +124,7 @@ button.google-button svg{
     /* padding: 10px; */
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 #auth-page>h1{
     padding-bottom: 10px;

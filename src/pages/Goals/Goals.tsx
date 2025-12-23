@@ -63,10 +63,10 @@ function Goals() {
     const {days, today, addProgress} = useDays();
     const [pop, setPop] = useState<ReactNode>();
     useEffect(()=>{
-      console.log({days})
+      //-- console.log({days})
       //worker.postMessage("hello")
     },[days])
-    //console.log(user)
+    ////-- console.log(user)
   return (
     <div className='page' id='goals'>
       {pop && <Pop toggle={() => setPop(undefined)}>{pop}</Pop>}
@@ -74,7 +74,7 @@ function Goals() {
       <div className='goals'>
         {
           days.map(day=>{
-            console.log("myday",day)
+            //-- console.log("myday",day)
             let {goal} = day
             let goalProgress = day.progress;
             let progressWidth = 100 /goal.amount* goalProgress;
@@ -149,14 +149,14 @@ export function getGoalAmountString(goal: TGoal, goalProgress: number){
   return  goal.type === "time"? getTimeAmount(goalProgress) + "/" +getTimeAmount(goal.amount) + " hours": goal.type === "distance"? goalProgress/1000 + "/" + goal.amount/1000 + "km": goal.amount;
 }
 export function SingleGoal({goal}: {goal: TMyGoal}){
-  //console.log({goal})
+  ////-- console.log({goal})
   let goalDays =  goal.history;
   let goalProgress = sumDaysProgress(goalDays);
   const {setPop} = usePop();
   let progressWidth = getPercentage(goal.amount, goalProgress);
   let goalAmountString = getGoalAmountString(goal, goalProgress)
   useEffect(()=>{
-    console.log("Single goal rendering")
+    //-- console.log("Single goal rendering")
   },[])
   //const {reloadStats} = useStatsV2()
   const reloadStats = () =>{}
@@ -194,17 +194,17 @@ function Goals() {
     const user = useUser();
     const contentRef = useRef<HTMLDivElement>(null);
 
-    console.log("goals rendering")
+    //-- console.log("goals rendering")
     //const {goals } = user;
     const {goals, addProgress, daysLoading, loadDays} = useDays();
     
     const {setPop} = usePop();
     usePullRefreshTouch( loadDays)
     useEffect(()=>{
-      console.log("------ Goals Render ----")
-      //console.log("remount")
-      // console.log(user)
-      //console.log({goals})
+      //-- console.log("------ Goals Render ----")
+      ////-- console.log("remount")
+      // //-- console.log(user)
+      ////-- console.log({goals})
       //worker.postMessage("hello")
     },[])
   return (

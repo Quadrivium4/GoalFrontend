@@ -24,7 +24,7 @@ function useLazyFriends (){
     const current = useRef<boolean |null>(null);
     
     useEffect(()=>{
-        console.log("getting friends")
+        //-- console.log("getting friends")
         getFriends();
     }, [index])
     const fetchFriends = async() =>{
@@ -34,11 +34,11 @@ function useLazyFriends (){
         try {
              //await wait(1000);
             let newFriends = await getLazyFriends(index);
-            if(!newFriends) return console.log("not friends");
+            if(!newFriends) return //-- console.log("not friends");
             
             setFriends(prev => {
                 // if(prev.length > 10){
-                //     console.log("slicing")
+                //     //-- console.log("slicing")
                 //     return [...newFriends, ...(prev.slice(5))]
                 // }
                 cachedFriends = [...newFriends, ...prev];
@@ -46,7 +46,7 @@ function useLazyFriends (){
             })
            
         } catch (error) {
-            console.log("error getting friends", error)
+            //-- console.log("error getting friends", error)
         } finally{
              current.current = null;
              setLoading(false)
@@ -57,7 +57,7 @@ function useLazyFriends (){
         if(current.current) return;
         current.current = true;
         if(cachedFriends.length > (index) * 20){
-            console.log("friends cached");
+            //-- console.log("friends cached");
             current.current = false;
             return setFriends(cachedFriends);
         } 
@@ -65,13 +65,13 @@ function useLazyFriends (){
     }
     useEffect(() =>{
         return () => {
-            console.log("unmount")
+            //-- console.log("unmount")
             //setFriends([])
         }
     },[])
     const getMore = () => setIndex(i =>i++)
     const reload = async() => {
-        console.log("reloading lazy friends")
+        //-- console.log("reloading lazy friends")
         if(current.current) return;
         current.current = true// new AbortController();
         setFriends([])
@@ -110,7 +110,7 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
    
     useEffect(()=>{
         const root = document.getElementById("page");
-         console.log("root", root)
+         //-- console.log("root", root)
         if(!root) return;
         
         root.addEventListener("touchstart", onStartTouch)
@@ -125,11 +125,11 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
     }
     function onStartTouch(e: TouchEvent){
         const root = document.getElementById("page");
-        console.log("touch")
+        //-- console.log("touch")
         if(!root) return;
         if(root.scrollTop > 10) return;
-        console.log('scroll top', {div: root.scrollTop, root: document.getElementById("root")?.scrollTop});
-        console.log("start touch", e);
+        //-- console.log('scroll top', {div: root.scrollTop, root: document.getElementById("root")?.scrollTop});
+        //-- console.log("start touch", e);
          if(e && e.touches && e.touches[0]){
             touch.start = e.touches[0].clientY;
         }
@@ -139,15 +139,15 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
     async function onEndTouch(e: TouchEvent){
         const root = document.getElementById("page");
          if(!root) return;
-        console.log("end touch", e)
-        console.log({touch})
+        //-- console.log("end touch", e)
+        //-- console.log({touch})
         if(e && e.changedTouches && e.changedTouches[0]){
             let delta = e.changedTouches[0].clientY - touch.start;
-            console.log(e.changedTouches[0].clientY - touch.start)
+            //-- console.log(e.changedTouches[0].clientY - touch.start)
 
             if(delta > 100){
                const spinner = document.getElementById("app-spinner");
-               console.log(spinner)
+               //-- console.log(spinner)
                if(spinner){
                  spinner.style.maxHeight = "50px";
                  
@@ -171,8 +171,8 @@ function Friends() {
     const {friends, getMore, index, loading, reload} = useLazyFriends();
     usePullRefreshTouch(reload);
     useEffect(()=>{
-        console.log("---- reloading friends");
-        //console.log("user changed", user)
+        //-- console.log("---- reloading friends");
+        ////-- console.log("user changed", user)
     },[])
     return (
         <>
@@ -188,7 +188,7 @@ function Friends() {
                 {   loading? <FriendSkeleton n={4} />: 
                     friends.length > 0? friends.map(friend =>{
                         let goalsString = friend.goalsInfo.map((goal, i) =>  {
-                            //console.log("hhhh", goal)
+                            ////-- console.log("hhhh", goal)
                             let title = goal.title;
                             let firstLetter = title[0].toUpperCase();
                             title = firstLetter + title.substring(1);

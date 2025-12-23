@@ -14,7 +14,7 @@ export function Day({day}: {day: TDay}){
     const toggleLikeProgress = async(progress: TProgress, isLiked: boolean) =>{
         if(isLiked){
             // unlikeProgress({id: day._id, ...progress}).then(res =>{
-            //     console.log("unliked")
+            //     //-- console.log("unliked")
                 
             //     day.history= day.history.map(pgr =>{
             //         if(pgr.date == progress.date){
@@ -27,7 +27,7 @@ export function Day({day}: {day: TDay}){
             // })
         }else{
             likeProgress({id: day._id, ...progress}).then(res =>{
-                console.log("liked");
+                //-- console.log("liked");
                  day.history= day.history.map(pgr =>{
                     if(pgr.date == progress.date){
                         let likes: TLike[] = [...pgr.likes, {userId: user._id, username: user.name, profileImg: user.profileImg}];
@@ -45,7 +45,7 @@ export function Day({day}: {day: TDay}){
             {
                 day.history.length> 0? day.history.map(progress =>{
                     let {date} = progress;
-                    console.log("PROGRESS", progress);
+                    //-- console.log("PROGRESS", progress);
                     let dateString = sameDay(date, Date.now())? "Today at "+getTime(date): isYesterday(date)? "Yesterday at "+getTime(date): formatDate(date);
                     let youLiked = Boolean(progress.likes.find(like => like.userId === user._id));
                     return (

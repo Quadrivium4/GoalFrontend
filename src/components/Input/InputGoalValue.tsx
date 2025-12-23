@@ -8,11 +8,11 @@ export function getDateInputValue(date: number | Date){
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
     let result = `${year.toString().padStart(4, "0")}-${month.toString().padStart(2, "0")}-${date.getDate().toString().padStart(2,"0")}`;
-    //console.log(result, date)
+    ////-- console.log(result, date)
     return result;
 }
 export function getTimeInputValue(date: number | Date){
-    //console.log({date})
+    ////-- console.log({date})
     date = new Date(date);
     let hours = date.getHours().toString().padStart(2, "0");
     let minutes = date.getMinutes().toString().padStart(2, "0");
@@ -41,10 +41,10 @@ function InputProgressValues({type, onChange, initial }: {type:TGoalAmountType, 
         onChange(form);
     }
     const updateDate = (dateString: string) =>{
-            console.log({dateString})
+            //-- console.log({dateString})
             if(dateString === '') return;
             let {year, month, day} = yearMonthFromValue(dateString);
-            console.log({year, month})
+            //-- console.log({year, month})
             let newDate = new Date(form.date);
             newDate.setFullYear(year, month, day);
             if(newDate.getTime() > Date.now()) return message.error("Invalid date in the future");

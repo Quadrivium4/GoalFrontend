@@ -78,7 +78,7 @@ function getCalendarDates(from: number, to: number, option?: "daily" | "weekly")
     }
     
     //dateArrays.push(new Date(startDate));
-    //console.log(dateArrays);
+    ////-- console.log(dateArrays);
     return dateArrays;
 }
 function createPolygonStringAndMonthPoints (graph: TGraphPoint[]) {
@@ -154,13 +154,13 @@ export function getDaysArray(frequency: TGoal["frequency"], calendar: Date[], st
                 daysArray.push({date, days: history})
             } else daysArray.push({date, days: []})
         }else if(frequency === "daily"){
-            //console.log()
-           //console.log(day, date.toDateString(), new Date(day.date).toDateString(), j)
+            ////-- console.log()
+           ////-- console.log(day, date.toDateString(), new Date(day.date).toDateString(), j)
             if(day&& date.toDateString() === new Date(day.date).toDateString()){
                 daysArray.push({date, days: [day]})
                 j++;
             }else daysArray.push({date, days: []})
-            //console.log( j)
+            ////-- console.log( j)
         }
     })
     return daysArray;
@@ -206,14 +206,14 @@ export function createGraphArray(stats: TDay[], goal: TGoal):TPointDays {
     
     let option: "daily" | "weekly" = goal.frequency === "daily"? "daily" : "weekly";
     let calendar = getCalendarDates(firstDay.date, today.getTime(),option );
-    //console.log({calendar})
+    ////-- console.log({calendar})
     
     let daysArray: TDateDays[] = getDaysArray(goal.frequency, calendar, stats);
-     //console.log({daysArray})
+     ////-- console.log({daysArray})
     let maxProgress = getMaxProgress(daysArray, goal.frequency);
     // empty days use latest goal amount
     let dayLatestGoal = daysArray[0].days[daysArray[0].days.length-1].goal;
-    //console.log(goal.title, {maxProgress})
+    ////-- console.log(goal.title, {maxProgress})
     let result: TPointDays = {};
     daysArray.map(({date, days}, i) =>{
         let point: TGraphPoint;
@@ -246,7 +246,7 @@ export function EditGoalAmount({goal, date}: {goal: TGoal, date: number}){
             closePop();
             updateStats(res)
         }).catch(err=>{
-            console.log("error edit amount stats")
+            //-- console.log("error edit amount stats")
         })
     }
     
@@ -269,14 +269,14 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
     const {setPop} = usePop()
     const ref = useRef<HTMLDivElement>(null);
     const svgWidth = (graph.length -1) * gap + paddingHorizontal * 2 < minSvgWidth? minSvgWidth : (graph.length -1) * gap + paddingHorizontal * 2 ;
-   // console.log({svgWidth, length: graph.length, gap})
+   // //-- console.log({svgWidth, length: graph.length, gap})
     useEffect(() =>{
         
         let {polygonString, monthPoints} = createPolygonStringAndMonthPoints(graph)
         setMonthNamePoints(monthPoints);
         setPointsString(polygonString)
         if(ref.current) {
-            //console.log({div: ref.current})
+            ////-- console.log({div: ref.current})
             ref.current.scrollLeft = ref.current.scrollWidth
         }
     },[graph])
@@ -302,9 +302,9 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
                 {graph.map((point, i) =>{
                     let nextPoint = graph[i+1];
                     if(point.date.getTime() === 1765148400000){
-                          console.log("POINntt", {point})
+                          //-- console.log("POINntt", {point})
                     }
-                    //console.log({point})
+                    ////-- console.log({point})
                     return (
 
                         <g onClick={() =>{ setPop(<PointPop point={point}/>, point.goal.title)}} key={point.id}>
@@ -354,7 +354,7 @@ function GraphV2() {
         <div className='graphs'>
             
             {loading? <GraphSkeleton graphs={Object.values(stats)}/>: Object.entries(stats).map(([key, graph], i)=>{
-                //if(i == 0) console.log("RERENDER")
+                //if(i == 0) //-- console.log("RERENDER")
                 let {points, goal} = graph;
                 
                 return (

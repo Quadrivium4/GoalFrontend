@@ -40,15 +40,15 @@ const StatsProvider = ({ children, user}: {children: ReactNode, user: TUser}) =>
     const {goals, _id} = user ;
     const {stats} = state;
     useEffect(()=>{
-       // console.log("reloading stats")
+       // //-- console.log("reloading stats")
         dayController.getStats(_id).then(data =>{
             let result: TGraph[] = createGraphArray(data)
             setState({stats:result, loading: false})
          }).catch(err =>{
             if(axios.isCancel(err)){
-                //console.log("cancel err")
+                ////-- console.log("cancel err")
             }else {
-                //console.log("unexpected error")
+                ////-- console.log("unexpected error")
             }
         })
     },[goals,_id])
@@ -66,7 +66,7 @@ const StatsProvider = ({ children, user}: {children: ReactNode, user: TUser}) =>
             setState({...state, loading: false, stats:result})
         });
         // Manually update stats, not recommended
-        // console.log("updating stats")
+        // //-- console.log("updating stats")
         // let dayDate = new Date(day.date);
         // dayDate.setHours(0,0,0,0);
         // let newStats = stats.map(graph =>{
@@ -91,17 +91,17 @@ const StatsProvider = ({ children, user}: {children: ReactNode, user: TUser}) =>
                             
         //                     let maxAmount = (100 *sumDaysProgress(point.history))/ point.progress;
         //                     newPoint = createGraphPoint(day.goal, newHistory, point.date, i, maxAmount)
-        //                     //console.log({newPoint, maxAmount, amountHeight: point.amountHeight, sumDaysProgress: sumDaysProgress(newHistory), pointProgress: point.progress})
+        //                     ////-- console.log({newPoint, maxAmount, amountHeight: point.amountHeight, sumDaysProgress: sumDaysProgress(newHistory), pointProgress: point.progress})
         //                     return  newPoint
         //                 }
 
-        //                 console.log({point})
+        //                 //-- console.log({point})
         //                 return point
         //             }else {
         //                 if(point.date.getTime() === dayDate.getTime()){
         //                     let maxAmount = (100 *sumDaysProgress(point.history))/ point.progress;
         //                     let newPoint = createGraphPoint(day.goal, [day], point.date, i, maxAmount);
-        //                     //console.log({newPoint, maxAmount})
+        //                     ////-- console.log({newPoint, maxAmount})
         //                     return newPoint;
         //                 }
         //                 return point
@@ -113,9 +113,9 @@ const StatsProvider = ({ children, user}: {children: ReactNode, user: TUser}) =>
         //     }
         //     return graph
         // })
-        // console.log({newStats})
+        // //-- console.log({newStats})
         // newStats.map(graph => graph.points.map(point => point.history.map(day => day.history.map((progress, i) =>{
-        //     if(progress.notes === "cic") console.log(progress)
+        //     if(progress.notes === "cic") //-- console.log(progress)
         // }))))
         // setState({stats: newStats})
     }

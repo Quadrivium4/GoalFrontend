@@ -5,7 +5,7 @@ import styles from "./FriendSkeleton.module.css"
 
 function FriendSkeleton({n}:{n: number}) {
     let array = [...Array(n)]
-    console.log({array})
+    //-- console.log({array})
     return (
         <>
 

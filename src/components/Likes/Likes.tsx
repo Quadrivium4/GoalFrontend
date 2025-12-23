@@ -29,7 +29,7 @@ export function LikesList({likes}:{likes: TLike[]}){
 export function Likes({likes}:{likes: TLike[]}){
   const {setPop} = usePop();
 //   useEffect(()=> {
-//     console.log({likes})
+//     //-- console.log({likes})
 //     setPop(<LikesList likes={likes}  />)
 // },[likes])
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) =>{

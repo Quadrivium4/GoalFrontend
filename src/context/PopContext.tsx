@@ -22,9 +22,9 @@ const PopProvider = ({ children }: {children: ReactNode}) => {
    }
    const closePop = () => {
     setState(prev => {
-        console.log({prev})
+        //-- console.log({prev})
         const newState = prev.slice(0,-1);
-        console.log({newState})
+        //-- console.log({newState})
         return newState;
     })
    };

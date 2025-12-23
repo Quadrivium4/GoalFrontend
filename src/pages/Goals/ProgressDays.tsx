@@ -34,7 +34,7 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
     }
     return (<div className={styles["sub-progresses"]}>
             {history.length > 0 && history[0].history.length > 0? history.sort((a, b)=> a.date -b.date).map((day, dayIndex) =>{
-                //console.log(day.date, new Date())
+                ////-- console.log(day.date, new Date())
                 return (
                     <div key={day._id} className={styles.day}>
                     {/* <p>{day.utcDate.toLocaleTimeString()}</p> */}
@@ -44,7 +44,7 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                     day.history.sort((a, b)=> a.date -b.date).map((progress, progressIndex) =>{
                         //const strings = getDayStrings()
                         let date = new Date(progress.date);
-                        //console.log({progressIndex, progress: day.history[progressIndex]})
+                        ////-- console.log({progressIndex, progress: day.history[progressIndex]})
                         // TODO LIKE PAST PROGRESS
                         let youLiked = Boolean(progress.likes.find(like => like.userId ===day.goal.userId));
                         return (

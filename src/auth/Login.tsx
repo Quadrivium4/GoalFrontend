@@ -22,11 +22,11 @@ function Login() {
       setError(null)
       login({email, password}).then((res)=>{
               navigate("/");
-              console.log(res)
+              //-- console.log(res)
           }).catch(err => {
 
             let msg =  err.message
-            console.log("login error", {err})
+            //-- console.log("login error", {err})
             setError(err.errorCode);
             message.error(msg)
           })
@@ -46,7 +46,7 @@ function Login() {
         <p>Don't have an account yet? <Link to={"/register"}>Register</Link></p>
         <p>forgot password? <Link to={"/reset-password"} state={{email}} >Reset</Link></p>
         
-        {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=> console.log("Error google login")}/> */}
+        {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=> //-- console.log("Error google login")}/> */}
       </div>
     </div>
   );

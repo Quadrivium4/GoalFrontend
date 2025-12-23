@@ -14,7 +14,7 @@ function Message() {
         return () => clearTimeout(timeout)
     },[message])
     useEffect(() =>{
-        //console.log({hidden})
+        ////-- console.log({hidden})
         if(hidden) setClasses(classes => [...classes, "hidden"])
         else if(!hidden) setClasses(classes => classes.filter(classname => classname !== "hidden"))
     },[hidden])

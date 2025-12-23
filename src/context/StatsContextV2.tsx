@@ -47,15 +47,15 @@ const StatsProviderV2 = ({ children, user}: {children: ReactNode, user: TUser}) 
     const {goals, _id} = user ;
     const {stats} = state;
     useEffect(()=>{
-       // console.log("reloading stats")
+       // //-- console.log("reloading stats")
         dayController.getStats(_id).then(data =>{
             let result: TStats= createGraphArray(data)
             setState({stats:result, loading: false})
          }).catch(err =>{
             if(axios.isCancel(err)){
-                //console.log("cancel err")
+                ////-- console.log("cancel err")
             }else {
-                //console.log("unexpected error")
+                ////-- console.log("unexpected error")
             }
         })
     },[goals,_id])

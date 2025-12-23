@@ -26,7 +26,7 @@ export const setLoader = () =>{
 const Navigator = () =>{
     const {logged, user, loading} = useAuth();
     useEffect(()=>{
-        //console.log("navigator",{logged})
+        ////-- console.log("navigator",{logged})
     }, [logged])
     useEffect(() =>{
         if(!loader) return

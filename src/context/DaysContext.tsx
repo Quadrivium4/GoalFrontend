@@ -67,13 +67,13 @@ const getUpdatedGoalDays = (updatedDay: TDay, goals: TMyGoal[]) =>{
         */
 
 const getUpdatedGoals = (goals: TMyGoal[], updatedDay: TDay, updateGoal?: boolean) =>{
-    console.log("get",{updatedDay})
+    //-- console.log("get",{updatedDay})
     let updatedDays: TDay[];
     let result = goals.map(goal =>{
             let newGoal: TMyGoal = goal;
-            console.log(goal);
+            //-- console.log(goal);
             if(goal._id === updatedDay.goal._id){
-                console.log("goal found", goal.title)
+                //-- console.log("goal found", goal.title)
                 if(updateGoal) {
                     newGoal.amount = updatedDay.goal.amount;
                     newGoal.title = updatedDay.goal.title;
@@ -89,7 +89,7 @@ const getUpdatedGoals = (goals: TMyGoal[], updatedDay: TDay, updateGoal?: boolea
                     let lastMonday = lastMondayDate.getTime();
                    
 
-                    console.log({lastMonday: new Date(lastMonday)})
+                    //-- console.log({lastMonday: new Date(lastMonday)})
                     
                     if(updatedDay.date > lastMonday && updatedDay.date < nextWeekTime(lastMonday).getTime()){
                         let updated = false;
@@ -100,17 +100,17 @@ const getUpdatedGoals = (goals: TMyGoal[], updatedDay: TDay, updateGoal?: boolea
                             }
                             return day
                         })
-                        console.log({updated, updatedDays, updatedDay});
+                        //-- console.log({updated, updatedDays, updatedDay});
                         if(!updated) updatedDays.push(updatedDay);
                         newGoal =  {...goal, history: updatedDays}
                     }else{
                         let isNew = true;
-                        console.log("changed date is more than one week before");
-                        console.log({history: goal.history, updatedDay})
+                        //-- console.log("changed date is more than one week before");
+                        //-- console.log({history: goal.history, updatedDay})
                         for (let i = 0; i < goal.history.length; i++) {
                             const day = goal.history[i];
                             if(day._id === updatedDay._id){
-                                console.log("day found")
+                                //-- console.log("day found")
                                 newGoal = {...goal, history: goal.history.splice(i, 1)}
                                 break;
                             }
@@ -136,7 +136,7 @@ const getUpdatedGoals = (goals: TMyGoal[], updatedDay: TDay, updateGoal?: boolea
 //                     }
 //                 }else if(goal.frequency === "weekly"){
 //                     let lastMonday = getLastMonday(Date.now()).getTime();
-//                     console.log({lastMonday: new Date(lastMonday)})
+//                     //-- console.log({lastMonday: new Date(lastMonday)})
                     
 //                     if(updatedDay.date > lastMonday && updatedDay.date < nextWeekTime(lastMonday).getTime()){
 //                         let updated = false;
@@ -163,7 +163,7 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
     const  {updateUser} = useAuth()
     let user = useUser();
     if(me) user = me;
-    //console.log({user})
+    ////-- console.log({user})
     const {setLoading, loading} = useAppLoading();
     const [goals, setGoals] = useState<TMyGoal[]>([]);
     //const [today, setToday] = useState<TDay | null>(null)
@@ -182,7 +182,7 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
             setGoals(goals);
             setLoading(false)
         } catch (err) {
-            console.log("error fetching days: ", err)
+            //-- console.log("error fetching days: ", err)
         }
 
     }
@@ -200,7 +200,7 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
 
         updateUser({...user, goals: [...user.goals, newDay.goal]})
         let updatedGoals: TMyGoal[] = [...goals, {...newDay.goal, history: []}]
-        console.log({updatedGoals})
+        //-- console.log({updatedGoals})
         setGoals(updatedGoals)
 
         setLoading(false)
@@ -212,10 +212,10 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
             if(goal._id === newDay.goal._id) return newDay.goal;
             return goal
         })
-        console.log({newGoals})
+        //-- console.log({newGoals})
         updateUser({...user, goals: newGoals});
         let updatedGoals = getUpdatedGoals(goals, newDay, true);
-        console.log({updatedGoals})
+        //-- console.log({updatedGoals})
         setGoals(updatedGoals)
         setLoading(false)
         
@@ -265,7 +265,7 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
                     const p = day.history[i];
                     
                     if(p.date === progress.date){
-                        console.log("progress found")
+                        //-- console.log("progress found")
                         
                         updatedDays[i].history.splice(j, 1)
                         break;
@@ -277,7 +277,7 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
                 return {...goal, history: updatedDays}
             })
         }else if(updatedDay.date < getLastMonday(Date.now()).getTime() && updatedDay.goal.frequency == "weekly"){
-            console.log("updating progress weekly previously",updatedDay.date, getLastMonday(Date.now()))
+            //-- console.log("updating progress weekly previously",updatedDay.date, getLastMonday(Date.now()))
             updatedGoals = goals.map(goal =>{
                 let updatedDays = [...goal.history];
                 // if(goal._id == goalId){
@@ -290,10 +290,10 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
                     const p = day.history[i];
                     
                     if(p.date === progress.date){
-                        console.log("progress found")
+                        //-- console.log("progress found")
                         
                         updatedDays[i].history.splice(j, 1);
-                        console.log(updatedDays[i])
+                        //-- console.log(updatedDays[i])
                         break;
                     }
                     

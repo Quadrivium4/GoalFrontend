@@ -39,24 +39,24 @@ export const NotificationProvider = ({children}: {children: React.ReactNode}) =>
   const [newNotification, setNewNotification] = useState(false);
   useEffect(()=>{
       getNotifications().then(res =>{
-        console.log(res)
+        //-- console.log(res)
         let isNew = isNewNotification(res)
         if(isNew) setNewNotification(true)
         setNotifications(res)
 
       }).catch(err =>{
-        console.log("err notifications")
+        //-- console.log("err notifications")
       })
   },[])
   async function reload() {
     getNotifications().then(res =>{
-        console.log(res)
+        //-- console.log(res)
         let isNew = isNewNotification(res)
         if(isNew) setNewNotification(true)
         setNotifications(res)
 
       }).catch(err =>{
-        console.log("err notifications")
+        //-- console.log("err notifications")
       })
   }
   return <NotificationContext.Provider value={{notifications, newNotification, setNotifications, setNewNotification, reload}}>{children}</NotificationContext.Provider>
@@ -80,7 +80,7 @@ export function Notifications(){
       let newUser = await acceptFriendRequest(id);
       setNotifications(newUser.notifications);
     } catch (error: any) {
-      console.log("err", error)
+      //-- console.log("err", error)
       message.error(error.message)
     } 
    
@@ -122,7 +122,7 @@ export function NotificationBell({setPop}: {setPop: (content: React.ReactNode)=>
 
 
 
-  //console.log({notifications})
+  ////-- console.log({notifications})
   const openNotifications = () =>{
     setPop(<Notifications />);
     let ids = notifications.map(not => not._id);

@@ -18,7 +18,7 @@ function Verify() {
           verify({id: userId, token:token}).then(res =>{
             navigate("/");
           }).catch(err =>{
-            console.log("error");
+            //-- console.log("error");
             message.error(err.message);
             navigate("/");
           })

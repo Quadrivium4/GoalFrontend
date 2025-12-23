@@ -19,11 +19,11 @@ function EditAccount() {
   const [error, setError] = useState(null)
 
      const handleChange = () =>{
-      console.log("handle change")
+      //-- console.log("handle change")
       editUser({name, bio, profileType: "public"}).then(()=>{
 
       }).catch(err=>{
-        console.log("error editing user")
+        //-- console.log("error editing user")
       })
   }
   return (

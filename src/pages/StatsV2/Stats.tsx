@@ -14,7 +14,7 @@ function Stats() {
   const {reloadStats} = useStats();
   
   useEffect(()=>{
-    //console.log("stats rerender")
+    ////-- console.log("stats rerender")
   },[])
   return (
     <>

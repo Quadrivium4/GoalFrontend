@@ -17,9 +17,9 @@ function GoogleButton({onSuccess = ()=>{}, onError= ()=>{}, children}: {onSucces
                 onSuccess(res);
           }).catch((err) => {
             let msg =  err.message;
-            // console.log("login error", err)
+            // //-- console.log("login error", err)
             // message.error(msg)
-            console.log(err)
+            //-- console.log(err)
             onError(msg)
           })
   }
@@ -28,7 +28,7 @@ function GoogleButton({onSuccess = ()=>{}, onError= ()=>{}, children}: {onSucces
     <>
 
         <button style={{width: "100%"}} onClick={()=>{
-            console.log("google clicked");
+            //-- console.log("google clicked");
             glog();
             }} className='google-button outline'>
             <FcGoogle />
