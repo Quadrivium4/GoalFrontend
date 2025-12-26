@@ -22,9 +22,10 @@ const Layout = () =>(
 )
 const authRouter = createBrowserRouter([{
     element: <Layout />, 
+    
     children: [{
 
-
+    index: true,
     path: "/:reload?/*",
     element: <LandingPage />
 
@@ -48,10 +49,12 @@ const authRouter = createBrowserRouter([{
 },{
     path: "/verify-password/:userId/:token",
     element: <VerifyResetPassword />
-},   {
+},   
+{
     path: "/delete-account/:id/:token",
     element: <DeleteAccount />
-},{
+},
+{
         path: "/privacy-policy",
         element: <PrivacyPolicy />
     }]}]
@@ -59,7 +62,7 @@ const authRouter = createBrowserRouter([{
 
 export const Header = () =>{
     return (
-    <div id="header" style={{backgroundColor: colors.backgroundDark, width: "100%", padding: 8}}>
+    <div id="header" style={{backgroundColor: colors.backgroundDark, width: "100%", padding: "8px 20px"}}>
         <a href='/'><h1 className="logo">G<span>o</span>al</h1></a>
         <div className="nav-links">
 
@@ -77,6 +80,16 @@ export const Footer = () =>{
         {/* <a href='/'><h1 className="logo">G<span>o</span>al</h1></a> */}
       </div>
     )
+}
+export const AuthLayout = () =>{
+    return <div id='auth-page'>
+        <Header></Header>
+
+            <Outlet />
+          
+         
+         <Footer></Footer>
+    </div>
 }
 const AuthNavigator = () =>{
     return (

@@ -32,7 +32,7 @@ function Login() {
           })
   }
   const onGoogleLogin = () =>{
-      navigate("/");
+     // navigate("/");
   }
   return (
     <div className={styles.login}>
@@ -45,7 +45,7 @@ function Login() {
         <GoogleButton onSuccess={onGoogleLogin} onError={message.error}>Sign in with google</GoogleButton>
         <p>Don't have an account yet? <Link to={"/register"}>Register</Link></p>
         <p>forgot password? <Link to={"/reset-password"} state={{email}} >Reset</Link></p>
-        
+  
         {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=> //-- console.log("Error google login")}/> */}
       </div>
     </div>

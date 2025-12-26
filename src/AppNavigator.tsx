@@ -42,6 +42,7 @@ const Layout = () =>{
 const appRouter = createBrowserRouter([{
     element: <Layout />, 
     children: [{
+        index: true,
         path: "/*",
         element: <Goals />
     },{
@@ -56,10 +57,12 @@ const appRouter = createBrowserRouter([{
     },{
         path: "/user/:userId",
         element: <User />
-    },   {
+    },
+     {
         path: "/delete-account/:id/:token",
         element: <DeleteAccount />
-    },{
+    },
+    {
         path: "/privacy-policy",
         element: <PrivacyPolicy />
     }
@@ -73,7 +76,7 @@ const AppNavigator = () =>{
         {/* <div>{mode}</div>
         <div>{window.screen.width + " " + window.innerWidth}</div> */}
        
-        <RouterProvider router={appRouter}></RouterProvider>
+        <RouterProvider router={appRouter} ></RouterProvider>
                     
         {/* <BrowserRouter >
          {window.screen.width >= 500?<Header></Header> : null}

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useMessage } from '../context/MessageContext';
 
 
+
 function Verify() {
     const {userId, token} = useParams();
     const {verify} = useAuth();
@@ -12,16 +13,21 @@ function Verify() {
     const ref = useRef(false);
     useEffect(()=>{
         
-        
+         const controller = new AbortController()
         if(userId && token && !ref.current) {
           ref.current = true;
-          verify({id: userId, token:token}).then(res =>{
+         
+          verify({id: userId, token:token}, controller).then(res =>{
             navigate("/");
+            message.success("verification successful")
           }).catch(err =>{
-            //-- console.log("error");
-            message.error(err.message);
+            console.log("error", err);
+            //message.error(err.message);
             navigate("/");
           })
+        }
+        return () =>{
+          controller.abort();
         }
     },[])
   return (

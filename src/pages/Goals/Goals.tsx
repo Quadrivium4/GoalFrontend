@@ -191,6 +191,7 @@ export function SingleGoal({goal}: {goal: TMyGoal}){
 
 //* VERSION 2 */
 function Goals() {
+  console.log("hi goals")
     const user = useUser();
     const contentRef = useRef<HTMLDivElement>(null);
 

@@ -19,7 +19,7 @@ export default function ProfileIcon({profileImg, name, _id, size}: {profileImg?:
             {loading ? <Loader size={30} /> : null}
             <img src={profileImg.url} style={{width: size, height: size, display: loading ? "none" : "block"}} onLoad={()=>setLoading(false)}/>
                </>
-            : <h1 style={{fontSize: size}}>{name[0]}</h1>}
+            : <h1 style={{fontSize: size}}>{name[0].toUpperCase()}</h1>}
         </div> 
 
     )

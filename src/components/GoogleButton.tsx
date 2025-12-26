@@ -11,10 +11,12 @@ const errors = {
   INVALID_PASSWORD: 1003,
 }
 function GoogleButton({onSuccess = ()=>{}, onError= ()=>{}, children}: {onSuccess?: (res: any)=>void, onError?: (message: string)=>void, children: ReactNode}) {
-  const {login, googleLogin} = useAuth()
+  const {login, googleLogin} = useAuth();
+  const navigate = useNavigate()
   const handleGoogleLogin = (token: string) =>{
       googleLogin(token).then((res)=>{
                 onSuccess(res);
+                //navigate("/")
           }).catch((err) => {
             let msg =  err.message;
             // //-- console.log("login error", err)

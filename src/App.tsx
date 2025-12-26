@@ -11,6 +11,7 @@ import { PopProvider } from './context/PopContext';
 import { GlobalProvider } from './GlobalState';
 import { NotificationProvider } from './pages/Settings/Notifications/Notifications';
 import { isMobile } from './utils';
+import NavigatorV2 from './NavigatorV2';
 
 // function App() {
 //   return (
@@ -32,15 +33,12 @@ import { isMobile } from './utils';
 
 function App() {
   return (
-
-
       <PopProvider >
-            
         <MessageProvider>
           <AuthProvider>
               <NotificationProvider >
               <Message />
-              <Navigator></Navigator>
+              <NavigatorV2 />
               </NotificationProvider>
           </AuthProvider>
         </MessageProvider>

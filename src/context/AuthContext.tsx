@@ -65,7 +65,7 @@ type ContextProps = TAuthStateProps & {
     googleLogin: (token: string) =>Promise<void>,
     register: (form: TRegisterForm) => Promise<void>,
     logout: () => Promise<void>, 
-    verify: (credentials: TVerifyProps) =>Promise<void>, 
+    verify: (credentials: TVerifyProps, controller: AbortController) =>Promise<void>, 
     verifyPassword: (credentials: TVerifyProps) =>Promise<void>, 
     deleteAccount: () =>{}, 
     updateUserProfileImage: (id: string) => void,
@@ -73,6 +73,7 @@ type ContextProps = TAuthStateProps & {
     editUser: (user: TUserForm) => Promise<void>,
     setLoading: (state: boolean) =>void,
     deleteAccountRequest: () =>Promise<void>
+    testGbug: () => Promise<void>
 } | null;
 const AuthContext = createContext<ContextProps>(null);
 type TActionProps = {
@@ -102,7 +103,7 @@ const authReducer: Reducer<TAuthStateProps, TActionProps> =  (state, action) =>{
 }
 const AuthProvider = ({children } : {children: ReactNode}) =>{
     const [state, dispatch] = useReducer(authReducer, authState);
-
+    
     const {message} = useMessage()
     useEffect(()=>{
         //if(!state.logged && state.loading){
@@ -166,6 +167,9 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
     //     dispatch({ type: "LOGIN", payload: { aToken, user } });
     //     //return { user, aToken };
     // }
+    const testGbug  = async() =>{
+        
+    }
     const googleLogin = async(token: string) =>{
          try {
             setLoading(true);
@@ -176,8 +180,11 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
             ////-- console.log({ user, aToken });
             localStorage.setItem("aToken", aToken);
             updateProtectedApiToken(aToken)
+            
             dispatch({ type: "LOGIN", payload: { aToken, user } });
-         }finally{
+            
+         }catch(err){
+            console.log("error in google login")
             setLoading(false)
          }
         
@@ -199,15 +206,22 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
         dispatch({type: "LOGGED_OUT"})
         //redirect("/login")
     }
-    const verify = async({id, token}: TVerifyProps): Promise<void> =>{
+    const verify = async({id, token}: TVerifyProps, controller: AbortController): Promise<void> =>{
         setLoading(true)
-        const res =  await api.post(`${baseUrl}/verify`, {token, id});
-        //-- console.log({axiosResponse: res})
-        const {user, aToken}: TUserAuthResponse = res.data;
-        //-- console.log({user, aToken})
-        localStorage.setItem("aToken", aToken);
-        updateProtectedApiToken(aToken)
-        dispatch({type: "LOGIN", payload: {aToken, user}})
+        try {
+            const res =  await api.post(`${baseUrl}/verify`, {token, id}, {signal: controller.signal});
+            //-- console.log({axiosResponse: res})
+            const {user, aToken}: TUserAuthResponse = res.data;
+            //-- console.log({user, aToken})
+            localStorage.setItem("aToken", aToken);
+            updateProtectedApiToken(aToken)
+            dispatch({type: "LOGIN", payload: {aToken, user}})
+        } catch (error) {
+            console.log("error in verification");
+        } finally {
+            setLoading(false)
+        }
+       
         
         setLoading(false);
     }
@@ -258,7 +272,7 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
     }
 
     return (
-        <AuthContext.Provider value={{...state, login,googleLogin, register, logout, changeEmail, verify, verifyPassword, deleteAccount,  updateUserProfileImage, updateUser, editUser, setLoading, deleteAccountRequest}}>
+        <AuthContext.Provider value={{...state,testGbug, login,googleLogin, register, logout, changeEmail, verify, verifyPassword, deleteAccount,  updateUserProfileImage, updateUser, editUser, setLoading, deleteAccountRequest}}>
                 {children}
         </AuthContext.Provider>
     )

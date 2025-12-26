@@ -3,7 +3,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
   
+}
+#cropping {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
 }
 #landing-page section {
     position: relative;
@@ -12,11 +20,12 @@
     max-width: 800px;
     height: 70vh;
     align-items: center;
-    padding: 10px;
+    padding: 0px 20px;
     /* border-left: 1px solid rgb(95, 95, 95);
     border-right: 1px solid rgb(94, 94, 94); */
 }
 #landing-page section .text{
+    z-index: 1;
     display: flex;
     flex-direction: column;
     width: 60%;
@@ -29,9 +38,8 @@
     gap: 10px;
 }
 #landing-page section img.app-screenshot1{
-    transform: rotate(-35deg);
-    z-index: -1;
-    right: 0;
+    transform: rotate(-28deg);
+    right: 0px;
     top: -50px;
     width: 400px;
     position: absolute;
@@ -58,8 +66,8 @@
 }
 #landing-page section img.app-screenshot3 {
     transform: rotate(-25deg);
-    z-index: -1;
-    right: 0;
+
+    right: 0px;
     top: -20px;
     width: 400px;
     position: absolute;
@@ -67,7 +75,7 @@
     background-color: rebeccapurple;
 }
 #landing-page #share-friends{
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 @media(max-width: 800px) {
     #landing-page section img.app-screenshot1 {
@@ -92,8 +100,8 @@
 @media(max-width: 500px){
     #landing-page section img.app-screenshot1 {
             width: 300px;
-            right: -150px;
-            top: -80px;
+            right: -120px;
+            top: 0px;
         }
     #landing-page section#track-progress img {
         width: 240px;
@@ -102,8 +110,9 @@
         left: -70px;
     }
     #landing-page section img.app-screenshot3 {
-        width: 240px;
-        right: -70px;
+        width: 300px;
+        right: -90px;
+        top: 0px;
     }
 
 }

@@ -13,7 +13,7 @@ function VerifyResetPassword() {
     const {message} = useMessage()
     useEffect(()=>{
         // don't verify twice because of <StrictMode>
-        if(isVerifing.current) //-- console.log("already verifying...")
+        if(isVerifing.current) return console.log("already verifying...")
         if(userId && token && !isVerifing.current) {
           isVerifing.current = true;
          verifyPassword({id: userId, token}).then((res)=>{

@@ -8,7 +8,7 @@ import "./LandingPage.css"
 
 function LandingPage() {
     const {userId, token} = useParams();
-    const {verify} = useAuth();
+    const {verify, testGbug} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams()
@@ -38,6 +38,9 @@ function LandingPage() {
     return (
         
         <div id='landing-page'>
+            <div id='cropping'>
+
+          
         <section id='set-goal'>
             <div className='text'>
                 <h1>Set your goal</h1>
@@ -76,7 +79,7 @@ function LandingPage() {
             
             <img src={friendsImg} alt='goals screenshot' className='app-screenshot3' />
         </section>
-       
+         </div>
         </div>
     );
 }

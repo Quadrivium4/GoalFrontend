@@ -112,14 +112,10 @@ function Settings() {
           </ImageUpload>
         </div>
          <div className='text'>
-          <div className='edit' onClick={ ()=>setPop(<>
-              <h2>Change username</h2>
-                 <input onChange={(e) =>setName(e.target.value)} autoFocus value={name} placeholder='name'></input>
-                  <button onClick={handleChange}>save</button>
-              </>)}>
+          <div className='edit' onClick={() => setPop(<ChangeName />)}>
              {isEditing !== "name"?  
             <>
-            <p>{name}</p>
+            <p>{user.name}</p>
             <div className='edit-icon'>
                   <MdOutlineModeEditOutline  />
                 </div>
@@ -180,6 +176,29 @@ function Settings() {
     </div>
     </>
   );
+}
+const ChangeName = () =>{
+  const {logout, deleteAccountRequest, editUser, googleLogin} = useAuth();
+  const user = useUser()
+  const [name, setName] = useState(user.name)
+  const {closePop} = usePop()
+    const handleChange = () =>{
+      //-- console.log("handle change")
+      editUser({name, bio: user.bio, profileType: user.profileType}).then(()=>{
+        closePop()
+      }).catch(err=>{
+        //-- console.log("error editing user")
+      })
+  }
+  return (
+    <>
+              <h2>Change username</h2>
+                 <input onChange={(e) =>{
+                  console.log(e.target.value)
+                  setName(e.target.value)}} autoFocus value={name} placeholder='name'></input>
+                  <button onClick={handleChange}>save</button>
+              </>
+  )
 }
 const DeleteAccount = () =>{
    const {deleteAccountRequest} = useAuth();
