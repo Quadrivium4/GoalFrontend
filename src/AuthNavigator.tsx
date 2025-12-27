@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Link, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import Login from './auth/Login';
 import Register from './auth/Register/Register';
 import Verify from './auth/Verify';
@@ -9,6 +9,7 @@ import DeleteAccount from './shared/DeleteAccount';
 import DownloadPage from './auth/DownloadPage';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import { colors } from './constants';
+import { useAuth } from './context/AuthContext';
 
 const Layout = () =>(
     <>
@@ -82,6 +83,8 @@ export const Footer = () =>{
     )
 }
 export const AuthLayout = () =>{
+    const {user, logged} = useAuth();
+    if(user && logged) return <Navigate to="/" />
     return <div id='auth-page'>
         <Header></Header>
 
