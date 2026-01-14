@@ -75,11 +75,7 @@ const appRoutes: RouteObject[] = [{
     },{
         path: "/user/:userId",
         element: <User />
-    },{
-        path: "/verify/:userId/:token",
-        element: <Verify />
     },
-
     {
         path: "/privacy-policy",
         element: <PrivacyPolicy />
@@ -101,9 +97,6 @@ const authRoutes: RouteObject[] = [{
 }, {
     path: "/register",
     element: <Register/>
-}, {
-    path: "/verify/:userId/:token",
-    element: <Verify />
 },{
     path: "/reset-password",
     element: <ResetPassword />
@@ -131,7 +124,11 @@ const appRouter = createBrowserRouter([{
 },{
     element: <AuthLayout />,
     children: authRoutes
-}]);
+},{
+    path: "/verify/:userId/:token",
+    element: <Verify />
+}
+]);
 const loader = document.getElementById("app-loader");
 export const removeLoader = () =>{
     if(!loader) return;

@@ -36,9 +36,9 @@ function ChangeEmail() {
   return (
     <>
       
-      <div className={'form'}>
+      <div  className={'form'}>
         <h2>Change Email</h2>
-        <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='new email'></input>
+        <input onChange={(e) =>setEmail(e.target.value)} value={email ?? ""} name="cicci" type='text' placeholder='new email' autoComplete='off' ></input>
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
         <button onClick={handleChange}>Submit</button>
       </div>

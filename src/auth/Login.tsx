@@ -38,8 +38,8 @@ function Login() {
     <div className={styles.login}>
       <h1 className={styles.title}>Login</h1>
       <div className={'form'}>
-        <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='email'></input>
-        <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
+        <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='email' autoComplete='email'></input>
+        <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password' autoComplete='password'></input>
         <button type='submit' onClick={handleLogin}>Submit</button>
         <p>- or - </p>
         <GoogleButton onSuccess={onGoogleLogin} onError={message.error}>Sign in with google</GoogleButton>

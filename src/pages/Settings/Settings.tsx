@@ -130,13 +130,14 @@ function Settings() {
             setPop(<ChangeEmail />)}
             }>
                 <p>{user.email}</p>
+      
                 <div className='edit-icon'>
                   <MdOutlineModeEditOutline  />
                 </div>
                 
             </div>
         </div>
-
+            
       </div>
       <div className='edit-bio'>
               <textarea className='bio' onBlur={()=>setBio(user.bio)} value={bio} onChange={(e) =>setBio(e.target.value)} placeholder='write something about you...'></textarea>
@@ -195,7 +196,7 @@ const ChangeName = () =>{
               <h2>Change username</h2>
                  <input onChange={(e) =>{
                   console.log(e.target.value)
-                  setName(e.target.value)}} autoFocus value={name} placeholder='name'></input>
+                  setName(e.target.value)}} autoFocus value={name} placeholder='name' type='username'></input>
                   <button onClick={handleChange}>save</button>
               </div>
   )

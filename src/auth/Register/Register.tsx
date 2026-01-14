@@ -25,8 +25,8 @@ function Register() {
     <div className={styles.register}>
       <h1 className={styles.title}>Register</h1>
       <div className={'form'} >
-        <input onChange={(e) =>setName(e.target.value)} value={name} type='text' placeholder='username'></input>
-        <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='email'></input>
+        <input onChange={(e) =>setName(e.target.value)} value={name} type='username' autoComplete='username' placeholder='username'></input>
+        <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' autoComplete='email' placeholder='email'></input>
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
         <button type='submit' onClick={()=>{
           register({name, email, password}).then(res =>{
