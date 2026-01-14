@@ -37,6 +37,8 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                 // console.log(day.date, new Date())
                 return (
                     <div key={day._id} className={styles.day}>
+                    {day.history.length > 0 ?
+                          <>
                     {/* <p>{day.utcDate.toLocaleTimeString()}</p> */}
                     <p style={{textAlign: "center"}}>{sameDay(day.date, new Date())? "Today" : isYesterday(day.date)? "Yesterday": getDate(day.date) }</p>
                     {
@@ -80,6 +82,7 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                         )
                         })
                     }
+                    </>: null}
                     </div>
                 )
                 }): <p>no progress</p>}

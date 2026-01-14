@@ -250,10 +250,22 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
         setLoading(true)
         let updatedDay = await dayController.updateProgress(progress);
         
-         let updatedGoals;
+         let updatedGoals: TMyGoal[];
+         console.log({date: updatedDay.date, today: getToday().getTime()}, )
         if(updatedDay.date < getToday().getTime() && updatedDay.goal.frequency == "daily"){
             
+            // updatedGoals = goals.map(goal =>{
+            //     if(goal._id == updatedDay.goal._id){
+            //         //let updatedDay = goal.history.find(d => d.date )
+            //         return {...goal, history: []};
+            //     }else {
+            //         return goal;
+            //     }
+            // })
             updatedGoals = goals.map(goal =>{
+                if(goal._id == updatedDay.goal._id){
+
+               
                 let updatedDays = [...goal.history];
                 // if(goal._id == goalId){
                 //     updatedDays[dayIndex].history.splice(progressIndex, 1)
@@ -262,7 +274,7 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
                     const day = goal.history[i];
 
                     for (let j = 0; j < day.history.length; j++) {
-                    const p = day.history[i];
+                    const p = day.history[j];
                     
                     if(p.date === progress.date){
                          console.log("progress found")
@@ -275,6 +287,10 @@ const DaysProvider = ({children, me}: {children: ReactNode, me?: TUser}) =>{
                     
                 }
                 return {...goal, history: updatedDays}
+                 }else{
+                    return goal;
+                 }
+                 
             })
         }else if(updatedDay.date < getLastMonday(Date.now()).getTime() && updatedDay.goal.frequency == "weekly"){
              console.log("updating progress weekly previously",updatedDay.date, getLastMonday(Date.now()))
