@@ -17,7 +17,7 @@ const GlobalProvider = ({ children }: {children: ReactNode}) => {
     const [state, setState] = useState<MessageStateProps>({content: "global", hello: "hello"});
     //const delay = 5000;
     const message = () =>{
-        //-- console.log("Hi message global");
+         console.log("Hi message global");
         setState({...state, content: "new global" + "1"})
     }
     return (

@@ -81,7 +81,7 @@ type TActionProps = {
     payload?: any
 }
 const authReducer: Reducer<TAuthStateProps, TActionProps> =  (state, action) =>{
-    ////-- console.log("dispatching...", action)
+    // console.log("dispatching...", action)
     switch (action.type) {
         case "SET_PROFILE_IMAGE": 
             if(!state.user) return state;
@@ -113,14 +113,14 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
 
     const isLogged = async () => {
         const aToken =  localStorage.getItem("aToken");
-        ////-- console.log({aToken})
-        ////-- console.log(aToken)
+        // console.log({aToken})
+        // console.log(aToken)
         if (!aToken) return dispatch({ type: "LOGGED_OUT" });
         try {
             //await wait(2000)
              const res = await protectedApi.get(`/user`);
              let user = res.data;
-        ////-- console.log({user})
+        // console.log({user})
             if (!user) return dispatch({ type: "LOGGED_OUT" });
             //dispatch({type: "LOGGED_OUT"})
             localStorage.setItem("user", JSON.stringify(user));
@@ -128,8 +128,8 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
             dispatch({ type: "LOGIN", payload: { aToken, user } });
         } catch (error) {
            
-            ////-- console.log({loading:state.loading})
-            ////-- console.log("authError", error)
+            // console.log({loading:state.loading})
+            // console.log("authError", error)
             // if(error instanceof CanceledError && {config: {signal: AbortSignal}}){
 
             //     return 0;
@@ -148,7 +148,7 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
            // await wait(5000)
             const res = await api.post(`${baseUrl}/login`,{ email, password });
             const { user, aToken }: TUserAuthResponse= res.data;
-            //-- console.log({ user, aToken });
+             console.log({ user, aToken });
             localStorage.setItem("aToken", aToken);
             updateProtectedApiToken(aToken)
             dispatch({ type: "LOGIN", payload: { aToken, user } });
@@ -160,9 +160,9 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
     }
     // const googleLogin = async(credentials: CredentialResponse) =>{
     //     const res  = await api.post("/google-login", credentials);
-    //     //-- console.log(res.data)
+    //      console.log(res.data)
     //     const { user, aToken }: TUserAuthResponse= res.data;
-    //     ////-- console.log({ user, aToken });
+    //     // console.log({ user, aToken });
     //     localStorage.setItem("aToken", aToken);
     //     dispatch({ type: "LOGIN", payload: { aToken, user } });
     //     //return { user, aToken };
@@ -175,9 +175,9 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
             setLoading(true);
             //await wait(5000)
             const res  = await api.post("/google-login", {token});
-            //-- console.log(res.data)
+             console.log(res.data)
             const { user, aToken }: TUserAuthResponse= res.data;
-            ////-- console.log({ user, aToken });
+            // console.log({ user, aToken });
             localStorage.setItem("aToken", aToken);
             updateProtectedApiToken(aToken)
             
@@ -194,14 +194,14 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
         setLoading(true)
         //await wait(5000)
         const {user} : {user: TUser} = await api.post(`${baseUrl}/register`, {name, email, password});
-        //-- console.log("successfully registered", user);
+         console.log("successfully registered", user);
         setLoading(false)
         //SecureStore.setItemAsync("aToken", aToken);
     }
     const logout = async() =>{
-        //-- console.log({state})
+         console.log({state})
         await protectedApi.get(`${protectedUrl}/logout`);
-        //-- console.log("log out")
+         console.log("log out")
         localStorage.removeItem("aToken");
         dispatch({type: "LOGGED_OUT"})
         //redirect("/login")
@@ -210,9 +210,9 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
         setLoading(true)
         try {
             const res =  await api.post(`${baseUrl}/verify`, {token, id}, {signal: controller.signal});
-            //-- console.log({axiosResponse: res})
+             console.log({axiosResponse: res})
             const {user, aToken}: TUserAuthResponse = res.data;
-            //-- console.log({user, aToken})
+             console.log({user, aToken})
             localStorage.setItem("aToken", aToken);
             updateProtectedApiToken(aToken)
             dispatch({type: "LOGIN", payload: {aToken, user}})
@@ -230,30 +230,30 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
         //await wait(5000);
         const res =  await api.post(`/verify-reset-password`, {token, id});
         const {user, aToken}: TUserAuthResponse = res.data;
-        //-- console.log({user, aToken})
+         console.log({user, aToken})
         localStorage.setItem("aToken", aToken);
         updateProtectedApiToken(aToken)
         dispatch({type: "LOGIN", payload: {aToken, user}})
     }
     const deleteAccount = async() =>{
         await api.delete(`${protectedUrl}/user`);
-        //-- console.log("User delted succesfully");
+         console.log("User delted succesfully");
         localStorage.removeItem("aToken");
         dispatch({type: "LOGGED_OUT"});
     }
      const deleteAccountRequest = async() =>{
         setLoading(true);
-        //-- console.log(localStorage.getItem("aToken"));
+         console.log(localStorage.getItem("aToken"));
         
         await protectedApi.delete(`${protectedUrl}/user`);
-        //-- console.log("User delted succesfully");
+         console.log("User delted succesfully");
         localStorage.removeItem("aToken");
         setLoading(false);
         dispatch({type: "LOGGED_OUT"});
         
     }
     const changeEmail = async(form: TLoginForm) =>{
-        //-- console.log("changing email...")
+         console.log("changing email...")
         const updatedUser = await userController.changeEmail(form)
         dispatch({type: "SET_USER", payload: updatedUser})
     }

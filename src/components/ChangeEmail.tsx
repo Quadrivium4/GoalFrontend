@@ -22,13 +22,13 @@ function ChangeEmail() {
   const handleChange = () =>{
       setError(null)
       changeEmail({email, password}).then((res)=>{
-              //-- console.log(res)
+               console.log(res)
               message.success("we sent you a verification email to the new address")
               closePop()
           }).catch(err => {
             
             let msg =  err.message
-            //-- console.log("login error", {err})
+             console.log("login error", {err})
             setError(err.errorCode);
             message.error(msg)
           })

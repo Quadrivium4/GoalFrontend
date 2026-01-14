@@ -16,7 +16,7 @@ import NavigatorV2 from './NavigatorV2';
 // function App() {
 //   return (
 // {/* <ErrorBoundary fallbackRender={(props)=>{
-//   //-- console.log(props)
+//    console.log(props)
 //   return <div>Error</div>}
 //   }> */}
 //      <MessageProvider>
@@ -36,10 +36,8 @@ function App() {
       <PopProvider >
         <MessageProvider>
           <AuthProvider>
-              <NotificationProvider >
               <Message />
               <NavigatorV2 />
-              </NotificationProvider>
           </AuthProvider>
         </MessageProvider>
       </PopProvider>

@@ -4,7 +4,7 @@ export const IconNetButton = ({className = "", request, children, onError,}: { c
   const [loading, setLoading] = useState(false);
   const requesting = useRef<boolean>(false);
   const handleClick = async () =>{
-    if(requesting.current) return //-- console.log("already requesting");
+    if(requesting.current) return  console.log("already requesting");
     requesting.current = true;
     try{
       await request();

@@ -12,7 +12,7 @@ import styles from "./PointPop.module.css"
 import { useStatsV2 } from "../../../context/StatsContextV2";
 const PointHeader = ({progressWidth}: {progressWidth: number}) =>{
     useEffect(()=>{
-        //-- console.log({progressWidth})
+         console.log({progressWidth})
     },[progressWidth])
     return (
         <>
@@ -26,9 +26,9 @@ const PointHeader = ({progressWidth}: {progressWidth: number}) =>{
 //      let graph = stats.find(g =>{
 //             return g.goal._id == goalId
 //         });
-//          //-- console.log({graph})
+//           console.log({graph})
 //         let newPoint = graph?.points.find(p => p.date.getTime() == timestamp);
-//         //-- console.log({newPoint})
+//          console.log({newPoint})
 //         return newPoint?.history || [];
 // }
 export default function PointPop ({point}: {point: TGraphPoint}){
@@ -39,7 +39,7 @@ export default function PointPop ({point}: {point: TGraphPoint}){
     const {setPop} = usePop();
     const user = useUser();
     
-    ////-- console.log(point)
+    // console.log(point)
     date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     //const [history, setHistory] = useState(point.history);
     const [history, setHistory] = useState(stats[point.goal._id].points[point.date.getTime()].history);
@@ -47,10 +47,10 @@ export default function PointPop ({point}: {point: TGraphPoint}){
     useEffect(()=>{
         
         let newPoint = stats[point.goal._id].points[point.date.getTime()];
-        //-- console.log({newPoint})
+         console.log({newPoint})
         if(!newPoint) return;
         setHistory(newPoint.history)
-        //-- console.log("reloading point pop", point);
+         console.log("reloading point pop", point);
     },[stats])
     let {goal } = point;
     const [goalProgress, setGoalProgress] = useState(sumDaysProgress(history));
@@ -73,7 +73,7 @@ export default function PointPop ({point}: {point: TGraphPoint}){
             </div>
             <PointHeader progressWidth={progressWidth}/>
             <ProgressDays history={history} onChange={(day: TDay) =>{
-                //-- console.log("ON CHANGEEEE", {day})
+                 console.log("ON CHANGEEEE", {day})
                 setHistory(prev => {
                     let id = prev.findIndex(d => d._id == day._id);
                     let newDays = [...prev];

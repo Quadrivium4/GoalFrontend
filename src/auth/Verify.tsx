@@ -27,7 +27,8 @@ function Verify() {
           })
         }
         return () =>{
-          controller.abort();
+          console.log("aborting...")
+          //controller.abort();
         }
     },[])
   return (

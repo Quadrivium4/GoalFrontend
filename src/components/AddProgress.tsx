@@ -16,7 +16,7 @@ function AddProgress({ goal, date = Date.now(), onRes} : {goal: TGoal,   date?: 
     const [form, setForm] = useState<TProgress>({progress: 0, notes: "", likes: [], date: Date.now()});
     const {closePop} = usePop();
     const updateGoalProgress = async () =>{
-        //-- console.log({form})
+         console.log({form})
         //await wait(1000)
         let res = await addProgress(goal._id,  form.progress, form.notes, form.date);
         closePop();
@@ -25,7 +25,7 @@ function AddProgress({ goal, date = Date.now(), onRes} : {goal: TGoal,   date?: 
         if(onRes) onRes(res)
  
     }
-    //useEffect(()=>//-- console.log("set form changed"), [setForm])
+    //useEffect(()=> console.log("set form changed"), [setForm])
     return (
         <div className='form'>
             <h2>Add Progress</h2>

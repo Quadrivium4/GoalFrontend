@@ -23,7 +23,7 @@ function EditProgress({day, progress,   onChange, progressIndex, dayIndex} : {da
             closePop();
         } catch (err) {
             
-            //-- console.log("hello error:", err)
+             console.log("hello error:", err)
         }
     }
     const deleteGoalProgress = async() =>{
@@ -32,7 +32,7 @@ function EditProgress({day, progress,   onChange, progressIndex, dayIndex} : {da
             if(onChange) onChange(res)
             closePop();
         } catch (err) {
-            //-- console.log("hello error:", err)
+             console.log("hello error:", err)
         }
     }
     return (

@@ -29,14 +29,14 @@ const Pop = ({children, toggle}: {children?: ReactNode, toggle?: () => void}) =>
         {pops.map(pop =>{
 
        
-        //-- console.log("pop");
+         console.log("pop");
         return <div key={Date.now() + Math.random()} id="pop-layer" onClick={(e)=>{
             closePop()
-            //-- console.log("click in parent");
+             console.log("click in parent");
         }}>
             <div id="pop-up" onClick={(e)=>{
                 e.stopPropagation();
-                //-- console.log("click in pop")
+                 console.log("click in pop")
             }}>
                 <div className="header">
                     <h2 className="title">{pop.title}</h2>

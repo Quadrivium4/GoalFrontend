@@ -21,7 +21,7 @@ function VerifyResetPassword() {
             message.success("Verificatioon successful!")
             navigate("/");
          }).catch(err =>{
-            //-- console.log("error", err)
+             console.log("error", err)
             message.error("Cannot verify password, try again");
             navigate("/")
          })

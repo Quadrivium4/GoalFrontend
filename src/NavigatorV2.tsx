@@ -25,6 +25,7 @@ import Header from './components/Header';
 import Pop from './components/Pop/Pop';
 import Footer from './components/Footer';
 import Loader from './components/Loader/Loader';
+import { NotificationProvider } from './pages/Settings/Notifications/Notifications';
 
 const LoadingLayer = () =>{
     const {loading} = useAppLoading();
@@ -37,6 +38,7 @@ const AppLayout = () => {
     if(! user) return <div> invalid</div>
     return (
         <AppLoadingProvider>
+            <NotificationProvider>
                 <DaysProvider>
                     <StatsProviderV2 user={user}>
                        <Header></Header>
@@ -53,6 +55,7 @@ const AppLayout = () => {
          <Footer></Footer> 
                     </StatsProviderV2>
               </DaysProvider>
+              </NotificationProvider>
             </AppLoadingProvider>
     )
 }
@@ -72,7 +75,11 @@ const appRoutes: RouteObject[] = [{
     },{
         path: "/user/:userId",
         element: <User />
+    },{
+        path: "/verify/:userId/:token",
+        element: <Verify />
     },
+
     {
         path: "/privacy-policy",
         element: <PrivacyPolicy />

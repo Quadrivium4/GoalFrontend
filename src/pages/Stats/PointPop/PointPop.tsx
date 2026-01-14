@@ -11,7 +11,7 @@ import { EditGoalAmount, getPercentage, getProgressColor, normalizePercentage, T
 import styles from "./PointPop.module.css"
 const PointHeader = ({progressWidth}: {progressWidth: number}) =>{
     useEffect(()=>{
-        //-- console.log({progressWidth})
+         console.log({progressWidth})
     },[progressWidth])
     return (
         <>
@@ -25,9 +25,9 @@ const getLatestPointHistory = (timestamp: number, goalId: string, stats: TGraph[
      let graph = stats.find(g =>{
             return g.goal._id == goalId
         });
-         //-- console.log({graph})
+          console.log({graph})
         let newPoint = graph?.points.find(p => p.date.getTime() == timestamp);
-        //-- console.log({newPoint})
+         console.log({newPoint})
         return newPoint?.history || [];
 }
 export default function PointPop ({point}: {point: TGraphPoint}){
@@ -38,7 +38,7 @@ export default function PointPop ({point}: {point: TGraphPoint}){
     const {setPop} = usePop();
     const user = useUser();
     
-    ////-- console.log(point)
+    // console.log(point)
     date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     //const [history, setHistory] = useState(point.history);
     const [history, setHistory] = useState(getLatestPointHistory(point.date.getTime(), point.goal._id, stats));
@@ -46,12 +46,12 @@ export default function PointPop ({point}: {point: TGraphPoint}){
         let graph = stats.find(g =>{
             return g.goal._id == point?.goal._id
         });
-         //-- console.log({graph})
+          console.log({graph})
         let newPoint = graph?.points.find(p => p.date.getTime() == point?.date.getTime());
-        //-- console.log({newPoint})
+         console.log({newPoint})
         if(!newPoint) return;
         setHistory(newPoint.history)
-        //-- console.log("reloading point pop", point);
+         console.log("reloading point pop", point);
     },[stats])
     let goalDays =  point.history;
     let {goal } = point;
@@ -75,7 +75,7 @@ export default function PointPop ({point}: {point: TGraphPoint}){
             </div>
             <PointHeader progressWidth={progressWidth}/>
             <ProgressDays history={history} onChange={(day: TDay) =>{
-                //-- console.log("ON CHANGEEEE", {day})
+                 console.log("ON CHANGEEEE", {day})
                 setHistory(prev => {
                     let id = prev.findIndex(d => d._id == day._id);
                     let newDays = [...prev];

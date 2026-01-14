@@ -34,7 +34,7 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
     }
     return (<div className={styles["sub-progresses"]}>
             {history.length > 0 && history[0].history.length > 0? history.sort((a, b)=> a.date -b.date).map((day, dayIndex) =>{
-                ////-- console.log(day.date, new Date())
+                // console.log(day.date, new Date())
                 return (
                     <div key={day._id} className={styles.day}>
                     {/* <p>{day.utcDate.toLocaleTimeString()}</p> */}
@@ -44,7 +44,7 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                     day.history.sort((a, b)=> a.date -b.date).map((progress, progressIndex) =>{
                         //const strings = getDayStrings()
                         let date = new Date(progress.date);
-                        ////-- console.log({progressIndex, progress: day.history[progressIndex]})
+                        // console.log({progressIndex, progress: day.history[progressIndex]})
                         // TODO LIKE PAST PROGRESS
                         let youLiked = Boolean(progress.likes.find(like => like.userId ===day.goal.userId));
                         return (
@@ -53,6 +53,7 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                                 if(day.goal.userId !== user._id) return;
                                 setPop(<EditProgress day={day} progress={progress} onChange={onChange} progressIndex={progressIndex} dayIndex={dayIndex}/>)
                         }}>
+                            
                             <div className={styles["header"]}>
                                 {/* <p>{sameDay(date, new Date())? "Today" : isYesterday(date)? "Yesterday": formatDate(date) }</p> */}
                                 <p>at {getTime(date)}</p>
@@ -68,12 +69,13 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                             
                             </div>
                             </div>
-                            {progress.likes.length> 0?<div className='likes' style={{paddingBottom: 5}}>
-                            <Likes likes={progress.likes}/>
-                            </div>: null}
+                           
                             
                             </div>
-
+                            {progress.likes.length> 0?
+                            <div className='likes' style={{paddingBottom: 5, paddingTop: 5}}>
+                            <Likes likes={progress.likes}/>
+                            </div>: null}
                             </div>
                         )
                         })
