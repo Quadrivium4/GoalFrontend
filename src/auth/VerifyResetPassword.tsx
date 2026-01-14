@@ -18,11 +18,11 @@ function VerifyResetPassword() {
           isVerifing.current = true;
          verifyPassword({id: userId, token}).then((res)=>{
             isVerifing.current = false;
-            message.success("Verificatioon successful!")
+            message.success("Verification successful!")
             navigate("/");
          }).catch(err =>{
              console.log("error", err)
-            message.error("Cannot verify password, try again");
+            message.error("Cannot verify password...");
             navigate("/")
          })
          

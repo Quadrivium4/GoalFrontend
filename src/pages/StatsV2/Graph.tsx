@@ -349,11 +349,12 @@ export type TGraph = {
     }
 }
 function GraphV2() {
-    const {stats, reloadStats, loading} = useStatsV2()
+    const {stats, reloadStats, loading} = useStatsV2();
+    let statsLength = Object.keys(stats).length;
     return (
         <div className='graphs'>
-            
-            {loading? <GraphSkeleton graphs={Object.values(stats)}/>: Object.entries(stats).map(([key, graph], i)=>{
+          
+            {loading? <GraphSkeleton graphs={Object.values(stats)}/>: statsLength > 0? Object.entries(stats).map(([key, graph], i)=>{
                 //if(i == 0)  console.log("RERENDER")
                 let {points, goal} = graph;
                 
@@ -364,7 +365,7 @@ function GraphV2() {
                         {Object.keys(points).length > 0? <Svg graph={Object.values(points)} />: <p>no stats</p>}
                     </div>
                 )
-            })}
+            }): <p>No stats yet, create your goals and add your progress!</p>}
         </div>
     );
 }

@@ -19,6 +19,7 @@ function ResetPassword() {
             message.success("We have sent you a confirmatin email");
         }).catch(err =>{
              console.log(err)
+             message.error(err.message);
         })
     }
   return (
