@@ -8,7 +8,7 @@ const wait = async(data: any, headers: any) =>{
     return new Promise((resolve, reject) =>{
         setTimeout(()=>{
             resolve(data)
-             console.log({data, headers})
+             //-- console.log({data, headers})
         }, delay)
     })
     
@@ -37,36 +37,36 @@ type CustomError = {
 //     if(!config.baseURL) config.baseURL = "";
 //     let fullUrl = config.baseURL + config.url;
     
-//     // console.log({fullUrl})
+//     // //-- console.log({fullUrl})
 //     if(apiCancelTokens[fullUrl]){
 //         // Cancel previous request;
-//         // console.log("canceling request", fullUrl)
+//         // //-- console.log("canceling request", fullUrl)
 //         apiCancelTokens[fullUrl].abort("duplicated")
 //     }else{
 //         let controller = new AbortController();
 //         apiCancelTokens[fullUrl] = controller;
 //         config.signal = controller.signal;
 //     }
-//     // console.log({config})
+//     // //-- console.log({config})
 //     return config;
 
 // },(error)=>{
-//      console.log({error})
+//      //-- console.log({error})
 // })
 api.interceptors.response.use(function(response){
 
-     console.log({response});
+     //-- console.log({response});
     return response
 }, function(error: TBackendError){
     if(error.response){
         const {message, errorCode}  = error.response.data;
         throw {message, errorCode}
     }
-     console.log({error});
+     //-- console.log({error});
     return error
 }
 )
-//api.get("https://stackoverflow.com/questions/51447021/how-to-handle-api-call-error-with-jquery-ajax").then(resp=>  console.log({resp})).catch(err =>  console.log(err))
+//api.get("https://stackoverflow.com/questions/51447021/how-to-handle-api-call-error-with-jquery-ajax").then(resp=>  //-- console.log({resp})).catch(err =>  //-- console.log(err))
 
 // export const protectedApi = () => {
 //    // let aToken = localStorage.getItem("aToken");
@@ -87,22 +87,22 @@ export const protectedApi = axios.create({
     }
 })
 export const updateProtectedApiToken = (token: string) =>{
-     console.log("updating token", token)
-    // console.log(protectedApi.defaults.headers)
+     //-- console.log("updating token", token)
+    // //-- console.log(protectedApi.defaults.headers)
     protectedApi.defaults.headers.common["Authorization"] = "Bearer " + token;
     protectedApi.defaults.headers["Authorization"] = "Bearer " + token;
-     console.log(protectedApi.defaults.headers);
+     //-- console.log(protectedApi.defaults.headers);
 }
 protectedApi.interceptors.response.use(function(response){
 
-    // console.log({response});
+    // //-- console.log({response});
     return response
 }, function(error: TBackendError){
     if(error.response){
         const {message, errorCode}  = error.response.data;
         throw {message, errorCode}
     }
-    // console.log({error});
+    // //-- console.log({error});
     throw error
 }
 )
@@ -118,26 +118,26 @@ protectedApi.interceptors.response.use(function(response){
 //     if(!config.baseURL) config.baseURL = "";
 //     let fullUrl = config.baseURL + config.url;
     
-//     // console.log({fullUrl})
+//     // //-- console.log({fullUrl})
 //     if(cancelTokens[fullUrl]){
 //         // Cancel previous request;
-//         // console.log("canceling request", fullUrl)
+//         // //-- console.log("canceling request", fullUrl)
 //         cancelTokens[fullUrl].abort("duplicated")
 //     }else{
 //         let controller = new AbortController();
 //         cancelTokens[fullUrl] = controller;
 //         config.signal = controller.signal;
 //     }
-//     // console.log({config})
+//     // //-- console.log({config})
 //     return config;
 
 // },(error)=>{
-//      console.log({error})
+//      //-- console.log({error})
 // })
 
 // protectedApi.interceptors.response.use((response)=>{
 
-//     // console.log({response});
+//     // //-- console.log({response});
 //     return response
 // }, function(error: TBackendError){
 //     if( error instanceof CanceledError){
@@ -148,7 +148,7 @@ protectedApi.interceptors.response.use(function(response){
 //         const {message}  = error.response.data;
 //         throw new Error(message)
 //     }
-//     // console.log({error});
+//     // //-- console.log({error});
 //     return error
 //     return [null, error]
 // }
@@ -194,9 +194,9 @@ export function getRandomColor(){
 export function getRandomUserColor(userId: string){
     userId = userId.substring(18)
     let number = parseInt(userId, 16);
-    //  console.log({before: number})
+    //  //-- console.log({before: number})
     number = number % userColors.length;
-    // console.log({after: number});
+    // //-- console.log({after: number});
     return userColors[number]
 }
 

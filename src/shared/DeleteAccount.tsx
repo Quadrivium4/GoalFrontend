@@ -6,8 +6,8 @@ import { useMessage } from '../context/MessageContext';
 
 
 function DeleteAccount() {
-    console.log("delete account");
-    console.log({url: window.location.href, params: window.location});
+    //-- console.log("delete account");
+    //-- console.log({url: window.location.href, params: window.location});
     const {id, token} = useParams();
     const {verify, loading, logged, user} = useAuth();
     const navigate = useNavigate()
@@ -17,7 +17,7 @@ function DeleteAccount() {
     useEffect(()=>{
         if(id && token && !ref.current) {
             ref.current = true;
-            console.log("hello", {navigate, logged, loading, user, url: window.location.href})
+            //-- console.log("hello", {navigate, logged, loading, user, url: window.location.href})
             api.post('/delete-account', {id, token}).then(res =>{
                 setStatus("success");
                 navigate("/");

@@ -6,7 +6,7 @@ import styles from "./Register.module.css"
 import { CredentialResponse, GoogleLogin, useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google';
 import Login from '../Login';
 import GoogleButton from '../../components/GoogleButton';
-// console.log(styles)
+// //-- console.log(styles)
 
 function Register() {
   const {register, googleLogin} = useAuth()
@@ -30,12 +30,12 @@ function Register() {
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
         <button type='submit' onClick={()=>{
           register({name, email, password}).then(res =>{
-               console.log(res)
+               //-- console.log(res)
               message.success("We sent you a verification email");
           }).catch(err =>{
             message.error(err.message);
           })
-          // console.log(response)
+          // //-- console.log(response)
           //message.success("Email Sent!")
         }}>Submit</button>
         <p>- or -</p>

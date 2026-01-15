@@ -8,7 +8,10 @@ function Select<T extends string>({options, placeholder, onSelect, selected} : {
         onSelect(selectedOption);
     },[selectedOption])
     return (
-        <div className="custom-select" style={{borderRadius: !isActive? 5 : undefined}}>
+        <div className="custom-select" tabIndex={0} style={{borderRadius: !isActive? 5 : undefined}} onBlur={() => {
+            setIsActive(false);
+            ////-- console.log("on blur fired")
+            }}>
             {selectedOption? <p onClick={()=> setIsActive(prev => !prev)}>{selectedOption}</p> : <p className="placeholder" onClick={()=> setIsActive(true)}>{placeholder}</p>}
             <div className="options-wrapper">
 

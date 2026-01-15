@@ -142,7 +142,7 @@ const NavigatorV2 = () =>{
     const {logged, user, loading} = useAuth();
     
     useEffect(()=>{
-        console.log("navigator",{logged, user, loading})
+        //-- console.log("navigator",{logged, user, loading})
     }, [logged, user, loading])
     useEffect(() =>{
         if(!loader) return
@@ -153,7 +153,7 @@ const NavigatorV2 = () =>{
     if(loading) return null;
     return <RouterProvider router={appRouter} />
 //    if(loading) return null;
-//     console.log("not loading", {user, logged, loading, url: window.location.href})
+//     //-- console.log("not loading", {user, logged, loading, url: window.location.href})
 //     return (
 //         <>
 //         {logged && user? 

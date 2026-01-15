@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { isMobile } from './utils';
 const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ;
-//  console.log({CLIENT_ID})
+//  //-- console.log({CLIENT_ID})
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

@@ -15,10 +15,10 @@ function ResetPassword() {
   const {message} = useMessage()
     const handleResetPass = () =>{
         api.post("/reset-password", {email, password}).then(res =>{
-             console.log(res)
+             //-- console.log(res)
             message.success("We have sent you a confirmatin email");
         }).catch(err =>{
-             console.log(err)
+             //-- console.log(err)
              message.error(err.message);
         })
     }
@@ -32,7 +32,7 @@ function ResetPassword() {
         <button onClick={handleResetPass}>Submit</button>
         {/* <p>Don't have an account yet? <Link to={"/"}>Register</Link></p> */}
        
-        {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=>  console.log("Error google login")}/> */}
+        {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=>  //-- console.log("Error google login")}/> */}
       </div>
     </>
   );

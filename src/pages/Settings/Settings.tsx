@@ -26,12 +26,12 @@ import { useLocation } from 'react-router-dom';
 //   const [isEditing, setIsEditing] = useState<"name" | "bio" | false>("bio")
 
 //   const handleChange = () =>{
-//        console.log("handle change")
+//        //-- console.log("handle change")
 //       editUser({name, bio}).then(()=>{
 //         setIsEditing(false);
 
 //       }).catch(err=>{
-//          console.log("error editing user")
+//          //-- console.log("error editing user")
 //       })
 //   }
 //   return (
@@ -90,11 +90,11 @@ function Settings() {
 
  
   const handleChange = () =>{
-       console.log("handle change")
+       //-- console.log("handle change")
       editUser({name, bio, profileType}).then(()=>{
         setIsEditing(false)
       }).catch(err=>{
-         console.log("error editing user")
+         //-- console.log("error editing user")
       })
   }
  
@@ -140,9 +140,11 @@ function Settings() {
             
       </div>
       <div className='edit-bio'>
-              <textarea className='bio' onBlur={()=>setBio(user.bio)} value={bio} onChange={(e) =>setBio(e.target.value)} placeholder='write something about you...'></textarea>
+              <textarea className='bio' value={bio} onChange={(e) =>setBio(e.target.value)} placeholder='write something about you...'></textarea>
               
-              {user.bio !== bio &&<NetButton request={async()=> await editUser({name: user.name, bio, profileType})}>save</NetButton>}
+              {user.bio != bio && <NetButton request={async()=> {
+                //-- console.log("hello");
+                await editUser({name: user.name, bio, profileType})}}>save</NetButton>}
           </div>
           <div className='account-type'>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: 5}} >
@@ -184,18 +186,18 @@ const ChangeName = () =>{
   const [name, setName] = useState(user.name)
   const {closePop} = usePop()
     const handleChange = () =>{
-       console.log("handle change")
+       //-- console.log("handle change")
       editUser({name, bio: user.bio, profileType: user.profileType}).then(()=>{
         closePop()
       }).catch(err=>{
-         console.log("error editing user")
+         //-- console.log("error editing user")
       })
   }
   return (
     <div className='form'>
               <h2>Change username</h2>
                  <input onChange={(e) =>{
-                  console.log(e.target.value)
+                  //-- console.log(e.target.value)
                   setName(e.target.value)}} autoFocus value={name} placeholder='name' type='username'></input>
                   <button onClick={handleChange}>save</button>
               </div>
@@ -227,11 +229,11 @@ const AddPassword = () =>{
       const handleClick= async() =>{
         try {
           let res = protectedApi.post("/add-password", {email, password});
-            console.log({res})
+            //-- console.log({res})
           await logout()
           message.success("We have sent you a confirmatin email");
         } catch (error) {
-           console.log(error)
+           //-- console.log(error)
         }
           
           
@@ -244,7 +246,7 @@ const AddPassword = () =>{
         <button onClick={handleClick}>Submit</button>
         {/* <p>Don't have an account yet? <Link to={"/"}>Register</Link></p> */}
        
-        {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=>  console.log("Error google login")}/> */}
+        {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=>  //-- console.log("Error google login")}/> */}
       </div>
         </div>)
 }

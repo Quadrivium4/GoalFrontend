@@ -115,7 +115,7 @@ function iosPWASplash(icon, color = 'white') {
     const iconImage = new Image();
 
     iconImage.onerror = function () {
-        // console.log("err", iconImage.src);
+        // //-- console.log("err", iconImage.src);
         //throw new Error('Failed to load icon image');
     };
 
@@ -124,7 +124,7 @@ function iosPWASplash(icon, color = 'white') {
     //iconImage.crossOrigin="anonymous"
     iconImage.onload = function () {
         // Calculate the icon size based on the device's pixel ratio
-        // console.log("image loaded", iconImage.src);
+        // //-- console.log("image loaded", iconImage.src);
         const iconSizew = iconImage.width / (6 / pixelRatio);
         const iconSizeh = iconImage.height / (6 / pixelRatio);
 

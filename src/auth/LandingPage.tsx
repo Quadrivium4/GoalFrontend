@@ -15,13 +15,13 @@ function LandingPage() {
     const [prompt, setPrompt] = useState<any>();
 
     const setEvent = (e: any) =>{
-         console.log(e);
+         //-- console.log(e);
         e.preventDefault();
         setPrompt(e);
     }
     useEffect(()=>{
-       //  console.log("landing mounting")
-        // console.log("hello landing", location, params)
+       //  //-- console.log("landing mounting")
+        // //-- console.log("hello landing", location, params)
         window.addEventListener("beforeinstallprompt",setEvent);
         return ()=>{
             window.removeEventListener("beforeinstallpropmpt", setEvent)

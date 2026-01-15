@@ -21,13 +21,13 @@ function Verify() {
             navigate("/");
             message.success("verification successful")
           }).catch(err =>{
-            console.log("error", err);
+            //-- console.log("error", err);
             //message.error(err.message);
             navigate("/");
           })
         }
         return () =>{
-          console.log("aborting...")
+          //-- console.log("aborting...")
           //controller.abort();
         }
     },[])

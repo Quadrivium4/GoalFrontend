@@ -101,7 +101,7 @@ function User() {
     const you = useUser()
     const ref = useRef<HTMLDivElement>(null)
     //const hello = useScrollRefresh(ref, ()=>{})
-     console.log({userId})
+     //-- console.log({userId})
     useEffect(() =>{
        
         
@@ -121,7 +121,7 @@ function User() {
             setUser(res)
         }).catch(err =>{
             setUserLoading(false)
-             console.log("cannot load user")
+             //-- console.log("cannot load user")
         })
         
     }
@@ -134,7 +134,7 @@ function User() {
         }
         ).catch(err => {
              setGoalsLoading(false)
-             console.log(err)
+             //-- console.log(err)
         })
     }
    
@@ -160,7 +160,7 @@ function User() {
                 <FriendButton friend={user}/>
             </div> 
        </div>
-       {user.profileType == "private" && !me.friends.find(f => f == user._id)? 
+       {user.profileType == "private" && !me.following.find(f => f == user._id)? 
         null:
        <div className='activities'>
         <h2>Goals</h2>

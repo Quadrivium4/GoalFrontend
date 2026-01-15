@@ -22,7 +22,7 @@ const MessageProvider = ({ children }: {children: ReactNode}) => {
     //const delay = 5000;
     const message = {
         error: (message: string) => {
-             console.log("new error message dispatched", message)
+             //-- console.log("new error message dispatched", message)
             setState({ content: message, type: "error" });
         },
         success: (message: string) => {

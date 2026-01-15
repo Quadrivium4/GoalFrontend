@@ -6,7 +6,7 @@ function GraphSkeleton({graphs}:{graphs: TGraph[]}) {
     return (
         <div className={styles.skeletons}>
         {graphs.map(graph =>{
-            // console.log("hello")
+            // //-- console.log("hello")
             return (
                 <div key={graph.goal._id}>
                 <div className={styles["title-skeleton"]}>

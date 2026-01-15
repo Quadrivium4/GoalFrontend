@@ -6,7 +6,7 @@ const BottomNavLink = ({href, Icon}: {href: string, Icon: IconType}) =>{
     const [isFocused, setIsFocused] = useState(false);
     const location = useLocation();
     useEffect(()=>{
-         console.log(location.pathname, href)
+         //-- console.log(location.pathname, href)
         if(location.pathname == href && !isFocused) setIsFocused(true)
         else if(isFocused && location.pathname !== href) setIsFocused(false)
     },[location])

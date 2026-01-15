@@ -55,7 +55,7 @@ const getDays = async(userId?: string):Promise<TMyGoal[]> =>{
     return res.data;
 }
 const getStats = async(userId?: string):Promise<TGoalDays[]> =>{
-    // console.log("mine", {userId})
+    // //-- console.log("mine", {userId})
     let res = await protectedApi.get(userId? "/stats/" + userId : "/stats");
     return res.data;
 }
