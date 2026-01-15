@@ -156,6 +156,7 @@ function User() {
             <div>
                 <h2>{user.name}</h2>
                 {/* <p>{user.bio || "empty bio for the moment..."}</p> */}
+                <p style={{fontSize: 15}}> -  {user.goals.map(goal => goal.title.toUpperCase() + "  -  ")}</p>
                 <p>{user.bio}</p>
                 <FriendButton friend={user}/>
             </div> 
