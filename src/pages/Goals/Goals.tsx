@@ -170,7 +170,7 @@ export function SingleGoal({goal}: {goal: TMyGoal}){
           
         </div>
         
-        <ProgressDays history={goalDays} onChange={reloadStats}/>
+         <ProgressDays history={goalDays} onChange={reloadStats}/>
        
         <div className='footer'>
           <div style={{display: 'flex', gap: "5px"}}>
@@ -219,8 +219,13 @@ function Goals() {
           user.goals.length > 0 && daysLoading? <GoalSkeleton goals={user.goals} />:
           goals?.length > 0? goals.map(goal=>{
             let {history, ...goalInfo} = goal;
-            if(!goal) return <SingleGoal goal={{...goalInfo, history: []}} key={goalInfo._id}/>
-            return <SingleGoal goal={goal} key={goalInfo._id}/>
+            let currentGoalInfo = user.goals.find(g => g._id === goal._id);
+            if(!currentGoalInfo) {
+              console.log("error, goal not found");
+              return <></>
+            }
+            //if(!goal) return <SingleGoal goal={{...currentGoalInfo, history: []}} key={goalInfo._id}/>
+            return <SingleGoal goal={{...currentGoalInfo, history}} key={goalInfo._id}/>
           }): <p>no goals</p>
         }
 

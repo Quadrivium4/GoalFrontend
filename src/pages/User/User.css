@@ -18,6 +18,12 @@
     align-items: center;
     gap: 10px;
 }
+#user .info .text{
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 
 #user .option {
     display: flex;

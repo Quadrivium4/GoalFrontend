@@ -32,14 +32,16 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
     const editProgress = () =>{
 
     }
+    
     return (<div className={styles["sub-progresses"]}>
             {history.length > 0 && history[0].history.length > 0? history.sort((a, b)=> a.date -b.date).map((day, dayIndex) =>{
                 // //-- console.log(day.date, new Date())
                 return (
+                     day.history.length > 0 ?
                     <div key={day._id} className={styles.day}>
-                    {day.history.length > 0 ?
-                          <>
-                    {/* <p>{day.utcDate.toLocaleTimeString()}</p> */}
+                   
+                          
+       
                     <p style={{textAlign: "center"}}>{sameDay(day.date, new Date())? "Today" : isYesterday(day.date)? "Yesterday": getDate(day.date) }</p>
                     {
                         
@@ -66,25 +68,22 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                             <div className={styles.main} style={{display: "flex"}}>
                             <p>{progress.notes}</p>
                             <div className={styles["sidebar"]}>
-                               
-                               
-                            
+            
                             </div>
                             </div>
-                           
-                            
+
                             </div>
-                            {progress.likes.length> 0?
+                            {
+                            progress.likes.length> 0?
                             <div className='likes' style={{paddingBottom: 5, paddingTop: 5}}>
                             <Likes likes={progress.likes}/>
                             </div>: null}
                             </div>
                         )
                         })
-                    }
-                    </>: null}
-                    </div>
-                )
-                }): <p>no progress</p>}
+                    }</div> : null)
+                }): <p>no progress</p>
+            }
+            
         </div>)
 }

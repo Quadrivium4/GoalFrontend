@@ -195,7 +195,7 @@ const ChangeName = () =>{
   }
   return (
     <div className='form'>
-              <h2>Change username</h2>
+              <h2>name</h2>
                  <input onChange={(e) =>{
                   //-- console.log(e.target.value)
                   setName(e.target.value)}} autoFocus value={name} placeholder='name' type='username'></input>

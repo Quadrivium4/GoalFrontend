@@ -153,11 +153,11 @@ function User() {
         user? <>
         <div className='info'>
             <ProfileIcon  name={user.name} _id={user._id} profileImg={user.profileImg} />
-            <div>
+            <div className='text'>
                 <h2>{user.name}</h2>
                 {/* <p>{user.bio || "empty bio for the moment..."}</p> */}
                 <p style={{fontSize: 15}}> -  {user.goals.map(goal => goal.title.toUpperCase() + "  -  ")}</p>
-                <p>{user.bio}</p>
+                <p className='user-bio'>{user.bio}</p>
                 <FriendButton friend={user}/>
             </div> 
        </div>

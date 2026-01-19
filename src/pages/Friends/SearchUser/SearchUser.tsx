@@ -240,9 +240,13 @@ export default function SearchUser(){
     const user = useUser()
     const navigate = useNavigate()
     return (
-    <> 
-        <input type='text' onChange={(e) => search(e.target.value)} placeholder='search name or #id' style={{marginTop: 15, marginBottom: 5, textDecoration: "none"}}></input>
+    <div className={styles.searchPop}> 
+        <h2>Search</h2>
+        <input type='text' onChange={(e) => search(e.target.value)} placeholder='name or #id' style={{marginTop: 15, marginBottom: 5, textDecoration: "none"}}></input>
         <Select options={["following", "followers", "none"]} onSelect={addFilter} placeholder='filter' />
+
+
+    
         <div className={styles.people} onScroll={(e) =>{
             const target = e.target as HTMLDivElement;
             const bottom = Math.abs(target.scrollHeight - target.clientHeight - target.scrollTop) < 30
@@ -276,5 +280,6 @@ export default function SearchUser(){
             </div>
            
         </div>
-        </>)
+            </div>
+        )
 }

@@ -101,7 +101,7 @@ export function sumDoubleDayProgress(goal: TMyGoal){
 //     }
 //     return newLikes
 // }
-
+const pullToRefreshDelta = 150;
 export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.RefObject<HTMLDivElement> ) =>{
     const touch = {
         start: 0
@@ -109,11 +109,15 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
     
    
     useEffect(()=>{
+        
         const root = document.getElementById("page");
           //-- console.log("root", root)
         if(!root) return;
         
         root.addEventListener("touchstart", onStartTouch)
+        root.addEventListener("scroll", () =>{
+
+        }, true)
          return ()=> {
             if(!root) return;
             root.removeEventListener("touchend", onEndTouch);
@@ -124,7 +128,10 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
     //      
     }
     function onStartTouch(e: TouchEvent){
+        
         const root = document.getElementById("page");
+        console.log("touch started target",  e.target)
+        if(!e.target || isScrollableTarget(e.target!)) return console.log("target isScrollable");
          //-- console.log("touch")
         if(!root) return;
         if(root.scrollTop > 10) return;
@@ -145,7 +152,7 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
             let delta = e.changedTouches[0].clientY - touch.start;
              //-- console.log(e.changedTouches[0].clientY - touch.start)
 
-            if(delta > 100){
+            if(delta > pullToRefreshDelta){
                const spinner = document.getElementById("app-spinner");
                 //-- console.log(spinner)
                if(spinner){
@@ -164,6 +171,15 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
     }
    
 }
+function isScrollableTarget(target: any): boolean{
+    console.log({target});
+
+    console.log(window.getComputedStyle(target).overflowY)
+    if(target.scrollHeight > target.clientHeight && ["scroll", "auto"].includes(window.getComputedStyle(target).overflowY)){
+        return true;
+    }
+    return false;
+}
 function Friends() {
 
     //const {days, today, addProgress} = useDays();
@@ -176,6 +192,7 @@ function Friends() {
     },[])
     return (
         <>
+       
         <PageHeader title={"Friends"} action={<RiSearchLine onClick={() =>setPop(<SearchUser />)} size={24} />} />
         
         

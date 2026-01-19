@@ -10,8 +10,9 @@ function FriendSkeleton({n}:{n: number}) {
         <>
 
         {
-            array.map(n =>{
-                return (<div className={styles.friendSkeleton} key={n + Math.random()}>
+            array.map((n, i)=>{
+                console.log("skeleton", i)
+                return (<div className={styles.friendSkeleton} key={"friend-skeleton" + i}>
                 <div className={styles.circle}></div>
                 
             </div>)
