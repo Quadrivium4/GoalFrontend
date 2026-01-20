@@ -220,6 +220,9 @@ function Goals() {
           goals?.length > 0? goals.map(goal=>{
             let {history, ...goalInfo} = goal;
             let currentGoalInfo = user.goals.find(g => g._id === goal._id);
+            if(goal.title == "gil"){
+              //console.log(goal, "cici")
+            }
             if(!currentGoalInfo) {
               console.log("error, goal not found");
               return <></>

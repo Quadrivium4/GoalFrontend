@@ -1,4 +1,4 @@
-import React,{ReactNode, useEffect, useState} from 'react';
+import React,{ReactNode, useCallback, useEffect, useMemo, useState} from 'react';
 import { useAuth, useUser } from '../../context/AuthContext';
 import Select from '../../components/Select/Select';
 import Input from '../../components/Input/Input';
@@ -26,26 +26,43 @@ import styles from "./ProgressDays.module.css";
 import { MdOutlineThumbUpOffAlt } from "react-icons/md";
 import { postLike } from '../../controllers/likes';
 
+function daysEmpty(days: TDay[] ){
+    let empty = true; 
+    for (let i = 0; i < days.length; i++) {
+        const day = days[i];
+        if(day.history.length > 0) empty = false;
+        
+    }
+    return empty
+}
 export default function ProgressDays({history,  onChange}:{history: TDay[], onChange?: (day: TDay)=>void}){
     const user = useUser();
     const {setPop} = usePop();
+    let noprogress = useMemo(() =>{
+        console.log("running progress check", daysEmpty(history), history[0])
+    
+        return daysEmpty(history);
+    },[history])
+    
     const editProgress = () =>{
 
     }
     
     return (<div className={styles["sub-progresses"]}>
-            {history.length > 0 && history[0].history.length > 0? history.sort((a, b)=> a.date -b.date).map((day, dayIndex) =>{
+         {noprogress? <p>no progress</p>: 
+            history.length > 0 ? history.sort((a, b)=> a.date -b.date).map((day, dayIndex) =>{
                 // //-- console.log(day.date, new Date())
                 return (
-                     day.history.length > 0 ?
+                    
+                   day.history.length >0? 
                     <div key={day._id} className={styles.day}>
                    
                           
-       
+                    
                     <p style={{textAlign: "center"}}>{sameDay(day.date, new Date())? "Today" : isYesterday(day.date)? "Yesterday": getDate(day.date) }</p>
-                    {
-                        
-                    day.history.sort((a, b)=> a.date -b.date).map((progress, progressIndex) =>{
+                    
+                    
+                    {day.history.sort((a, b)=> a.date -b.date).map((progress, progressIndex) =>{
                         //const strings = getDayStrings()
                         let date = new Date(progress.date);
                         // //-- console.log({progressIndex, progress: day.history[progressIndex]})
@@ -81,8 +98,8 @@ export default function ProgressDays({history,  onChange}:{history: TDay[], onCh
                             </div>
                         )
                         })
-                    }</div> : null)
-                }): <p>no progress</p>
+                    }</div>: null)
+                }): null
             }
             
         </div>)

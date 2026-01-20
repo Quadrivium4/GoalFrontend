@@ -253,7 +253,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
         let updatedGoals: TMyGoal[];
         //-- console.log({date: updatedDay.date, today: getToday().getTime()}, )
         if (updatedDay.date < getToday().getTime() && updatedDay.goal.frequency == "daily") {
-
+            console.log("first if")
             // updatedGoals = goals.map(goal =>{
             //     if(goal._id == updatedDay.goal._id){
             //         //let updatedDay = goal.history.find(d => d.date )
@@ -293,7 +293,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
 
             })
         } else if (updatedDay.date < getLastMonday(Date.now()).getTime() && updatedDay.goal.frequency == "weekly") {
-            //-- console.log("updating progress weekly previously",updatedDay.date, getLastMonday(Date.now()))
+            console.log("updating progress weekly previously",updatedDay.date, getLastMonday(Date.now()))
             updatedGoals = goals.map(goal => {
                 let updatedDays = [...goal.history];
                 // if(goal._id == goalId){
@@ -321,6 +321,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
         } else {
             console.log("updating goal...")
             if(updatedDay._id != progress.id){
+                console.log("new day returnec")
                 // New day returned
                 updatedGoals = goals.map(goal => {
                 if (goal._id == updatedDay.goal._id) {
@@ -336,7 +337,8 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
                         }
                         return day
                     })
-
+                    updatedDays.push(updatedDay);
+                    console.log({updatedDays})
                     return { ...goal, history: updatedDays }
                 } else {
                     return goal
@@ -377,6 +379,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
         //     return {...goal, history: updatedDays}
         // })
         // updatedGoals = getUpdatedGoals(goals, updatedDay);
+        console.log({updatedGoals})
         setGoals(updatedGoals);
         setLoading(false)
         return updatedDay
