@@ -116,7 +116,8 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
         
         root.addEventListener("touchstart", onStartTouch)
         root.addEventListener("scroll", () =>{
-
+            console.log("scrolling");
+            root.removeEventListener("touchend", onEndTouch);
         }, true)
          return ()=> {
             if(!root) return;
