@@ -139,12 +139,8 @@ function Settings() {
         </div>
             
       </div>
-      <div className='edit-bio'>
-              <textarea className='bio' value={bio} onChange={(e) =>setBio(e.target.value)} placeholder='write something about you...'></textarea>
-              
-              {user.bio != bio && <NetButton request={async()=> {
-                //-- console.log("hello");
-                await editUser({name: user.name, bio, profileType})}}>save</NetButton>}
+      <div className='edit-bio' onClick={() => setPop(<ChangeBio />)}>
+            <p>{user.bio}</p>
           </div>
           <div className='account-type'>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: 5}} >
@@ -199,6 +195,35 @@ const ChangeName = () =>{
                  <input onChange={(e) =>{
                   //-- console.log(e.target.value)
                   setName(e.target.value)}} autoFocus value={name} placeholder='name' type='username'></input>
+                  <button onClick={handleChange}>save</button>
+              </div>
+  )
+}
+const ChangeBio = () =>{
+  const {logout, deleteAccountRequest, editUser, googleLogin} = useAuth();
+  const user = useUser()
+  const [bio, setBio] = useState(user.bio)
+  const {closePop} = usePop()
+    const handleChange = () =>{
+       //-- console.log("handle change")
+      editUser({name: user.name, bio: bio, profileType: user.profileType}).then(()=>{
+        closePop()
+      }).catch(err=>{
+         //-- console.log("error editing user")
+      })
+  }
+  return (
+    <div className='form'>
+              <h2>About</h2>
+                 <textarea
+                 onFocus={(e)=>{
+                  let length= e.target.value.length ?? 0;
+                  e.target.setSelectionRange(length, length)
+                }
+                }
+                  onChange={(e) =>{
+                  //-- console.log(e.target.value)
+                  setBio(e.target.value)}} autoFocus value={bio} placeholder='about you' ></textarea>
                   <button onClick={handleChange}>save</button>
               </div>
   )

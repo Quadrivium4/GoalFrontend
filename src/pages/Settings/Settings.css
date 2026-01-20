@@ -58,6 +58,8 @@
     position: relative;
     display: flex;
     width: 100%;
+    background-color: var(--background-medium);
+    padding: 10px 5px;
 }
 #settings .edit-bio div{
     display: flex;
