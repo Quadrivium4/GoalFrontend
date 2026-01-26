@@ -7,6 +7,7 @@ export const NetButton = ({className = "", request, children, onError}: { classN
     setLoading(true);
     
     request().catch(err =>{
+      console.log("erroro in net button", {err})
       if(onError)onError(err)
     }).finally(()=>{
       setLoading(false);

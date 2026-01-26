@@ -194,13 +194,10 @@ const ChangeName = () =>{
   const user = useUser()
   const [name, setName] = useState(user.name)
   const {closePop} = usePop()
-    const handleChange = () =>{
+    const handleChange = async () =>{
        //-- console.log("handle change")
-      editUser({name, bio: user.bio, profileType: user.profileType}).then(()=>{
-        closePop()
-      }).catch(err=>{
-         //-- console.log("error editing user")
-      })
+     await editUser({name, bio: user.bio, profileType: user.profileType});
+     
   }
   return (
     <div className='form'>
@@ -208,7 +205,7 @@ const ChangeName = () =>{
                  <input onChange={(e) =>{
                   //-- console.log(e.target.value)
                   setName(e.target.value)}} autoFocus value={name} placeholder='name' type='username'></input>
-                  <button onClick={handleChange}>save</button>
+                  <NetButton request={handleChange}>save</NetButton>
               </div>
   )
 }
@@ -217,13 +214,15 @@ const ChangeBio = () =>{
   const user = useUser()
   const [bio, setBio] = useState(user.bio)
   const {closePop} = usePop()
-    const handleChange = () =>{
+    const handleChange = async () =>{
        //-- console.log("handle change")
-      editUser({name: user.name, bio: bio, profileType: user.profileType}).then(()=>{
-        closePop()
-      }).catch(err=>{
-         //-- console.log("error editing user")
-      })
+       try {
+         await editUser({name: user.name, bio: bio, profileType: user.profileType});
+         closePop();
+       } catch (error) {
+          console.log("error editing user",{error})
+       }
+      
   }
   return (
     <div className='form'>
@@ -237,7 +236,8 @@ const ChangeBio = () =>{
                   onChange={(e) =>{
                   //-- console.log(e.target.value)
                   setBio(e.target.value)}} autoFocus value={bio} placeholder='about you' ></textarea>
-                  <button onClick={handleChange}>save</button>
+                  <NetButton request={handleChange}>save</NetButton>
+                 
               </div>
   )
 }
@@ -281,7 +281,7 @@ const AddPassword = () =>{
       <div className='form'>
         <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' placeholder='email'></input>
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='new password'></input>
-        <button onClick={handleClick}>Submit</button>
+        <NetButton request={handleClick}>Submit</NetButton>
         {/* <p>Don't have an account yet? <Link to={"/"}>Register</Link></p> */}
        
         {/* <GoogleLogin onSuccess={handleGoogleLogin} onError={()=>  //-- console.log("Error google login")}/> */}
