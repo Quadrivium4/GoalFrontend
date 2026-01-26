@@ -201,22 +201,33 @@ export function getRandomUserColor(userId: string) {
     // //-- console.log({after: number});
     return userColors[number]
 }
-export const uploadImageToCloudinary = async (image: File, public_id?: string): Promise<TFile> => {
+
+export const uploadImageToCloudinary = async (image: File, onProgress?: (progress: number)=>void, public_id?: string): Promise<TFile> => {
     //const signatureResult = await getCloudinarySignature()
+    
     const formData = new FormData();
-    const comporessedImage=  await compressImage(image);
+    const comporessedImage= await compressImage(image);
     formData.append('file', comporessedImage);
     //formData.append('upload_preset', "ml_default");
     formData.append("api_key", CLOUDINARY_API_KEY);
     formData.append("upload_preset", "ml_default")
+    const request = new XMLHttpRequest();
+    request.upload.addEventListener("progress", (e)=>{
+        console.log("progress", e.loaded, e.total, e.loaded/e.total * 100);
+        if(onProgress)onProgress(e.loaded / e.total * 100);
+    })
+    request.open("post", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
+    request.send(formData);
+    const p:TFile =  await new Promise((resolve, rejecct) =>{
+         request.addEventListener("loadend", (e)=>{
+            if(onProgress) onProgress(100);
+            console.log("loadend", request.response);
+            resolve( JSON.parse(request.response));
+        })
+    })
+    
 
-   
-    const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
-        formData
-    );
-    console.log("cloudinary response", response)
-    return response.data;
+    return p;
 };
 function compressImage(file: File, maxWidth = 400, maxHeight = 300, quality = 0.5): Promise<string> {
       return new Promise((resolve, reject) => {

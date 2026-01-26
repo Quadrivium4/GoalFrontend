@@ -27,6 +27,23 @@ export default function ProfileIcon({profileImg, name, _id, size}: {profileImg?:
 
     )
 }
+export  function ProfileIconLocal({profileImg, size}: {profileImg: File,  size?: number}){
+    
+    let url = URL.createObjectURL(profileImg);
+   
+    return (
+       
+       <div className={styles.profile} style={{width: size, height: size, backgroundColor: "transparent"}} >
+         
+            <>
+           
+            <img src={url} style={{width: size, height: size}}/>
+               </>
+           
+        </div> 
+
+    )
+}
 export function ProfileIconLink({profileImg, name, _id, size}: {profileImg?: TFile, name:string, _id: string, size?: number}){
     return (
         <Link to={"/user/" + _id}>

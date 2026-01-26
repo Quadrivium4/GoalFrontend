@@ -3,7 +3,7 @@ import { MdOutlineInfo, MdOutlineModeEditOutline } from "react-icons/md";
 import ChangeEmail from '../../components/ChangeEmail';
 import ImageUpload from '../../components/ImageUpload';
 
-import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
+import ProfileIcon, { ProfileIconLocal } from '../../components/ProfileIcon/ProfileIcon';
 import { useAuth, useUser } from '../../context/AuthContext';
 import "./Settings.css";
 import {  NotificationBell } from './Notifications/Notifications';
@@ -88,6 +88,8 @@ function Settings() {
   const {updateUserProfileImage} = useAuth();
   const [isEditing, setIsEditing] = useState<"name" | false>();
   const {message} = useMessage();
+  const [uploadingProgress, setUploadingProgress] = useState(0);
+  const [uploadingImg, setUploadingImage] = useState<File>();
 
  
   const handleChange = () =>{
@@ -99,16 +101,21 @@ function Settings() {
       })
   }
   const handleUploadProfileImg = async(file: File) =>{
-    
-    const res = await uploadImageToCloudinary(file, user.profileImg.public_id);
+    setUploadingProgress(0.1);
+    setUploadingImage(file);
+    const res = await uploadImageToCloudinary(file,  (progress)=>{
+      setUploadingProgress(progress );
+    });
      updateUserProfileImage({
       public_id: res.public_id, 
       name: res.name,
       url: res.url
     });
-    const id = await uploadProfileImg(res);
-   
-
+    uploadProfileImg(res).then(res=>{
+      console.log("user image changed");
+    })
+    setUploadingProgress(100);
+    setTimeout(()=>setUploadingProgress(0), 100)
   }
  
   return (
@@ -120,8 +127,14 @@ function Settings() {
       
       <div className='info'>
         <div className='profile-img-uploader'>
+          {uploadingProgress!= 0? <div className='upload-progress-bar' style={{backgroundColor: "rgba(0,0,0,0.5)"}}>
+            {/* <div className='upload-progress' style={{width: uploadingProgress+ "%", height: 10, backgroundColor: "red"}}> */}
+           <p>{uploadingProgress.toFixed(0)}%</p>
+          {/* </div> */}
+          </div>: null}
           <ImageUpload uploadFile={handleUploadProfileImg}>
-            <ProfileIcon profileImg={user.profileImg} name={user.name} _id={user._id} size={60}></ProfileIcon>
+            {uploadingImg? <ProfileIconLocal profileImg={uploadingImg} />: 
+            <ProfileIcon profileImg={ user.profileImg} name={user.name} _id={user._id} size={60}></ProfileIcon>}
           </ImageUpload>
         </div>
          <div className='text'>

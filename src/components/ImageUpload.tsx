@@ -24,7 +24,7 @@ const ImageUpload = ({onUpload, children, uploadFile}: {onUpload?: () => Promise
 
     }
   }
-    if(loading) return <Loader size={30}/>
+    //if(loading) return <Loader size={30}/>
     return (
       <>
       <input type="file" onChange={e =>upload(e.target.files) } style={{display: "none"}} ref={fileInputRef}/>
