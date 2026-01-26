@@ -31,12 +31,17 @@ export function timeFromValue(time: string){
     return {hours, minutes}
 
 }
-const emptyProgress: TProgress = {date: Date.now(), notes: "", progress: 0, likes: []};
+export type TInputProgressValues = {
+    date: number,
+    notes: string,
+    amount: number,
+}
+const emptyProgress: TInputProgressValues = {date: Date.now(), notes: "", amount: 0};
 
-function InputProgressValues({type, onChange, initial }: {type:TGoalAmountType, onChange: (form: TProgress)=>void, initial?: Partial<TProgress>}){
+function InputProgressValues({type, onChange, initial }: {type:TGoalAmountType, onChange: (form: TInputProgressValues)=>void, initial?: Partial<TProgress>}){
     const {message} = useMessage();
-    const [form, setForm] = useState<TProgress>({...emptyProgress, ...initial});
-    const updateForm = (form: TProgress) =>{
+    const [form, setForm] = useState<TInputProgressValues>({...emptyProgress, ...initial });
+    const updateForm = (form: TInputProgressValues) =>{
         setForm(form);
         onChange(form);
     }
@@ -59,7 +64,7 @@ function InputProgressValues({type, onChange, initial }: {type:TGoalAmountType, 
         updateForm({...form, date: newDate.getTime()})
     }
     const updateProgress = (value: number) => {
-        updateForm({...form, progress: value});
+        updateForm({...form, amount: value});
     }
     const updateNotes = (value: string) => updateForm({...form, notes: value})
     return (
@@ -68,9 +73,9 @@ function InputProgressValues({type, onChange, initial }: {type:TGoalAmountType, 
             <input type="date" placeholder='date' value={getDateInputValue(form.date)} style={{display: 'flex', width: "100%"}} onChange={(e) => updateDate(e.target.value)}></input>
             <input type="time" placeholder='time' value={getTimeInputValue(form.date)} style={{display: 'flex', width: "50%"}} onChange={(e) => updateTime(e.target.value)}></input>
         </div>
-        {type === "time" ? <Input.TimePicker onSelect={(value) => updateProgress(value)} initialValue={form.progress}/> 
-        : type === "distance"? <Input.DistancePicker onSelect={updateProgress} initialValue={form.progress}/> 
-        : <input placeholder='progress' value={form.progress? form.progress: ''} type="number" onChange={(e)=> updateProgress(parseInt(e.target.value))} />}
+        {type === "time" ? <Input.TimePicker onSelect={(value) => updateProgress(value)} initialValue={form.amount}/> 
+        : type === "distance"? <Input.DistancePicker onSelect={updateProgress} initialValue={form.amount}/> 
+        : <input placeholder='progress' value={form.amount? form.amount: ''} type="number" onChange={(e)=> updateProgress(parseInt(e.target.value))} />}
             <textarea  placeholder='notes...' value={form.notes}onChange={(e)=> updateNotes(e.target.value)}></textarea>
             </>
     )

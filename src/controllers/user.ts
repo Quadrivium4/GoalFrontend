@@ -1,5 +1,6 @@
 // const addDay = async(day: TDayForm): Promise<TDay> =>{
 
+import { TFile } from "../components/ProfileIcon/ProfileIcon";
 import { TLoginForm, TUser } from "../context/AuthContext"
 import { protectedApi } from "../utils"
 import { wait } from "./days";
@@ -22,8 +23,8 @@ const getUser = async(userId: string): Promise<TUser> =>{
     const res = await protectedApi.get("/user", {params: {id: userId}});
     return res.data;
 }
-const uploadProfileImg = async(formData: FormData): Promise<string> =>{
-    const res =  await protectedApi.post("/user/upload-profile-image", formData,{headers: {"Content-Type": "multipart/form-data"}})
+const uploadProfileImg = async(file: TFile): Promise<TFile> =>{
+    const res =  await protectedApi.post("/user/update-img", file)
     return res.data
 }
 const changeEmail = async(form: TLoginForm): Promise<TUser> =>{
@@ -36,17 +37,24 @@ const putUser =  async(form: TUserForm): Promise<TUser> =>{
     const res = await protectedApi.put("/user", form);
     return res.data;
 }
+const getCloudinarySignature = async(): Promise<any> =>{
+    const res = await protectedApi.get("/cloudinary-signature");
+    return res.data
+}
+
 let controller = {
     uploadProfileImg,
     getUser,
     changeEmail,
-    putUser
+    putUser,
+    getCloudinarySignature
 }
 export  {
     uploadProfileImg,
     getUser,
     changeEmail,
     getProfile,
-    putUser
+    putUser,
+    getCloudinarySignature
 }
 export default controller

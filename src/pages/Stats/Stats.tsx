@@ -3,13 +3,10 @@ import { useDays } from '../../context/DaysContext';
 import "./Stats.css"
 import Input from '../../components/Input/Input';
 import Select from '../../components/Select/Select';
-import Calendar from './Calendar';
-import Graph from './Graph';
 import { useUser } from '../../context/AuthContext';
-import { StatsProvider, useStats } from '../../context/StatsContext';
 import { IoMdRefresh } from "react-icons/io";
 import { PageHeader } from '../../components/PageHeader/PageHeader';
-import GraphV2 from '../StatsV2/Graph';
+import GraphV2 from './Graph';
 import { useStatsV2 } from '../../context/StatsContextV2';
 function Stats() {
   const user = useUser()

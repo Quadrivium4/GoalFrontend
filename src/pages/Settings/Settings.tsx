@@ -14,8 +14,9 @@ import VisibilityInfo from './VisibiltiyInfo';
 import { usePop } from '../../context/PopContext';
 import { NetButton } from '../../components/NetButton/NetButton';
 import GoogleButton from '../../components/GoogleButton';
-import { api, protectedApi } from '../../utils';
+import { api, protectedApi, uploadImageToCloudinary } from '../../utils';
 import { useLocation } from 'react-router-dom';
+import { uploadProfileImg } from '../../controllers/user';
 
 // function OldEditing() {
 //   const {editUser} = useAuth();
@@ -97,6 +98,18 @@ function Settings() {
          //-- console.log("error editing user")
       })
   }
+  const handleUploadProfileImg = async(file: File) =>{
+    
+    const res = await uploadImageToCloudinary(file, user.profileImg.public_id);
+     updateUserProfileImage({
+      public_id: res.public_id, 
+      name: res.name,
+      url: res.url
+    });
+    const id = await uploadProfileImg(res);
+   
+
+  }
  
   return (
     <>
@@ -107,7 +120,7 @@ function Settings() {
       
       <div className='info'>
         <div className='profile-img-uploader'>
-          <ImageUpload onUpload={(id) => updateUserProfileImage(id)}>
+          <ImageUpload uploadFile={handleUploadProfileImg}>
             <ProfileIcon profileImg={user.profileImg} name={user.name} _id={user._id} size={60}></ProfileIcon>
           </ImageUpload>
         </div>

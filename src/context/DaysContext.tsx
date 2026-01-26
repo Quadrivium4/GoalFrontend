@@ -11,152 +11,76 @@ import * as likeController from "../controllers/likes"
 import { dayInMilliseconds, todayDate } from "../constants";
 import { getLastMonday, getToday, isToday, nextWeekTime } from "../utils";
 import { TUser, useAuth, useUser } from "./AuthContext";
-import { nextDayTime } from "./StatsContext";
 import { useAppLoading } from "./AppLoadingContext";
 type TDaysContext = {
     daysLoading: boolean,
     //today: TDay | null,
     goals: TMyGoal[],
     loadDays: () => Promise<void>
-    addProgress: (goalId: string, progress: number, notes: string, date: number) => Promise<TDay>
+    addProgress: (goalId: string, progress: number, notes: string, date: number, frequency: TGoal["frequency"]) => Promise<TProgress>
     addGoal: (goal: TGoalForm) => Promise<void>
     editGoal: (goal: Omit<TGoal, "type">) => Promise<void>,
     deleteGoal: (id: string) => Promise<void>,
-    editProgress: (progress: TProgressForm & { newDate: number }) => Promise<TDay>
-    deleteProgress: (progress: TProgressForm) => Promise<TDay>,
+    editProgress: (newProgress: TProgress, frequency: TGoal["frequency"]) => Promise<TProgress>
+    deleteProgress: (progressId: string) => Promise<TProgress>,
     likeProgress: (progress: TProgressForm) => Promise<void>,
     unlikeProgress: (progress: TProgressForm) => Promise<void>
 } | undefined;
-const daysState = {
-    today: null,
-    days: [],
-    //addProgress: (goalId: string, progress: )
-}
+
 export type TMyGoal = {
-    history: TDay[]
+    history: TProgress[]
 } & TGoal;
-/*
-const getUpdatedGoalDays = (updatedDay: TDay, goals: TMyGoal[]) =>{
-    let updatedGoals = goals.map(goal =>{
-            let newGoal: TMyGoal = goal;
-            if(goal._id === updatedDay.goal._id){
-                if(goal.frequency === "daily"){
-                    if(isToday(updatedDay.date)) {
-                        newGoal = {...goal, history: [updatedDay]}
-                    }
-                }else if(goal.frequency === "weekly"){
-                    let lastMonday = getLastMonday(Date.now()).getTime();
-                    if(updatedDay.date > lastMonday && updatedDay.date < nextDayTime(lastMonday)){
-                        let updated = false;
-                        updatedDays = goal.history.map(day =>{
-                            if(day._id === updatedDay._id){
-                                updated = true;
-                                return updatedDay
-                            }
-                            return day
-                        })
-                        if(!updated) updatedDays.push(updatedDay);
-                        newGoal =  {...goal, history: updatedDays}
-                    }
-                }
-            }
-            return newGoal
 
-        })
-}
-        */
-
-const getUpdatedGoals = (goals: TMyGoal[], updatedDay: TDay, updateGoal?: boolean) => {
-    //-- console.log("get",{updatedDay})
-    let updatedDays: TDay[];
-    let result = goals.map(goal => {
-        let newGoal: TMyGoal = goal;
-        //-- console.log(goal);
-        if (goal._id === updatedDay.goal._id) {
-            //-- console.log("goal found", goal.title)
-            if (updateGoal) {
-                newGoal.amount = updatedDay.goal.amount;
-                newGoal.title = updatedDay.goal.title;
-                newGoal.frequency = updatedDay.goal.frequency;
-            }
-            if (goal.frequency === "daily") {
-                if (isToday(updatedDay.date)) {
-                    newGoal = { ...goal, history: [updatedDay] }
-                }
-            } else if (goal.frequency === "weekly") {
-                let lastMondayDate = getLastMonday(Date.now());
-                lastMondayDate.setHours(0, 0, 0, 0);
-                let lastMonday = lastMondayDate.getTime();
-
-
-                //-- console.log({lastMonday: new Date(lastMonday)})
-
-                if (updatedDay.date > lastMonday && updatedDay.date < nextWeekTime(lastMonday).getTime()) {
-                    let updated = false;
-                    updatedDays = goal.history.map(day => {
-                        if (day._id === updatedDay._id) {
-                            updated = true;
-                            return updatedDay
-                        }
-                        return day
-                    })
-                    //-- console.log({updated, updatedDays, updatedDay});
-                    if (!updated) updatedDays.push(updatedDay);
-                    newGoal = { ...goal, history: updatedDays }
-                } else {
-                    let isNew = true;
-                    //-- console.log("changed date is more than one week before");
-                    //-- console.log({history: goal.history, updatedDay})
-                    for (let i = 0; i < goal.history.length; i++) {
-                        const day = goal.history[i];
-                        if (day._id === updatedDay._id) {
-                            //-- console.log("day found")
-                            newGoal = { ...goal, history: goal.history.splice(i, 1) }
-                            break;
-                        }
-
-                    }
-                }
-            }
+export const deleteProgressFromArray = (array: TProgress[], progress: TProgress) =>{
+    let a = [];
+    for (let i = 0; i < array.length; i++) {
+        // if(array[i].notes == "1"){
+        //     console.log("hello 1", array[i]._id != progress._id)
+        // }
+        // if(array[i].notes == "2"){
+        //     console.log("hello 2", array[i]._id != progress._id)
+        // }
+        if(array[i]._id != progress._id){
+            a.push(array[i])
         }
-        return newGoal
-
-    })
-    return result;
+    }
+    return a;
 }
-// const getUpdatedGoalDays = (goals: TMyGoal[], updatedDays: TDay[], goalId: string) =>{
-//     //let updatedDays: TDay[];
-//     let result = goals.map(goal =>{
-//             let newGoal: TMyGoal = goal;
-//             if(goal._id === goalId){
-//                 if(updateGoal) newGoal.amount = updatedDay.goal.amount;
-//                 if(goal.frequency === "daily"){
-//                     if(isToday(updatedDay.date)) {
-//                         newGoal = {...goal, history: [updatedDay]}
-//                     }
-//                 }else if(goal.frequency === "weekly"){
-//                     let lastMonday = getLastMonday(Date.now()).getTime();
-//                      //-- console.log({lastMonday: new Date(lastMonday)})
+export const editProgressArray = (array: TProgress[], progress: TProgress) =>{
+    let a = [];
+    let inserted = false;
+    console.log({initialArray: array, progress})
+    for (let i = 0; i < array.length; i++) {
+        if(progress.date <= array[i].date  && !inserted){
+            a.push(progress);
+            if(array[i]._id != progress._id){
+                a.push(array[i])
+            }
+            inserted = true;
+        }else if(array[i]._id != progress._id){
+            a.push(array[i])
+        }
+    }
+    if(!inserted) a.push(progress);
+    console.log("final array", a, progress)
+    return a;
+}
+export const createNewProgressArray = (array: TProgress[], progress: TProgress) =>{
+    let a = [];
+    let inserted = false;
+    for (let i = 0; i < array.length; i++) {
+        if(progress.date <= array[i].date  && !inserted){
+            a.push(progress);
+            a.push(array[i]);
+            inserted = true;
+        }else{
+            a.push(array[i])
+        }
+    }
+    if(!inserted) a.push(progress);
+    return a;
+}
 
-//                     if(updatedDay.date > lastMonday && updatedDay.date < nextWeekTime(lastMonday).getTime()){
-//                         let updated = false;
-//                         updatedDays = goal.history.map(day =>{
-//                             if(day._id === updatedDay._id){
-//                                 updated = true;
-//                                 return updatedDay
-//                             }
-//                             return day
-//                         })
-//                         if(!updated) updatedDays.push(updatedDay);
-//                         newGoal =  {...goal, history: updatedDays}
-//                     }
-//                 }
-//             }
-//             return newGoal
-
-//         })
-//         return result;
-// }
 const DaysContext = createContext<TDaysContext>(undefined)
 const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => {
     //const [goals, setGoals] = useState<TGoal[]>([]);
@@ -166,6 +90,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
     // //-- console.log({user})
     const { setLoading, loading } = useAppLoading();
     const [goals, setGoals] = useState<TMyGoal[]>([]);
+    
     //const [today, setToday] = useState<TDay | null>(null)
     const [initialLoading, setInitialLoading] = useState(true);
     useEffect(() => {
@@ -186,20 +111,40 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
         }
 
     }
-    const addProgress = async (goalId: string, progress: number, notes: string, date: number) => {
+    const addProgress = async (goalId: string, amount: number, notes: string, date: number, frequency: TGoal["frequency"]) => {
         setLoading(true)
-        let updatedDay = await dayController.addProgress(goalId, progress, notes, date);
-        let updatedGoals = getUpdatedGoals(goals, updatedDay);
+        let newProgress = await dayController.addProgress(goalId, amount, notes, date);
+        let updatedGoals = goals.map(goal =>{
+            if(goal._id == goalId){
+                let newHistory;
+                if(
+                    (frequency == "weekly" && date < getLastMonday(Date.now()).getTime()) || 
+                    (frequency == "daily" && date < getToday().getTime())
+                ){
+                    newHistory = [...goal.history];
+                }else{
+                    newHistory = createNewProgressArray(goal.history, newProgress);
+                }
+                
+                return {
+                    ...goal,
+                    history: newHistory
+                }
+            }else{
+                return goal
+            }
+            }
+        )
         setGoals(updatedGoals)
         setLoading(false);
-        return updatedDay
+        return newProgress;
     }
     const addGoal = async (goalForm: TGoalForm) => {
         setLoading(true)
-        let newDay = await goalController.addGoal(goalForm);
+        let newGoal = await goalController.addGoal(goalForm);
 
-        updateUser({ ...user, goals: [...user.goals, newDay.goal] })
-        let updatedGoals: TMyGoal[] = [...goals, { ...newDay.goal, history: [] }]
+        updateUser({ ...user, goals: [...user.goals, newGoal] })
+        let updatedGoals: TMyGoal[] = [...goals, { ...newGoal, history: [] }]
         //-- console.log({updatedGoals})
         setGoals(updatedGoals)
 
@@ -207,9 +152,9 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
     }
     const editGoal = async (goalForm: Omit<TGoal, "type">) => {
         setLoading(true)
-        let newDay = await goalController.editGoal(goalForm);
+        let newGoal = await goalController.editGoal(goalForm);
         let newGoals = user.goals.map(goal => {
-            if (goal._id === newDay.goal._id) return newDay.goal;
+            if (goal._id === newGoal._id) return newGoal;
             return goal
         })
         //-- console.log({newGoals})
@@ -221,22 +166,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
 
     }
 
-    // const editGoalAmount =  async(goalForm: Omit<TGoal, "type">, date: number) =>{
-    //     setLoading(true)
-    //     if(goalForm.frequency === "daily"){
-    //         let newDay = await goalController.editGoalAmount<TDay>(goalForm, date);
-    //         let updatedGoals = getUpdatedGoals(goals, newDay, true)
-    //         setGoals(updatedGoals)
-    //     }else if(goalForm.frequency === "weekly"){
-    //         let newDays = await goalController.editGoalAmount<TDay[]>(goalForm, date);
-    //         let updatedGoals = getUpdatedGoalDays(goals, newDays, goalForm._id)
-    //         setGoals(updatedGoals)
-    //     }
 
-
-    //     setLoading(false)
-
-    // }
     const deleteGoal = async (id: string) => {
         setLoading(true)
         let user = await goalController.deleteGoal(id);
@@ -246,158 +176,44 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
         setLoading(false)
 
     }
-    const editProgress = async (progress: TProgressForm & { newDate: number }) => {
+    const editProgress = async (progress: TProgress, frequency: TGoal["frequency"]) => {
         setLoading(true)
-        let updatedDay = await dayController.updateProgress(progress);
-    
-        let updatedGoals: TMyGoal[];
-        //-- console.log({date: updatedDay.date, today: getToday().getTime()}, )
-        if (updatedDay.date < getToday().getTime() && updatedDay.goal.frequency == "daily") {
-            console.log("first if")
-            // updatedGoals = goals.map(goal =>{
-            //     if(goal._id == updatedDay.goal._id){
-            //         //let updatedDay = goal.history.find(d => d.date )
-            //         return {...goal, history: []};
-            //     }else {
-            //         return goal;
-            //     }
-            // })
-            updatedGoals = goals.map(goal => {
-                if (goal._id == updatedDay.goal._id) {
-
-
-                    let updatedDays = [...goal.history];
-                    // if(goal._id == goalId){
-                    //     updatedDays[dayIndex].history.splice(progressIndex, 1)
-                    // }
-                    for (let i = 0; i < goal.history.length; i++) {
-                        const day = goal.history[i];
-
-                        for (let j = 0; j < day.history.length; j++) {
-                            const p = day.history[j];
-
-                            if (p.date === progress.date) {
-                                //-- console.log("progress found")
-
-                                updatedDays[i].history.splice(j, 1)
-                                break;
-                            }
-
-                        }
-
-                    }
-                    return { ...goal, history: updatedDays }
-                } else {
-                    return goal;
+        let updatedProgress = await dayController.updateProgress(progress);
+        let updatedGoals = goals.map(goal =>{
+            if(goal._id == progress.goalId){
+                let newHistory;
+                if(
+                    (frequency == "weekly" && updatedProgress.date < getLastMonday(Date.now()).getTime()) || 
+                    (frequency == "daily" && updatedProgress.date < getToday().getTime())
+                ){
+                    newHistory = deleteProgressFromArray(goal.history, updatedProgress)
+                }else {
+                    newHistory = editProgressArray(goal.history, updatedProgress);
                 }
-
-            })
-        } else if (updatedDay.date < getLastMonday(Date.now()).getTime() && updatedDay.goal.frequency == "weekly") {
-            console.log("updating progress weekly previously",updatedDay.date, getLastMonday(Date.now()))
-            updatedGoals = goals.map(goal => {
-                let updatedDays = [...goal.history];
-                // if(goal._id == goalId){
-                //     updatedDays[dayIndex].history.splice(progressIndex, 1)
-                // }
-                for (let i = 0; i < goal.history.length; i++) {
-                    const day = goal.history[i];
-
-                    for (let j = 0; j < day.history.length; j++) {
-                        const p = day.history[i];
-
-                        if (p.date === progress.date) {
-                            //-- console.log("progress found")
-
-                            updatedDays[i].history.splice(j, 1);
-                            //-- console.log(updatedDays[i])
-                            break;
-                        }
-
-                    }
-
+                
+                return {
+                    ...goal,
+                    history: newHistory
                 }
-                return { ...goal, history: updatedDays }
-            })
-        } else {
-            console.log("updating goal...")
-            if(updatedDay._id != progress.id){
-                console.log("new day returnec")
-                // New day returned
-                updatedGoals = goals.map(goal => {
-                if (goal._id == updatedDay.goal._id) {
-                    console.log("goal found", {updatedDay, goal})
-
-                    let updatedDays = goal.history.map(day => {
-
-                        if (day._id === progress.id) {
-                            console.log("day updated!!!")
-                            let newHistory = day.history.filter(p => p.date != progress.date)
-            
-                            return {...day, history: newHistory}
-                        }
-                        return day
-                    })
-                    updatedDays.push(updatedDay);
-                    console.log({updatedDays})
-                    return { ...goal, history: updatedDays }
-                } else {
-                    return goal
-                }
-            })
             }else{
-                 updatedGoals = goals.map(goal => {
-                if (goal._id == updatedDay.goal._id) {
-                    console.log("goal found", {updatedDay, goal})
-           
-                    let updatedDays = goal.history.map(day => {
-
-                        if (day._id === updatedDay._id) {
-                            console.log("day updated!!!")
-               
-                            return updatedDay
-                        }
-                        return day
-                    })
-
-                    return { ...goal, history: updatedDays }
-                } else {
-                    return goal
-                }
-            })
+                return goal
             }
-           
-        }
-
-        // let updatedGoals = goals.map(goal =>{
-        //     updatedDays = goal.history.map(day =>{
-        //         if(day._id === updatedDay._id){
-        //             return updatedDay
-        //         }
-        //         return day
-        //     })
-
-        //     return {...goal, history: updatedDays}
-        // })
-        // updatedGoals = getUpdatedGoals(goals, updatedDay);
+            }
+        )
         console.log({updatedGoals})
         setGoals(updatedGoals);
         setLoading(false)
-        return updatedDay
+        return updatedProgress
     }
-    const deleteProgress = async (progress: TProgressForm) => {
+    const deleteProgress = async (progressId: string) => {
         setLoading(true)
-        let updatedDay = await dayController.deleteProgress(progress)
-        let updatedDays;
+        let updatedProgress = await dayController.deleteProgress(progressId)
+      
         let updatedGoals = goals.map(goal => {
-            if (updatedDay.goal._id == goal._id) {
-                updatedDays = goal.history.map(day => {
-                    if (day._id === updatedDay._id) {
-                        return updatedDay
-                    }
-                    return day
-                })
+            if (updatedProgress.goalId == goal._id) {
+                let updatedHistory = deleteProgressFromArray(goal.history, updatedProgress);
 
-                return { ...goal, history: updatedDays }
+                return { ...goal, history: updatedHistory }
             } else {
                 return goal
             }
@@ -405,7 +221,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
         })
         setGoals(updatedGoals);
         setLoading(false)
-        return updatedDay
+        return updatedProgress
     }
     const likeProgress = async (progress: TProgressForm) => {
         let updatedDay = await likeController.postLike(progress)

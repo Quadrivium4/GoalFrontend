@@ -6,6 +6,7 @@ import { TLike } from "../../controllers/days";
 import ProfileIcon from "../ProfileIcon/ProfileIcon";
 import { usePop } from "../../context/PopContext";
 import { useEffect } from "react";
+import { useUser } from "../../context/AuthContext";
 
 export function LikesList({likes}:{likes: TLike[]}){
     const {closePop} = usePop();
@@ -28,6 +29,7 @@ export function LikesList({likes}:{likes: TLike[]}){
 }
 export function Likes({likes}:{likes: TLike[]}){
   const {setPop} = usePop();
+  const user = useUser()
 //   useEffect(()=> {
 //      //-- console.log({likes})
 //     setPop(<LikesList likes={likes}  />)
@@ -37,6 +39,8 @@ export function Likes({likes}:{likes: TLike[]}){
     //e.stopPropagation();
     setPop(<LikesList likes={likes}  />)
   }
+  const youLiked = likes.findIndex(like => like.userId == user._id) >= 0;
+  
   if(likes.length === 0) return null
   return (
     <div className={styles.likes}onClick={handleClick}>
@@ -48,7 +52,8 @@ export function Likes({likes}:{likes: TLike[]}){
       })
      
     }
-     <p>{likes.length} liked your progress</p>
+    {youLiked ? likes.length > 1?  <p>you and {likes.length-1} other{likes.length> 2? "s": null} liked it</p> : <p>You liked it</p>: 
+     <p>{likes.length} people liked it</p>}
     </div>
   )
 }

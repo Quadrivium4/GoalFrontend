@@ -8,28 +8,37 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { IconNetButton } from './IconNetButton/IconNetButton';
 import { colors } from '../constants';
 import { usePop } from '../context/PopContext';
-
-function EditProgress({day, progress,   onChange, progressIndex, dayIndex} : {day: TDay, progress: TProgress, onChange?: (day: TDay)=>void, progressIndex: number, dayIndex: number}) {
-    const {editProgress, deleteProgress} = useDays()
-    const {goal} = day;
-    const [form, setForm] = useState<TProgress>(progress);
+import { TGoal } from '../controllers/goals';
+import { useStatsV2 } from '../context/StatsContextV2';
+export type TChangeProps = {
+    action: "edit" | "delete",
+    progress: TProgress
+}
+function EditProgress({goal, progress,   onChange, progressIndex, dayIndex} : {goal: TGoal, progress: TProgress, onChange?: (res: TChangeProps)=>void, progressIndex: number, dayIndex: number}) {
+    const {editProgress, deleteProgress} = useDays();
+    const {editStats, deleteProgressStats} = useStatsV2()
+    //const {goal} = day;
+    const [newProgress, setNewProgress] = useState<TProgress>(progress);
     const {message} =useMessage()
     const {closePop} = usePop();
     const updateGoalProgress = async () =>{
+        console.log("updating progress goal")
         try {
-            let res = await editProgress({id: day._id, date: progress.date,progress: form.progress, notes: form.notes, newDate: form.date});
-
-            if(onChange) onChange(res);
+            let res = await editProgress(newProgress, goal.frequency);
+            editStats(res);
+            console.log({onChange})
+            if(onChange) onChange({progress: res, action: "edit"});
             closePop();
         } catch (err) {
             
-             //-- console.log("hello error:", err)
+             console.log("hello error:", err)
         }
     }
     const deleteGoalProgress = async() =>{
         try {
-            let res = await deleteProgress({...progress, id: day._id});
-            if(onChange) onChange(res)
+            let res = await deleteProgress(progress._id);
+            deleteProgressStats(res);
+            if(onChange) onChange({progress: res, action: "delete"})
             closePop();
         } catch (err) {
              //-- console.log("hello error:", err)
@@ -38,7 +47,9 @@ function EditProgress({day, progress,   onChange, progressIndex, dayIndex} : {da
     return (
         <div className='form'>
             <h2>Change Progress</h2>
-            <InputGoalValue type={goal.type} onChange={setForm} initial={progress} />
+            <InputGoalValue type={goal.type} onChange={(form) =>{
+                setNewProgress({...progress, amount: form.amount, date: form.date, notes: form.notes})
+            }} initial={progress} />
             <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                 <NetButton  request={updateGoalProgress}>save</NetButton>
                 <IconNetButton request={deleteGoalProgress}>

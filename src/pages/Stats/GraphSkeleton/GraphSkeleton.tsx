@@ -8,14 +8,14 @@ function GraphSkeleton({graphs}:{graphs: TGraph[]}) {
         {graphs.map(graph =>{
             // //-- console.log("hello")
             return (
-                <>
+                <div key={graph.goal._id}>
                 <div className={styles["title-skeleton"]}>
                     <div className={styles.circle}></div>
                 </div>
                 <div className={styles["graph-skeleton"]} key={graph.goal._id}>
                     <div className={styles.circle}></div>
                 </div>
-                </>
+                </div>
             )
         })
         }

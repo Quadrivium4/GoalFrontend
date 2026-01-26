@@ -15,11 +15,11 @@ export type TGoal =  TGoalForm & {
     _id: string
 } 
 // }
-const addGoal = async(goalForm: TGoalForm): Promise<TDay> =>{
+const addGoal = async(goalForm: TGoalForm): Promise<TGoal> =>{
     const res =  await protectedApi.post("/goals", {goalForm, date: Date.now()})
     return res.data
 }
-const editGoal = async(goal: Omit<TGoal, "type">, date?: number): Promise<TDay> =>{
+const editGoal = async(goal: Omit<TGoal, "type">, date?: number): Promise<TGoal> =>{
     const res =  await protectedApi.put("/goals", {...goal, date: date || Date.now()})
     return res.data
 }

@@ -7,15 +7,14 @@ import GoalSkeleton from '../../components/GoalSkeleton';
 import { useAuth, useUser } from '../../context/AuthContext';
 import { TMyGoal, useDays } from '../../context/DaysContext';
 import { usePop } from '../../context/PopContext';
-import { TDay, TGoalAmountType } from '../../controllers/days';
+import { TDay, TGoalAmountType, TProgress } from '../../controllers/days';
 import { TGoal } from '../../controllers/goals';
 import { getTimeAmount } from '../../utils';
 import { getPercentage, getProgressColor } from '../Stats/Graph';
 import "./Goals.css";
-import ProgressDays from './ProgressDays';
+import ProgressDays, { groupProgressesByDay } from './ProgressDays';
 import { NotificationBell, useNotifications } from '../Settings/Notifications/Notifications';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
-import { useStats } from '../../context/StatsContext';
 import { BsTrash } from 'react-icons/bs';
 import { FaEdit, FaPlus, FaRegTrashAlt } from 'react-icons/fa';
 import { RiFileEditLine } from 'react-icons/ri';
@@ -55,84 +54,22 @@ export function getAmountString(amount: number, type: TGoalAmountType):string{
   let string = type === "time"? getTimeAmount(amount) + " hours": type === "distance"?  amount/1000 + "km": amount + "";
   return string
 }
-/*
 
-function Goals() {
-    const user = useUser();
-    const {goals } = user;
-    const {days, today, addProgress} = useDays();
-    const [pop, setPop] = useState<ReactNode>();
-    useEffect(()=>{
-       //-- console.log({days})
-      //worker.postMessage("hello")
-    },[days])
-    // //-- console.log(user)
-  return (
-    <div className='page' id='goals'>
-      {pop && <Pop toggle={() => setPop(undefined)}>{pop}</Pop>}
-    
-      <div className='goals'>
-        {
-          days.map(day=>{
-             //-- console.log("myday",day)
-            let {goal} = day
-            let goalProgress = day.progress;
-            let progressWidth = 100 /goal.amount* goalProgress;
-            let goalAmountString = goal.type === "time"? getTimeAmount(goalProgress) + "/" +getTimeAmount(goal.amount) + " hours": goal.type === "distance"? goalProgress/1000 + "/" + goal.amount/1000 + "km": goal.amount;
-            return (
-              <div className='goal' key={day._id}>
-                <div className='header'><div className='progress' style={{width: progressWidth + "%"}}></div></div>
-                <div className='info'>
-                  <h3>{goal.title}</h3>
-                  <p>{goalAmountString} {goal.frequency}</p>
-                </div>
-                <div className='sub-progresses'>
-                {
-                  day.history.map(progress =>{
-                    let date = new Date(progress.date);
-                    return (<>
-                      <div className='sub-progress'>
-                        <div className='header'>
-                          <p>{sameDay(date, Date.now())? "Today" : formatDate(date)}</p>
-                          <p>{getAmountString(progress.progress, goal.type)}</p>
 
-                        </div>
-                        <p>{progress.notes}</p>
-                      </div>
-                    </>)
-                  })
-                }
-                </div>
-                <div className='footer'>
-                <button className='outline' onClick={() => setPop(<AddProgress  day={day}  closePop={()=>setPop(undefined)}/>)}>add progress</button>
-                
-                <MdOutlineModeEditOutline size={24} onClick={() =>setPop(<EditGoal goal={day.goal} closePop={() =>setPop(undefined)} />)} className='edit-icon' />
-                </div>
-              </div>
-            )
-          })
-        }
-
-      </div>
-   
-      <button onClick={() =>{
-        setPop(<AddGoal closePop={()=>setPop(undefined)} />)
-      }}>+</button>
-    </div>
-  );
-}*/
-export function sumDaysProgress(days: TDay[]){
-  let sum = 0;
-  for(let i = 0; i< days.length; i++)
-    sum += sumDayProgress(days[i]);
-  return sum;
+export const sumDaysProgress = (days: TDay[])=>{
+    let progress = 0;
+    for (let i = 0; i < days.length; i++) {
+        const day = days[i];
+        progress += sumDayProgress(day.progresses);
+    }
+    return progress;
 }
-export function sumDayProgress(day: TDay){
+export function sumDayProgress(progresses: TProgress[]){
  
   let sum = 0;
   //if(!day.history) return 0;
-  for(let i = 0; i < day.history.length; i++){
-    sum+= day.history[i].progress;
+  for(let i = 0; i < progresses.length; i++){
+    sum+= progresses[i].amount;
   }
   return sum;
 }
@@ -151,10 +88,11 @@ export function getGoalAmountString(goal: TGoal, goalProgress: number){
 export function SingleGoal({goal}: {goal: TMyGoal}){
   // //-- console.log({goal})
   let goalDays =  goal.history;
-  let goalProgress = sumDaysProgress(goalDays);
+  let goalProgress = sumDayProgress(goalDays);
   const {setPop} = usePop();
   let progressWidth = getPercentage(goal.amount, goalProgress);
   let goalAmountString = getGoalAmountString(goal, goalProgress)
+  const groupedProgress = groupProgressesByDay(goal.history);
   useEffect(()=>{
      //-- console.log("Single goal rendering")
   },[])
@@ -170,7 +108,7 @@ export function SingleGoal({goal}: {goal: TMyGoal}){
           
         </div>
         
-         <ProgressDays history={goalDays} onChange={reloadStats}/>
+         <ProgressDays history={groupedProgress} onChange={reloadStats} goal={goal}/>
        
         <div className='footer'>
           <div style={{display: 'flex', gap: "5px"}}>

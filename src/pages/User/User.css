@@ -34,7 +34,11 @@
     position: relative;
 }
 
-
+#user .graphs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 #user .graph::-webkit-scrollbar {
     background-color: var(--background-dark);
     border-radius: 50px;

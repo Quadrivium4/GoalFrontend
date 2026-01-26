@@ -7,16 +7,17 @@ import dayController, { TGoalDays, TStat } from '../../controllers/days';
 import {  TDay, TDayGoal, TProgress, TStats } from '../../controllers/days';
 import { TUser, useUser } from '../../context/AuthContext';
 import { editGoalAmount, TGoal, TGoalForm } from '../../controllers/goals';
-import { formatDate, getAmountString, getGoalAmountString,  SingleGoal, sumDayProgress, sumDaysProgress } from '../Goals/Goals';
+import { formatDate, getAmountString, getGoalAmountString,  SingleGoal, sumDayProgress, sumDaysProgress, } from '../Goals/Goals';
 import AddProgress from '../../components/AddProgress';
 import EditProgress from '../../components/EditProgress';
-import { useStats } from '../../context/StatsContext';
 import EditGoal from '../../components/EditGoal';
 import Input from '../../components/Input/Input';
 import { usePop } from '../../context/PopContext';
 import ProgressDays from '../Goals/ProgressDays';
 import PointPop from './PointPop/PointPop';
 import GraphSkeleton from './GraphSkeleton/GraphSkeleton';
+import { useStatsV2 } from '../../context/StatsContextV2';
+import UserPointPop from './PointPop/UserPointPop';
 type TPoint = {
     x: number,
     y: number
@@ -98,6 +99,7 @@ function createPolygonStringAndMonthPoints (graph: TGraphPoint[]) {
         polygonString: str
     }
 }
+
 export function createGraphPoint(goal: TGoal, history: TDay[], date: Date, i: number, frequency: TGoal["frequency"], maxAmount?: number, ): TGraphPoint{
     if(!maxAmount)  maxAmount  = 0;
 
@@ -108,6 +110,7 @@ export function createGraphPoint(goal: TGoal, history: TDay[], date: Date, i: nu
     //let maxAmount = (100 *sumDaysProgress(newHistory))/  (150 - point.amountHeight);
     let progressPercentage = normalizePercentage(getPercentage(goal.amount, goalProgress));
     let amountHeight = getPercentage(maxAmount, goal.amount);
+    console.log({amountHeight, maxAmount, amount: goal.amount})
     let color = getProgressColor(progressPercentage)
     //let dayNumber = date.getDate().toString()
     let id = goal._id + date.getTime();
@@ -144,7 +147,7 @@ export function getDaysArray(frequency: TGoal["frequency"], calendar: Date[], st
         if(frequency=== "weekly"){
             if(day) {
                 let history = [];
-                while(stats[j ]&& date.getTime()  + 7 * 24 *60 * 60 * 1000 > stats[j].date){
+                while(stats[j ]&& date.getTime()  + 7 * 24 *60 * 60 * 1000 > stats[j].date.getTime()){
                     day = stats[j]
                     history.push(day)
                     j++;
@@ -164,15 +167,34 @@ export function getDaysArray(frequency: TGoal["frequency"], calendar: Date[], st
     })
     return daysArray;
 }
+const getHigherGoalAmount = (progresses: TProgress[]) =>{
+    let max = 0;
+    for (let i = 0; i < progresses.length; i++) {
+        const p =progresses[i];
+        if(p.goalAmount > max) max = p.goalAmount;
+    }
+    return max;
+}
 export function getMaxProgress(stats: TDateDays[], frequency: TGoalForm["frequency"]){
-    let maxAmount = sumDaysProgress(stats[0].days);
+    // Da rivedere
+    let maxAmount = 0;
+
         for(const {days, date} of stats){
-            const curAmount = sumDaysProgress(days);
-            const latestDay = days[days.length-1];
-            if(latestDay && latestDay.goal.amount > maxAmount) maxAmount = latestDay.goal.amount;
-            if(curAmount > maxAmount) maxAmount = curAmount;
+            
+            for (let i = 0; i < days.length; i++) {
+                const day = days[i];
+                 const curAmount = sumDayProgress(day.progresses);
+                 const higherAmount = getHigherGoalAmount(day.progresses)
+                //const latestDay = days[days.length-1];
+                //if(latestDay && latestDay.goal.amount > maxAmount) maxAmount = latestDay.goal.amount;
+                if(curAmount > maxAmount) maxAmount = curAmount;
+                if(higherAmount > maxAmount) maxAmount = higherAmount;
+            }
+          
         }
+
     
+
     return maxAmount;
 }
 export function createEmptyPoint(goal: TGoal, date: Date, i: number, frequency: TGoal["frequency"],  maxAmount: number ) {
@@ -194,40 +216,49 @@ export function createEmptyPoint(goal: TGoal, date: Date, i: number, frequency: 
         };
     return point;
 }
-export function createGraphArray(stats: TDay[], goal: TGoal):TGraphPoint[] {
+export type TPointDays = {[key: number] : TGraphPoint};
+export function createGraphArray(stats: TDay[], goal: TGoal):TPointDays {
     if(stats.length < 1) return [];
-
+    console.log("HELLO GRAPH ARRAY")
     let firstDay = stats[0];
     let graphsArray:TGraphPoint[] = [];
     
     let today = new Date();//new Date("2024, 12, 25")
     
     let option: "daily" | "weekly" = goal.frequency === "daily"? "daily" : "weekly";
-    let calendar = getCalendarDates(firstDay.date, today.getTime(),option );
+    let calendar = getCalendarDates(firstDay.date.getTime(), today.getTime(),option );
     // //-- console.log({calendar})
     
     let daysArray: TDateDays[] = getDaysArray(goal.frequency, calendar, stats);
      // //-- console.log({daysArray})
     let maxProgress = getMaxProgress(daysArray, goal.frequency);
     // empty days use latest goal amount
-    let dayLatestGoal = daysArray[0].days[daysArray[0].days.length-1].goal;
+    let dayLatestGoalAmount=  daysArray[0].days[daysArray[0].days.length-1].progresses[0].goalAmount;
     // //-- console.log(goal.title, {maxProgress})
+    let result: TPointDays = {};
     daysArray.map(({date, days}, i) =>{
         let point: TGraphPoint;
+        console.log({dayLatestGoalAmount})
+        if(days.length > 0 && days[0].progresses.length > 0){
+            dayLatestGoalAmount = days[0].progresses[0].goalAmount;
+        }
+        let dayLatestGoal: TGoal = {...goal, amount: dayLatestGoalAmount};
+       //dayLatestGoal = goal;
         if(days.length > 0){
-            dayLatestGoal = days[days.length-1].goal;
+            //dayLatestGoal = days[days.length-1].goal;
             point = createGraphPoint(dayLatestGoal, days, date, i,goal.frequency, maxProgress);
             
         }else point = createEmptyPoint(dayLatestGoal, date, i, goal.frequency, maxProgress)
-        
+        result[date.getTime()] = point;
         graphsArray.push(point)
     })
-
-    return graphsArray
+    console.log("idiot")
+    console.log({result})
+    return result
 }
 export function EditGoalAmount({goal, date}: {goal: TGoal, date: number}){
     const user = useUser();
-    const {updateStats} = useStats();
+    const {updateStats} = useStatsV2();
     const {closePop} = usePop();
     const [amount, setAmount] = useState<number>(goal.amount);
     const createGoal = () =>{
@@ -263,7 +294,10 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
     const [pointsString, setPointsString] = useState("");
     const [monthNamePoints, setMonthNamePoints] = useState<TMonthPoint[]>([]);
     const [monthDayScroll, setMonthDayScroll] = useState(0);
-    const {setPop} = usePop()
+    const {userId}= useStatsV2();
+     const user = useUser();
+    const isMe = userId == user._id;
+    const {setPop} = usePop();
     const ref = useRef<HTMLDivElement>(null);
     const svgWidth = (graph.length -1) * gap + paddingHorizontal * 2 < minSvgWidth? minSvgWidth : (graph.length -1) * gap + paddingHorizontal * 2 ;
    //  //-- console.log({svgWidth, length: graph.length, gap})
@@ -304,7 +338,7 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
                     // //-- console.log({point})
                     return (
 
-                        <g onClick={() =>{ setPop(<PointPop point={point}/>, point.goal.title)}} key={point.id}>
+                        <g onClick={() =>{ setPop( isMe?  <PointPop point={point}/>: <UserPointPop point={point} />, point.goal.title)}} key={point.id}>
                         <rect x={point.x - gap/2} width={gap} height={150} fillOpacity={0}></rect>
 
                         <circle r={3} cx={point.x} cy={point.amountHeight}z={10} fill={"white"} ></circle>
@@ -341,27 +375,30 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
 
 export type TGraph = {
     goal: TGoal,
-    points: TGraphPoint[]
+    points: {
+        [day: number]: TGraphPoint
+    }
 }
-function Graph() {
-    const {stats, reloadStats, loading} = useStats()
+function GraphV2() {
+    const {stats, reloadStats, loading, userId} = useStatsV2();
+    let statsLength = Object.keys(stats).length;
     return (
         <div className='graphs'>
-            
-            {loading? <GraphSkeleton graphs={stats}/>: stats.map((graph, i)=>{
+          
+            {loading? <GraphSkeleton graphs={Object.values(stats)}/>: statsLength > 0? Object.entries(stats).map(([key, graph], i)=>{
                 //if(i == 0)  //-- console.log("RERENDER")
                 let {points, goal} = graph;
-                
+                console.log({points, goal})
                 return (
                     <div key={goal._id} className='graph-container'>
                         <h3>{goal.title}</h3>
                         
-                        {points.length > 0? <Svg graph={points} />: <p>no stats</p>}
+                        {Object.keys(points).length > 0? <Svg graph={Object.values(points)} />: <p>no stats</p>}
                     </div>
                 )
-            })}
+            }): <p>No stats yet, create your goals and add your progress!</p>}
         </div>
     );
 }
 
-export default Graph;
+export default GraphV2;

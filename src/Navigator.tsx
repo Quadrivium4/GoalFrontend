@@ -2,12 +2,11 @@ import AppNavigator from './AppNavigator';
 import { useAuth } from './context/AuthContext';
 import AuthNavigator from './AuthNavigator';
 import { useEffect } from 'react';
-import { DaysProvider } from './context/DaysContext';
-import { StatsProvider } from './context/StatsContext';
 import { createBrowserRouter, Link, RouterProvider, Routes } from 'react-router-dom';
 import DeleteAccount from './shared/DeleteAccount';
 import { AppLoadingProvider } from './context/AppLoadingContext';
 import { StatsProviderV2 } from './context/StatsContextV2';
+import { DaysProvider } from './context/DaysContext';
 // const commonRouter = createBrowserRouter([
 //     {
 //         path: "/delete-account/:id/:token",

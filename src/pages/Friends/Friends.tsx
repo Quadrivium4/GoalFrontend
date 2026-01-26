@@ -15,6 +15,7 @@ import { wait } from '../../controllers/days';
 import Loader from '../../components/Loader/Loader';
 import GoalSkeleton from '../../components/GoalSkeleton';
 import FriendSkeleton from '../../components/FriendSkeleton/FriendSkeleton';
+import { useLazyProgress } from './useLazyProgress';
 
 let cachedFriends:TLazyFriendsResponse = [];
 function useLazyFriends (){
@@ -84,9 +85,9 @@ export function sumDoubleDayProgress(goal: TMyGoal){
     let amount = 0;
     for (let i = 0; i < goal.history.length; i++) {
         let element = goal.history[i];
-        for (let j = 0; j < element.history.length; j++) {
-            amount += element.history[j].progress;
-        }
+        //for (let j = 0; j < element.length; j++) {
+            amount += element.amount;
+       // }
         
     }
     return amount;
@@ -186,6 +187,7 @@ function Friends() {
     //const {days, today, addProgress} = useDays();
     const {setPop}= usePop()
     const {friends, getMore, index, loading, reload} = useLazyFriends();
+  ///  const {progresses, getMore: getMoreProgresses} = useLazyProgress()
     usePullRefreshTouch(reload);
     useEffect(()=>{
          //-- console.log("---- reloading friends");
@@ -224,6 +226,11 @@ function Friends() {
                                     <p><span className='goals'>{goalsString}</span></p>
                                     </div>
                                 </div>
+                                {/* {
+                                    progresses.map(progress =>{
+                                        return <p>{progress.date}</p>
+                                    })
+                                } */}
                                 <UserDays days={friend.goals} goals={friend.goalsInfo} />
                                 {/* <div className="days">
                                     {

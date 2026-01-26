@@ -8,6 +8,8 @@ export const colors = {
     error: "rgba(190, 45, 45, 1)",
     backgroundDark: "rgb(20,20,20)"
 }
+export const CLOUDINARY_CLOUD_NAME="dkpz7szp2";
+export const CLOUDINARY_API_KEY="764642775426413"
 export const todayDate = Date.now();
 export const userColors = [
     "rgb(68, 48, 157)",

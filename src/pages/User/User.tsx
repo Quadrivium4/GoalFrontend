@@ -3,12 +3,11 @@ import { DaysProvider, TMyGoal, useDays } from '../../context/DaysContext';
 import "./User.css"
 import Input from '../../components/Input/Input';
 import Select from '../../components/Select/Select';
-import Calendar from '../Stats/Calendar';
 import Graph, { getPercentage, getProgressColor } from '../Stats/Graph';
 import { useLocation, useParams } from 'react-router-dom';
 import { getProfile, getUser } from '../../controllers/user';
 import { TUser, useUser } from '../../context/AuthContext';
-import { StatsProvider } from '../../context/StatsContext';
+import { StatsProviderV2 } from '../../context/StatsContextV2';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
 import { Likes } from '../../components/Likes/Likes';
 import { FriendButton } from '../Friends/SearchUser/SearchUser';
@@ -20,6 +19,7 @@ import { TProfile } from '../../controllers/friends';
 import { IoMdRefresh } from 'react-icons/io';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import Loader from '../../components/Loader/Loader';
+import ProgressDays, { groupProgressesByDay } from '../Goals/ProgressDays';
 function useScrollRefresh(ref: React.RefObject<HTMLDivElement>, onTrigger: Function){
     useEffect(()=>{
         const el = ref.current;
@@ -129,6 +129,7 @@ function User() {
         if(goalsLoading) return;
         setGoalsLoading(true)
           getDays(userId).then((res) =>{
+
             setGoals(res);
             setGoalsLoading(false);
         }
@@ -165,11 +166,12 @@ function User() {
         null:
        <div className='activities'>
         <h2>Goals</h2>
+        
         {goalsLoading? <p>loading</p>: <UserDays days={goals} goals={user?.goals!} />}
         <h2>Stats</h2>
-       <StatsProvider user={user}>
+       <StatsProviderV2 user={user}>
             <Graph/>
-        </StatsProvider>
+        </StatsProviderV2>
        </div>
         }
         </>: <p>user not found</p>}

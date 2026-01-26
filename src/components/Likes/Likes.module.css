@@ -6,6 +6,11 @@
 .likes > p {
     margin-left: 10px;
 }
+.likesList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .likesList h2{
     text-align: center;
 

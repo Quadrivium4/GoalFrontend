@@ -3,7 +3,6 @@ import { useAuth } from './context/AuthContext';
 import AuthNavigator, { AuthLayout } from './AuthNavigator';
 import { useEffect } from 'react';
 import { DaysProvider } from './context/DaysContext';
-import { StatsProvider } from './context/StatsContext';
 import { createBrowserRouter, Link, Navigate, Outlet, Route, RouteObject, RouterProvider, Routes, useRoutes } from 'react-router-dom';
 import DeleteAccount from './shared/DeleteAccount';
 import { AppLoadingProvider, useAppLoading } from './context/AppLoadingContext';

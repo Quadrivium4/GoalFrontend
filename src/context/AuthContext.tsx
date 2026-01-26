@@ -67,7 +67,7 @@ type ContextProps = TAuthStateProps & {
     verify: (credentials: TVerifyProps, controller: AbortController) =>Promise<void>, 
     verifyPassword: (credentials: TVerifyProps) =>Promise<void>, 
     deleteAccount: () =>{}, 
-    updateUserProfileImage: (id: string) => void,
+    updateUserProfileImage: (file: TFile) => void,
     updateUser: (user: TUser) => void,
     editUser: (user: TUserForm) => Promise<void>,
     setLoading: (state: boolean) =>void,
@@ -256,8 +256,8 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
         const updatedUser = await userController.changeEmail(form)
         dispatch({type: "SET_USER", payload: updatedUser})
     }
-    const updateUserProfileImage = (id: string) =>{
-        dispatch({type: "SET_PROFILE_IMAGE", payload: id})
+    const updateUserProfileImage = (file: TFile) =>{
+        dispatch({type: "SET_PROFILE_IMAGE", payload: file})
     }
     const updateUser = async(newUser: TUser) =>{
         dispatch({type: "SET_USER", payload: newUser});

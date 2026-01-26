@@ -6,19 +6,21 @@ import BottomNavLink from './BottomNavLink';
 import { uploadProfileImg } from "../controllers/user";
 import { LegacyRef, MutableRefObject, ReactNode, useRef, useState } from "react";
 import Loader from "./Loader/Loader";
+import { uploadImageToCloudinary } from "../utils";
 
-const ImageUpload = ({onUpload, children}: {onUpload: (id: string) => void,  children?: ReactNode}) =>{
+const ImageUpload = ({onUpload, children, uploadFile}: {onUpload?: () => Promise<void>,  children?: ReactNode, uploadFile: (file: File) => Promise<void>}) =>{
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
-  const upload = (files: FileList | null) =>{
+  const upload = async (files: FileList | null) =>{
     if(files && files.length > 0){
-      const form = new FormData();
-      form.append("image", files[0]);
+      // const form = new FormData();
+      // form.append("image", files[0]);
       setLoading(true);
-      uploadProfileImg(form).then(id =>{
-        onUpload(id);
-        setLoading(false);
-      })
+      await uploadFile(files[0]);
+      if(onUpload) await onUpload();
+      //onUpload()
+      setLoading(false);
+      
 
     }
   }
