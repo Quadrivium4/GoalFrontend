@@ -43,7 +43,8 @@ export default function PointPop ({point}: {point: TGraphPoint}){
     date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     //const [history, setHistory] = useState(point.history);
     console.log(stats, point);
-    const [history, setHistory] = useState(stats[point.goal._id].points[point.date.getTime()].history);
+    //const [history, setHistory] = useState(stats[point.goal._id].points[point.date.getTime()].history);
+    const [history, setHistory] = useState(point.history);
      useEffect(()=>{
         
         console.log("point changed", point, history)
@@ -52,7 +53,7 @@ export default function PointPop ({point}: {point: TGraphPoint}){
         
         let newPoint = stats[point.goal._id].points[point.date.getTime()];
          //-- console.log({newPoint})
-        if(!newPoint) return;
+        if(!newPoint) return setHistory([]);
         setHistory(newPoint.history)
          //-- console.log("reloading point pop", point);
     },[stats])

@@ -32,7 +32,7 @@ function EditGoal({goal}: {goal: TGoal}) {
     <div className='form'>
         <h2>Edit Goal</h2>
         <input placeholder='title' value={title} onChange={(e)=> setTitle(e.target.value)}></input>
-        <Select options={["daily", "weekly", "monthly"]} selected={goal.frequency} placeholder="frequency" onSelect={setFrequency}/>
+        <Select options={["daily", "weekly"]} selected={goal.frequency} placeholder="frequency" onSelect={setFrequency}/>
 
         {goal.type === "time"? <Input.TimePicker onSelect={setAmount} initialValue={goal.amount}/> 
         : goal.type=== "distance"? <Input.DistancePicker onSelect={setAmount} initialValue={goal.amount}/> 
