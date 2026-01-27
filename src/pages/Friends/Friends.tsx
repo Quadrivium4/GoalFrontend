@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { RiSearchLine } from "react-icons/ri";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
 import { colors } from '../../constants';
 import { useAuth, useUser } from '../../context/AuthContext';
@@ -187,6 +187,7 @@ function Friends() {
     //const {days, today, addProgress} = useDays();
     const {setPop}= usePop()
     const {friends, getMore, index, loading, reload} = useLazyFriends();
+    const navigate = useNavigate();
   ///  const {progresses, getMore: getMoreProgresses} = useLazyProgress()
     usePullRefreshTouch(reload);
     useEffect(()=>{
@@ -216,10 +217,10 @@ function Friends() {
                         });
                         return (
                             <div className='friend' key={friend._id} id={friend._id}>
-                                <div className='header'>
-                                    <Link to={"/user/" + friend._id}>
+                                <div className='header' onClick={()=>navigate("/user/" + friend._id)}>
+                                    {/* <Link to={"/user/" + friend._id}> */}
                                         <ProfileIcon name={friend.name} profileImg={friend.profileImg} _id={friend._id}/>
-                                    </Link>
+                                    {/* </Link> */}
                                     
                                     <div>
                                     <h3>{friend.name}</h3>
@@ -231,7 +232,10 @@ function Friends() {
                                         return <p>{progress.date}</p>
                                     })
                                 } */}
+                                <div className='friend-content'>
+
                                 <UserDays days={friend.goals} goals={friend.goalsInfo} />
+                                </div>
                                 {/* <div className="days">
                                     {
                                         friend.goalsInfo.map(gl =>{

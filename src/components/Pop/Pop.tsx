@@ -81,18 +81,18 @@ const PopV2 = ({children, toggle}: {children?: ReactNode, toggle?: () => void}) 
         <>
         {pops.map((pop ,i)=>{
 
-       
+        let layerStyle = pop.class == "close-pop" ? {opacity: 0}: {opacity: 1};
          //-- console.log("pop");
-        return <div key={"pop" + i} id="pop-layer"  className={pop.class ?? ""} onAnimationEnd={(e) =>{
+        return <div key={"pop" + i} id="pop-layer"  style={layerStyle} onClick={(e)=>{
+            closePop()
+             //-- console.log("click in parent");
+        }}>
+            <div id="pop-up" className={pop.class ?? ""} onAnimationEnd={(e) =>{
             console.log("animation end")
             if(e.animationName == "translate-close" || e.animationName == "disappear"){
                 removePop()
             }
         }} onClick={(e)=>{
-            closePop()
-             //-- console.log("click in parent");
-        }}>
-            <div id="pop-up" onClick={(e)=>{
                 e.stopPropagation();
                  //-- console.log("click in pop")
             }}>

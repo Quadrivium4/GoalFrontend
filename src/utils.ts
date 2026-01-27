@@ -229,7 +229,7 @@ export const uploadImageToCloudinary = async (image: File, onProgress?: (progres
 
     return p;
 };
-function compressImage(file: File, maxWidth = 400, maxHeight = 300, quality = 0.5): Promise<string> {
+function compressImage(file: File, maxWidth = 800, maxHeight = 700, quality = 0.7): Promise<string> {
       return new Promise((resolve, reject) => {
         const img = new Image();
         const reader = new FileReader();

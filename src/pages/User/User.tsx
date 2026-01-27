@@ -8,7 +8,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { getProfile, getUser } from '../../controllers/user';
 import { TUser, useUser } from '../../context/AuthContext';
 import { StatsProviderV2 } from '../../context/StatsContextV2';
-import ProfileIcon from '../../components/ProfileIcon/ProfileIcon';
+import ProfileIcon, { TFile } from '../../components/ProfileIcon/ProfileIcon';
 import { Likes } from '../../components/Likes/Likes';
 import { FriendButton } from '../Friends/SearchUser/SearchUser';
 import { getDays } from '../../controllers/days';
@@ -100,6 +100,7 @@ function User() {
     const [goalsLoading, setGoalsLoading] = useState(false);
     const you = useUser()
     const ref = useRef<HTMLDivElement>(null)
+    const [layerImg, setLayerImg] = useState<TFile>()
     //const hello = useScrollRefresh(ref, ()=>{})
      //-- console.log({userId})
     useEffect(() =>{
@@ -147,13 +148,20 @@ function User() {
                 fetchDays()
             }}/>} goBack={() => window.history.back()}/>
     
-       
+      
         <div id='user' className='content' >
-
+             {layerImg? <div className='layer' onClick={()=>setLayerImg(undefined)}>
+        <img className='layer-img' src={ `https://res.cloudinary.com/dkpz7szp2/image/upload/${layerImg.public_id}`}></img>
+       </div>: null}
            {userLoading?<div ><Loader size={40}></Loader></div> : 
         user? <>
         <div className='info'>
-            <ProfileIcon  name={user.name} _id={user._id} profileImg={user.profileImg} />
+            <div onClick={() => {
+                if(user.profileImg) setLayerImg(user.profileImg)
+                }}>
+             <ProfileIcon  name={user.name} _id={user._id} profileImg={user.profileImg}  />
+            </div>
+           
             <div className='text'>
                 <h2>{user.name}</h2>
                 {/* <p>{user.bio || "empty bio for the moment..."}</p> */}

@@ -127,10 +127,13 @@ function Settings() {
       
       <div className='info'>
         <div className='profile-img-uploader'>
-          {uploadingProgress!= 0? <div className='upload-progress-bar' style={{backgroundColor: "rgba(0,0,0,0.5)"}}>
-            {/* <div className='upload-progress' style={{width: uploadingProgress+ "%", height: 10, backgroundColor: "red"}}> */}
-           <p>{uploadingProgress.toFixed(0)}%</p>
-          {/* </div> */}
+          {uploadingProgress!= 0? <div className='upload-progress-layer' style={{backgroundColor: "rgba(0,0,0,0.5)"}}>
+            <div className='upload-progress-bar'>
+
+            <div className='upload-progress' style={{width: uploadingProgress+ "%"}}>
+           {/* <p>{uploadingProgress.toFixed(0)}%</p> */}
+          </div>
+          </div>
           </div>: null}
           <ImageUpload uploadFile={handleUploadProfileImg}>
             {uploadingImg? <ProfileIconLocal profileImg={uploadingImg} />: 
@@ -166,7 +169,8 @@ function Settings() {
             
       </div>
       <div className='edit-bio' onClick={() => setPop(<ChangeBio />)}>
-            <p>{user.bio}</p>
+            {user.bio? <p>{user.bio}</p>: <p style={{color: "gray"}}>write something about you</p>}
+    
           </div>
           <div className='account-type'>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: 5}} >
@@ -248,7 +252,7 @@ const ChangeBio = () =>{
                 }
                   onChange={(e) =>{
                   //-- console.log(e.target.value)
-                  setBio(e.target.value)}} autoFocus value={bio} placeholder='about you' ></textarea>
+                  setBio(e.target.value)}} autoFocus value={bio} ></textarea>
                   <NetButton request={handleChange}>save</NetButton>
                  
               </div>
