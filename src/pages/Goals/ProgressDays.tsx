@@ -90,7 +90,7 @@ export default function ProgressDays({history,  onChange, goal}:{history: TDay[]
                         let youLiked = Boolean(progress.likes.find(like => like.userId === progress.userId));
                         return (
                             <div key={progress._id} className={styles.prog}>
-                            <div className={styles["sub-progress"]} key={progress.date} onClick={() =>{
+                            <div className={`${styles["sub-progress"]} ${progress.userId == user._id? styles["isMe"]: ""}`} key={progress.date} onClick={() =>{
                                 if(progress.userId !== user._id) return;
                                 setPop(<EditProgress goal={goal} progress={progress} onChange={onChange} progressIndex={progressIndex} dayIndex={dayIndex}/>)
                         }}>

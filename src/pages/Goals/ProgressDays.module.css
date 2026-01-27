@@ -23,9 +23,12 @@
     border-bottom: 1px solid var(--background-light);
     color: var(--foreground-dark);
     transition: 250ms;
+   
+}
+.sub-progresses .sub-progress.isMe{
     cursor: pointer;
 }
-.sub-progresses .sub-progress:hover {
+.sub-progresses .sub-progress.isMe:hover {
     opacity: 0.7;
 }
 

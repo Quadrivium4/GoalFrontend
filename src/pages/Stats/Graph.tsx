@@ -381,7 +381,9 @@ export type TGraph = {
 }
 function GraphV2() {
     const {stats, reloadStats, loading, userId} = useStatsV2();
+    const user = useUser();
     let statsLength = Object.keys(stats).length;
+    const isMe = userId == user._id;
     return (
         <div className='graphs'>
           
@@ -396,7 +398,7 @@ function GraphV2() {
                         {Object.keys(points).length > 0? <Svg graph={Object.values(points)} />: <p>no stats</p>}
                     </div>
                 )
-            }): <p>No stats yet, create your goals and add your progress!</p>}
+            }): isMe? <p>No stats yet, create your goals and add your progress!</p>: <p>No stats yet!</p>}
         </div>
     );
 }

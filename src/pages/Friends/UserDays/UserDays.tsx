@@ -81,7 +81,8 @@ export default function UserDays({ days, goals }: {days: TMyGoal[], goals: TGoal
     
     return (
         <div className={styles.days}>
-        {goals.map(info =>{
+        
+        {goals.length > 0?  goals.map(info =>{
             console.log("infog", info)
             let goal = info
             let myGoal: TMyGoal | undefined = days.find(day => day._id == info._id);
@@ -109,7 +110,7 @@ export default function UserDays({ days, goals }: {days: TMyGoal[], goals: TGoal
                     <div className={styles.footer}><p>Total: {getAmountString(dayProgress, goal.type)}</p></div>
                 </div>
             )
-        })}
+        }): <p>No goals yet!</p>}
          </div>
     )
 }
