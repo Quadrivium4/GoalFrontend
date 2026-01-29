@@ -69,7 +69,7 @@ export function Day({day, goal, setGoals}: {day: TDay, goal: TGoal, setGoals:  R
                     let dateString = sameDay(date, Date.now())? "Today at "+getTime(date): isYesterday(date)? "Yesterday at "+getTime(date): formatDate(date);
                     let youLiked = Boolean(progress.likes.find(like => like.userId === user._id));
                     return (
-                        <div className={styles.progress}>
+                        <div className={styles.progress} key={progress._id}>
                             <div className={styles.header}>
                             <p className={styles.date}>{dateString}</p>
                             <p className={styles["progress-added"]}>+{getAmountString(progress.amount, goal.type)}</p>
@@ -101,7 +101,7 @@ export default function UserDays({ days, goals, setGoals }: {days: TMyGoal[], go
         <div className={styles.days}>
         
         {goals.length > 0?  goals.map(info =>{
-            console.log("infog", info)
+            //console.log("infog", info)
             let goal = info
             let myGoal: TMyGoal | undefined = days.find(day => day._id == info._id);
             if(!myGoal) myGoal = {

@@ -93,7 +93,7 @@ const StatsProviderV2 = ({ children, user}: {children: ReactNode, user: TUser}) 
 
          let newStats = editProgressInStats(data, progress);
          setData(newStats);
-         console.log({newStats})
+      //-- console.log({newStats})
          let result: TStats = createGraphArray(newStats)
          setState({...state, loading: false, stats: result})
        
@@ -148,7 +148,7 @@ const deleteProgressInStats = (data: TGoalDays[],progress: TProgress) =>{
     const newStats = data.map(goal => {
         if(goal._id === progress.goalId){
             let newArray = deleteProgressFromArray(goal.days, progress);
-            console.log({newArray, d: goal.days})
+         //-- console.log({newArray, d: goal.days})
             return {
                 ...goal, days: newArray
             }

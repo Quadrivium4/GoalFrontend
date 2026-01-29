@@ -58,6 +58,7 @@ export const normalizePercentage = (percentage: number) =>{
     return percentage
 }
 export const getProgressColor = (percentage: number) =>{
+    if(percentage > 100) percentage = 100;
     return `rgb(${185-percentage}, ${Math.round(200/100 * percentage)}, ${ Math.round(82/100 * percentage)})`;
 }
 function getCalendarDates(from: number, to: number, option?: "daily" | "weekly"){

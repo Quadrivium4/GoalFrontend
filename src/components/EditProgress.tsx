@@ -22,16 +22,16 @@ function EditProgress({goal, progress,   onChange, progressIndex, dayIndex} : {g
     const {message} =useMessage()
     const {closePop} = usePop();
     const updateGoalProgress = async () =>{
-        console.log("updating progress goal")
+     //-- console.log("updating progress goal")
         try {
             let res = await editProgress(newProgress, goal.frequency);
             editStats(res);
-            console.log({onChange})
+         //-- console.log({onChange})
             if(onChange) onChange({progress: res, action: "edit"});
             closePop();
         } catch (err) {
             
-             console.log("hello error:", err)
+          //-- console.log("hello error:", err)
         }
     }
     const deleteGoalProgress = async() =>{

@@ -112,7 +112,7 @@ function Settings() {
       url: res.url
     });
     uploadProfileImg(res).then(res=>{
-      console.log("user image changed");
+   //-- console.log("user image changed");
     })
     setUploadingProgress(100);
     setTimeout(()=>setUploadingProgress(0), 100)
@@ -238,7 +238,7 @@ const ChangeBio = () =>{
          await editUser({name: user.name, bio: bio, profileType: user.profileType});
          closePop();
        } catch (error) {
-          console.log("error editing user",{error})
+       //-- console.log("error editing user",{error})
        }
       
   }

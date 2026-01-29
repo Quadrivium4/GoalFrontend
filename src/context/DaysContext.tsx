@@ -35,10 +35,10 @@ export const deleteProgressFromArray = (array: TProgress[], progress: TProgress)
     let a = [];
     for (let i = 0; i < array.length; i++) {
         // if(array[i].notes == "1"){
-        //     console.log("hello 1", array[i]._id != progress._id)
+        //  //-- console.log("hello 1", array[i]._id != progress._id)
         // }
         // if(array[i].notes == "2"){
-        //     console.log("hello 2", array[i]._id != progress._id)
+        //  //-- console.log("hello 2", array[i]._id != progress._id)
         // }
         if(array[i]._id != progress._id){
             a.push(array[i])
@@ -49,7 +49,7 @@ export const deleteProgressFromArray = (array: TProgress[], progress: TProgress)
 export const editProgressArray = (array: TProgress[], progress: TProgress) =>{
     let a = [];
     let inserted = false;
-    console.log({initialArray: array, progress})
+ //-- console.log({initialArray: array, progress})
     for (let i = 0; i < array.length; i++) {
         if(progress.date <= array[i].date  && !inserted){
             a.push(progress);
@@ -62,7 +62,7 @@ export const editProgressArray = (array: TProgress[], progress: TProgress) =>{
         }
     }
     if(!inserted) a.push(progress);
-    console.log("final array", a, progress)
+ //-- console.log("final array", a, progress)
     return a;
 }
 export const createNewProgressArray = (array: TProgress[], progress: TProgress) =>{
@@ -210,7 +210,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
             }
             }
         )
-        console.log({updatedGoals})
+     //-- console.log({updatedGoals})
         setGoals(updatedGoals);
         setLoading(false)
         return updatedProgress

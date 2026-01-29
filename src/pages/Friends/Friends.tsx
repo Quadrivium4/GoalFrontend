@@ -121,9 +121,9 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
           //-- console.log("root", root)
         if(!root) return;
         
-        root.addEventListener("touchstart", onStartTouch)
+        root.addEventListener("touchstart", onStartTouch, {passive: true})
         root.addEventListener("scroll", () =>{
-            console.log("scrolling");
+            //console.log("scrolling");
             root.removeEventListener("touchend", onEndTouch);
         }, true)
          return ()=> {
@@ -138,8 +138,8 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
     function onStartTouch(e: TouchEvent){
         
         const root = document.getElementById("page");
-        console.log("touch started target",  e.target)
-        if(!e.target || isScrollableTarget(e.target!)) return console.log("target isScrollable");
+        //console.log("touch started target",  e.target)
+        if(!e.target || isScrollableTarget(e.target!)) return //console.log("target isScrollable");
          //-- console.log("touch")
         if(!root) return;
         if(root.scrollTop > 10) return;
@@ -148,8 +148,8 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
          if(e && e.touches && e.touches[0]){
             touch.start = e.touches[0].clientY;
         }
-        root.addEventListener("touchmove", onTouchMove)
-        root.addEventListener("touchend", onEndTouch)
+        root.addEventListener("touchmove", onTouchMove, {passive: true})
+        root.addEventListener("touchend", onEndTouch, {passive: true})
     }
     async function onEndTouch(e: TouchEvent){
         const root = document.getElementById("page");
@@ -275,15 +275,12 @@ function Friends() {
     const navigate = useNavigate();
     const {progresses, getMore: getMoreProgresses, setProgresses, reload, loading, initialLoading} = useProgress()
     const scrollableRef = useRef<HTMLDivElement>(null);
-    //const {setLoading} = useAppLoading()
+
     usePullRefreshTouch(async() => {
-        //setLoading(true)
+
         scrollableRef.current?.scrollTo({top: 0});
-        reload()
-    
-        
-        await wait(500)
-        //setLoading(false)
+        await reload();
+
     });
     const isLiking = useRef(false);
     const like = async(progress: TProgress) =>{

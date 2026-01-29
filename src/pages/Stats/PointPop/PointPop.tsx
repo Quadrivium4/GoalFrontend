@@ -42,12 +42,12 @@ export default function PointPop ({point}: {point: TGraphPoint}){
     // //-- console.log(point)
     date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     //const [history, setHistory] = useState(point.history);
-    console.log(stats, point);
+    //console.log(stats, point);
     //const [history, setHistory] = useState(stats[point.goal._id].points[point.date.getTime()].history);
     const [history, setHistory] = useState(point.history);
      useEffect(()=>{
         
-        console.log("point changed", point, history)
+        //console.log("point changed", point, history)
     },[point])
     useEffect(()=>{
         
@@ -75,7 +75,7 @@ export default function PointPop ({point}: {point: TGraphPoint}){
             </div>
             <PointHeader progressWidth={progressWidth}/>
             <ProgressDays history={history} goal={point.goal} onChange={(res: TChangeProps) =>{
-                 console.log("ON CHANGEEEE", {res});
+                 //console.log("ON CHANGEEEE", {res});
                  if(res.action == "edit"){
                     editStats(res.progress);
                  }else if(res.action == "delete"){

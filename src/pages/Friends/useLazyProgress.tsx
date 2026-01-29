@@ -36,7 +36,7 @@ export const useLazyProgress = () =>{
         let query = {
             index,  signal
         }
-        console.log({query})
+        //console.log({query})
         //await wait(3000)
          //-- console.log(query)
        
@@ -51,7 +51,7 @@ export const useLazyProgress = () =>{
                     return progresses;
                 }
                 else if(progresses.length > 0 && query.index == 0){
-                    console.log("resetting progresses")
+                    //console.log("resetting progresses")
 
                     return [...res]
                 }
@@ -80,9 +80,9 @@ export const useLazyProgress = () =>{
     }
 
      const reload = async() => {
-         console.log("reloading lazy friends",requestingRef.current)
+         //console.log("reloading lazy friends",requestingRef.current)
         if(requestingRef.current) return;
-        fetchProgresses();
+        await fetchProgresses();
        // requestingRef.current = true;
         setIndex(0);
         setHasMore(true)

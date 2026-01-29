@@ -11,7 +11,7 @@ function FriendSkeleton({n}:{n: number}) {
 
         {
             array.map((n, i)=>{
-                console.log("skeleton", i)
+             //-- console.log("skeleton", i)
                 return (<div className={styles.friendSkeleton} key={"friend-skeleton" + i}>
                 <div className={styles.circle}></div>
                 

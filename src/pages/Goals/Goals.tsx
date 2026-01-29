@@ -166,7 +166,7 @@ function Goals() {
               //console.log(goal, "cici")
             }
             if(!currentGoalInfo) {
-              console.log("error, goal not found");
+           //-- console.log("error, goal not found");
               return <></>
             }
             //if(!goal) return <SingleGoal goal={{...currentGoalInfo, history: []}} key={goalInfo._id}/>

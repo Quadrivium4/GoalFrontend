@@ -213,7 +213,7 @@ export const uploadImageToCloudinary = async (image: File, onProgress?: (progres
     formData.append("upload_preset", "ml_default")
     const request = new XMLHttpRequest();
     request.upload.addEventListener("progress", (e)=>{
-        console.log("progress", e.loaded, e.total, e.loaded/e.total * 100);
+     //-- console.log("progress", e.loaded, e.total, e.loaded/e.total * 100);
         if(onProgress)onProgress(e.loaded / e.total * 100);
     })
     request.open("post", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
@@ -221,7 +221,7 @@ export const uploadImageToCloudinary = async (image: File, onProgress?: (progres
     const p:TFile =  await new Promise((resolve, rejecct) =>{
          request.addEventListener("loadend", (e)=>{
             if(onProgress) onProgress(100);
-            console.log("loadend", request.response);
+         //-- console.log("loadend", request.response);
             resolve( JSON.parse(request.response));
         })
     })

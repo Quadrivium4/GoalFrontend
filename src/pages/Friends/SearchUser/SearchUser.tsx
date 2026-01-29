@@ -171,7 +171,7 @@ export function FriendButton({friend}: {friend: TUser | TProfile}){
     const type:TFriendType = getFriendType(user, friend._id);
     const [loading, setLoading] = useState(false);
     useEffect(()=>{
-        console.log({friend})
+       // console.log({friend})
         //getUser()
     },[])
     // //-- console.log("friend type", {type})

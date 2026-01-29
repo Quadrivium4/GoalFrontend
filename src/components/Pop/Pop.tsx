@@ -88,7 +88,7 @@ const PopV2 = ({children, toggle}: {children?: ReactNode, toggle?: () => void}) 
              //-- console.log("click in parent");
         }}>
             <div id="pop-up" className={pop.class ?? ""} onAnimationEnd={(e) =>{
-            console.log("animation end")
+           // console.log("animation end")
             if(e.animationName == "translate-close" || e.animationName == "disappear"){
                 removePop()
             }
