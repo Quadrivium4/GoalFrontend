@@ -124,10 +124,10 @@ const appRouter = createBrowserRouter([{
     path: "/verify/:userId/:token",
     element: <Verify />
 },{
-        path: "/privacy-policy",
-        element: <PrivacyPolicy />
-    }
-]);
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />
+}]);
+
 const loader = document.getElementById("app-loader");
 export const removeLoader = () =>{
     if(!loader) return;

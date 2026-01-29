@@ -188,7 +188,7 @@ function isScrollableTarget(target: any): boolean{
     //console.log({target});
 
     //console.log(window.getComputedStyle(target).overflowY)
-    if(target.scrollHeight > target.clientHeight && ["scroll", "auto"].includes(window.getComputedStyle(target).overflowY)){
+    if(target.scrollHeight > target.clientHeight && ["scroll", "auto"].includes(window.getComputedStyle(target).overflowY) && target.scrollTop != 0){
         return true;
     }
     return false;
