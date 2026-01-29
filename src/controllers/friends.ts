@@ -35,9 +35,10 @@ export type TProfile = {
     _id: string,
     name: string,
     profileImg?: TFile,
+    profileType: "public" | "private",
     visible: boolean
 }
-const getUsers= async({index, offset, search,filter, signal}: {index: number, search?: string, offset?: number,filter?: TFilter,  signal?: GenericAbortSignal}): Promise<TProfile[]> =>{
+const getUsers= async({index, offset, search,filter, signal}: {index: number, search?: string, offset?: number,filter?: TFilter,  signal?: GenericAbortSignal}): Promise<{users: TProfile[], user: TUser}> =>{
     
     const res =  await protectedApi.get("/users", {params:{
         index, 
@@ -84,7 +85,7 @@ const deleteFriend = async(id: string): Promise<TUser> =>{
     let res = await protectedApi.delete("/delete-friend/" + id);
     return res.data;
 }
-const getNotifications = async(): Promise<TNotification[]> =>{
+const getNotifications = async(): Promise<TUser> =>{
     let res = await protectedApi.get("/notifications",{params: {timestamp: Date.now()}});
     return res.data;
 }

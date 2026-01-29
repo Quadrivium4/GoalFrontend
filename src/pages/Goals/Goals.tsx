@@ -131,6 +131,7 @@ export function SingleGoal({goal}: {goal: TMyGoal}){
 function Goals() {
   //-- console.log("hi goals")
     const user = useUser();
+    const {reload: reloadNotifications} = useNotifications();
     const contentRef = useRef<HTMLDivElement>(null);
 
      //-- console.log("goals rendering")
@@ -138,7 +139,10 @@ function Goals() {
     const {goals, addProgress, daysLoading, loadDays} = useDays();
     
     const {setPop} = usePop();
-    usePullRefreshTouch( loadDays)
+    usePullRefreshTouch(  async() =>{
+      await loadDays();
+      await reloadNotifications()
+    })
     useEffect(()=>{
        //-- console.log("------ Goals Render ----")
       // //-- console.log("remount")

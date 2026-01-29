@@ -16,9 +16,10 @@ function VisibilityInfo() {
     <>
         <h1>Account visibility</h1>
       <h3>Public:</h3>
-      <p>Every one can see your activities</p>
+      <p>Every one can see your activities and every following request is automatically accepted.</p>
+      
       <h3>Private:</h3>
-      <p>Only followers can see your activities</p>
+      <p>Only followers can see your activities and you have to accept each follower.</p>
     </>
   );
 }

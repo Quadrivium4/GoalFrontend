@@ -7,14 +7,17 @@ import styles from "./Notifications.module.css";
 import { usePullRefreshTouch } from "../../Friends/Friends"
 import { NetButton } from "../../../components/NetButton/NetButton"
 import { wait } from "@testing-library/user-event/dist/utils"
+import { useAuth } from "../../../context/AuthContext"
+import { ProfileIconLink, TFile } from "../../../components/ProfileIcon/ProfileIcon"
 export type TNotification =  {
     _id: string,
     date: number,
     content: string,
-    type: "like" | "incoming request" | "accepted request" | "comment", 
+    type: "like" | "incoming request" | "accepted request" | "comment" | "new follower", 
     from: {
         name: string,
         userId: string,
+        profileImg?: TFile
     }
     status: "read" | "unread"
 }
@@ -37,13 +40,14 @@ export const NotificationContext = createContext<TNotificationContextProps | nul
 export const NotificationProvider = ({children}: {children: React.ReactNode}) =>{
   const [notifications, setNotifications] = useState<TNotification[]>([])
   const [newNotification, setNewNotification] = useState(false);
+  const {updateUser} = useAuth()
   useEffect(()=>{
       getNotifications().then(res =>{
          //-- console.log(res)
-        let isNew = isNewNotification(res)
+        let isNew = isNewNotification(res.notifications)
         if(isNew) setNewNotification(true)
-        setNotifications(res)
-
+        setNotifications(res.notifications)
+        updateUser(res);
       }).catch(err =>{
          //-- console.log("err notifications")
       })
@@ -51,9 +55,10 @@ export const NotificationProvider = ({children}: {children: React.ReactNode}) =>
   async function reload() {
     getNotifications().then(res =>{
          //-- console.log(res)
-        let isNew = isNewNotification(res)
+        let isNew = isNewNotification(res.notifications)
         if(isNew) setNewNotification(true)
-        setNotifications(res)
+        setNotifications(res.notifications);
+        updateUser(res);
 
       }).catch(err =>{
          //-- console.log("err notifications")
@@ -61,7 +66,19 @@ export const NotificationProvider = ({children}: {children: React.ReactNode}) =>
   }
   return <NotificationContext.Provider value={{notifications, newNotification, setNotifications, setNewNotification, reload}}>{children}</NotificationContext.Provider>
 }
-
+const getNotificationTitle = (type: TNotification["type"])=>{
+  if(type == "like"){
+    return "New Like!"
+  }else if(type == "accepted request"){
+    return "Accepted request!"
+  }else if(type == "incoming request"){
+    return "New follower request!"
+  }else if(type == "comment"){
+    return "New Comment!"
+  }else if(type == "new follower"){
+    return "New Follower!"
+  }
+}
 export function Notifications(){
   const {notifications, setNotifications} = useNotifications();
   const {message} = useMessage();
@@ -88,12 +105,19 @@ export function Notifications(){
   return (
     <div className='notifications'>
       <h2>Notifications</h2>
+      <div className={styles.notificationList}>
       {notifications.length > 0? notifications.sort((a, b)=> b.date -a.date).map((notification, index) =>{
         return (
-          <div className='notification' key={notification._id}>
-            <p className='date'>{sameDay(notification.date, new Date())? "Today" : isYesterday(notification.date)? "Yesterday": getDate(notification.date)} at {getTime(notification.date)}</p>
+          <div className={styles.notification} key={notification._id}>
+            <div className={styles.header}>
+              <ProfileIconLink profileImg={notification.from.profileImg} name={notification.from.name} _id={notification.from.userId} size={32} />
+              <div className="info">
+              <h4>{getNotificationTitle(notification.type)?.toUpperCase()}</h4>
+              <p className='date'>{sameDay(notification.date, new Date())? "Today" : isYesterday(notification.date)? "Yesterday": getDate(notification.date)} at {getTime(notification.date)}</p>
+             </div>
+           </div>
             {notification.type === "incoming request"? <>
-
+                
                 <p>{notification.from.name} wants to follow you!</p>
                 <div className='buttons' style={{display: "flex", gap: 10}}>
                   
@@ -102,11 +126,14 @@ export function Notifications(){
                 </div>
                 
             </>: 
-            <p>{notification.content}</p>}
+            <div>
+           
+            <p>{notification.content}</p></div>}
           </div>
 
         )
       }): <p>no notifications</p>}
+      </div>
     </div>
   )
 }

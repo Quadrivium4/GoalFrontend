@@ -214,6 +214,7 @@ const ChangeName = () =>{
     const handleChange = async () =>{
        //-- console.log("handle change")
      await editUser({name, bio: user.bio, profileType: user.profileType});
+     closePop()
      
   }
   return (

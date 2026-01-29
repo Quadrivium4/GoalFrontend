@@ -36,7 +36,7 @@ export const nextDayTime = (date: number | Date) =>{
     return date2.getTime()
 }
 const createGraphArray = (data: TGoalDays[]) => {
-    console.log("hello graph array")
+    //console.log("hello graph array")
     let stats: TStats = {};
     for (let i = 0; i < data.length; i++) {
         const {days, ...goal} = data[i];
@@ -58,13 +58,13 @@ const StatsProviderV2 = ({ children, user}: {children: ReactNode, user: TUser}) 
     useEffect(()=>{
        //  //-- console.log("reloading stats")
         dayController.getStats(_id).then(data =>{
-            console.log({data})
+            //console.log({data})
             setData(data);
             let result: TStats= createGraphArray(data)
             
             setState({stats:result, loading: false, userId: _id})
          }).catch(err =>{
-            console.log("ERRor", err);
+            //console.log("ERRor", err);
             setState({...state, loading: false})
             if(axios.isCancel(err)){
                 // //-- console.log("cancel err")
@@ -93,6 +93,7 @@ const StatsProviderV2 = ({ children, user}: {children: ReactNode, user: TUser}) 
 
          let newStats = editProgressInStats(data, progress);
          setData(newStats);
+         console.log({newStats})
          let result: TStats = createGraphArray(newStats)
          setState({...state, loading: false, stats: result})
        

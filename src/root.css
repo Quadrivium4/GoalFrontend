@@ -51,6 +51,7 @@ a{
     
 }
 p{
+    color: var(--foreground);
     font-weight: 300;
     font-size: 18px;
 }

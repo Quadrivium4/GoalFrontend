@@ -28,6 +28,7 @@ height: 100%;
 }
 #page .content {
     padding: 30px;
+    overflow: auto;
 }
 .form {
     display: flex;
@@ -70,6 +71,22 @@ button.google-button svg{
     top: 0;
     transition: 1s;
     z-index: 300;
+}
+.app-loader-anim{
+    animation-name: app-loader;
+    animation-duration: 5s;
+    
+}
+@keyframes app-loader{
+    0%{
+        height: 0px;
+    }
+    50%{
+        height: 100px;
+    }
+    100%{
+        height: 0px;
+    }
 }
 #message.success{
     background-color: rgba(1, 109, 1, 0.9);

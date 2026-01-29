@@ -23,8 +23,8 @@ type TDaysContext = {
     deleteGoal: (id: string) => Promise<void>,
     editProgress: (newProgress: TProgress, frequency: TGoal["frequency"]) => Promise<TProgress>
     deleteProgress: (progressId: string) => Promise<TProgress>,
-    likeProgress: (progress: TProgressForm) => Promise<void>,
-    unlikeProgress: (progress: TProgressForm) => Promise<void>
+    likeProgress: (progress: TProgressForm) => Promise<TProgress>,
+    unlikeProgress: (progress: TProgressForm) => Promise<TProgress>
 } | undefined;
 
 export type TMyGoal = {
@@ -152,16 +152,26 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
     }
     const editGoal = async (goalForm: Omit<TGoal, "type">) => {
         setLoading(true)
-        let newGoal = await goalController.editGoal(goalForm);
+        let {goal: newGoal, progresses}= await goalController.editGoal(goalForm);
         let newGoals = user.goals.map(goal => {
             if (goal._id === newGoal._id) return newGoal;
             return goal
         })
         //-- console.log({newGoals})
         updateUser({ ...user, goals: newGoals });
-        //let updatedGoals = getUpdatedGoals(goals, newDay, true);
+        let updatedGoals = goals.map(goal =>{
+            if(goal._id === newGoal._id){
+                return {
+                    ...newGoal,
+                    history: progresses
+                }
+            }else{
+                return goal
+            }
+            
+        })
         //-- console.log({updatedGoals})
-        //setGoals(updatedGoals)
+        setGoals(updatedGoals)
         setLoading(false)
 
     }
@@ -225,33 +235,35 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
     }
     const likeProgress = async (progress: TProgressForm) => {
         let updatedDay = await likeController.postLike(progress)
-        let updatedDays;
-        let updatedGoals = goals.map(goal => {
-            updatedDays = goal.history.map(day => {
-                if (day._id === updatedDay._id) {
-                    return updatedDay
-                }
-                return day
-            })
+        // let updatedDays;
+        // let updatedGoals = goals.map(goal => {
+        //     updatedDays = goal.history.map(day => {
+        //         if (day._id === updatedDay._id) {
+        //             return updatedDay
+        //         }
+        //         return day
+        //     })
 
-            return { ...goal, history: updatedDays }
-        })
-        setGoals(updatedGoals)
+        //     return { ...goal, history: updatedDays }
+        // })
+        // setGoals(updatedGoals)
+        return updatedDay
     }
     const unlikeProgress = async (progress: TProgressForm) => {
         let updatedDay = await likeController.deleteLike(progress)
-        let updatedDays;
-        let updatedGoals = goals.map(goal => {
-            updatedDays = goal.history.map(day => {
-                if (day._id === updatedDay._id) {
-                    return updatedDay
-                }
-                return day
-            })
+        // let updatedDays;
+        // let updatedGoals = goals.map(goal => {
+        //     updatedDays = goal.history.map(day => {
+        //         if (day._id === updatedDay._id) {
+        //             return updatedDay
+        //         }
+        //         return day
+        //     })
 
-            return { ...goal, history: updatedDays }
-        })
-        setGoals(updatedGoals)
+        //     return { ...goal, history: updatedDays }
+        // })
+        //setGoals()
+        return updatedDay
     }
     return (
         <DaysContext.Provider value={{ goals, addProgress, daysLoading: initialLoading, addGoal, editGoal, deleteGoal, editProgress, deleteProgress, likeProgress, unlikeProgress, loadDays }}>

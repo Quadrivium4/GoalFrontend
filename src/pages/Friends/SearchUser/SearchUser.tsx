@@ -24,6 +24,7 @@ const useUsers = () =>{
     const [searchText, setSearchText] = useState<string>();
     const [filter, setFilter] = useState<TFilter>()
     const [hasMore, setHasMore] = useState(true);
+    const {updateUser} = useAuth()
     
     useEffect(() =>{
        // if(!hasMore) return //-- console.log("has no more users");
@@ -62,15 +63,16 @@ const useUsers = () =>{
              //-- console.log("getting more users", index, offset, searchText)
             
              //-- console.log({res})
+            updateUser(res.user);
             setUsers(users => {
-                if(res.length == 0){
+                if(res.users.length == 0){
                     setHasMore(false);
                     return users;
                 }
                 if(users.length > 20){
                     //  //-- console.log("slicing")
                     // return [...(users.slice(10)), ...res]
-                }return [...users, ...res]})
+                }return [...users, ...res.users]})
             setLoading(false)
         }).catch(err =>{
              //-- console.log({err})
@@ -169,6 +171,7 @@ export function FriendButton({friend}: {friend: TUser | TProfile}){
     const type:TFriendType = getFriendType(user, friend._id);
     const [loading, setLoading] = useState(false);
     useEffect(()=>{
+        console.log({friend})
         //getUser()
     },[])
     // //-- console.log("friend type", {type})
@@ -228,7 +231,8 @@ export function FriendButton({friend}: {friend: TUser | TProfile}){
             type === "requesting"? <><p>accept</p> <RiUserFollowLine size={iconSize} color={colors.primary}/> </>:
             type ==="follower"? <><p>follow back</p><RiUserAddLine  size={iconSize}  color={colors.primary} /></>: 
              type ==="following"? <><p>following</p> <RiUserFollowLine  size={iconSize}color={colors.primary} /></>: 
-            <><p>request</p><RiUserAddLine  size={iconSize}  color={colors.primary} /></>
+            
+            <><p>{friend.profileType == "public"? "follow": "request"}</p><RiUserAddLine  size={iconSize}  color={colors.primary} /></>
         }
         </button>
     )

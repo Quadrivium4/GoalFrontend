@@ -25,6 +25,7 @@ import Pop from './components/Pop/Pop';
 import Footer from './components/Footer';
 import Loader from './components/Loader/Loader';
 import { NotificationProvider } from './pages/Settings/Notifications/Notifications';
+import { ProgressProvider } from './context/ProgressesContext';
 
 const LoadingLayer = () =>{
     const {loading} = useAppLoading();
@@ -39,11 +40,12 @@ const AppLayout = () => {
         <AppLoadingProvider>
             <NotificationProvider>
                 <DaysProvider>
+                    <ProgressProvider>
                     <StatsProviderV2 user={user}>
                        <Header></Header>
          <LoadingLayer />
          <Pop />
-         <div id='app-spinner' style={{maxHeight: 0, overflow: "hidden",  transition: "max-height 0.3s"}}> <Loader size={30}/></div>
+         <div id='app-spinner' style={{maxHeight: 0, overflow: "hidden",  transition: "max-height 1s"}}> <Loader size={30}/></div>
         
          <div id='page'>
             
@@ -53,6 +55,7 @@ const AppLayout = () => {
          </div>
          <Footer></Footer> 
                     </StatsProviderV2>
+                    </ProgressProvider>
               </DaysProvider>
               </NotificationProvider>
             </AppLoadingProvider>
@@ -75,10 +78,7 @@ const appRoutes: RouteObject[] = [{
         path: "/user/:userId",
         element: <User />
     },
-    {
-        path: "/privacy-policy",
-        element: <PrivacyPolicy />
-    }];
+    ];
 const authRoutes: RouteObject[] = [{
 
     index: true,
@@ -106,11 +106,8 @@ const authRoutes: RouteObject[] = [{
 {
     path: "/delete-account/:id/:token",
     element: <DeleteAccount />
-},
-{
-    path: "/privacy-policy",
-    element: <PrivacyPolicy />
-}]
+}
+]
 const AppRoutes = () =>{
     const {logged, user} = useAuth();
     if(logged && user) return <AppLayout />
@@ -126,7 +123,10 @@ const appRouter = createBrowserRouter([{
 },{
     path: "/verify/:userId/:token",
     element: <Verify />
-}
+},{
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />
+    }
 ]);
 const loader = document.getElementById("app-loader");
 export const removeLoader = () =>{
