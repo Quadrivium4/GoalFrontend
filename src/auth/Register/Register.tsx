@@ -30,8 +30,9 @@ function Register() {
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
         <button type='submit' onClick={()=>{
           register({name, email, password}).then(res =>{
-               //-- console.log(res)
+               console.log(res)
               message.success("We sent you a verification email");
+              navigate("/home");
           }).catch(err =>{
             message.error(err.message);
           })

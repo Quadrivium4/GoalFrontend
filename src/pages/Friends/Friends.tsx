@@ -11,7 +11,7 @@ import "./Friends.css";
 import SearchUser from './SearchUser/SearchUser';
 import UserDays from './UserDays/UserDays';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
-import { TProgress, wait } from '../../controllers/days';
+import { TLike, TProgress, wait } from '../../controllers/days';
 import Loader from '../../components/Loader/Loader';
 import GoalSkeleton from '../../components/GoalSkeleton';
 import FriendSkeleton from '../../components/FriendSkeleton/FriendSkeleton';
@@ -286,13 +286,18 @@ function Friends() {
     const like = async(progress: TProgress) =>{
         if(isLiking.current) return;
         isLiking.current= true;
-        likeProgress(progress).then(newProgress =>{
-            setProgresses(previous =>{
+        let newLike: TLike ={
+            userId: user._id,
+            profileImg: user.profileImg,
+            username: user.name
+        }
+        let newProgressFrontend = {...progress, likes: [...progress.likes,newLike]};
+        setProgresses(previous =>{
                 let newProgresses =previous.map(p =>{
-                    if(p._id == newProgress._id){
+                    if(p._id == newProgressFrontend._id){
                         return {
                             ...p,
-                            likes: newProgress.likes
+                            likes: newProgressFrontend.likes
                         }
                     }else{
                         return p
@@ -300,6 +305,20 @@ function Friends() {
                 })
                 return newProgresses
             })
+        likeProgress(progress).then(newProgress =>{
+            // setProgresses(previous =>{
+            //     let newProgresses =previous.map(p =>{
+            //         if(p._id == newProgress._id){
+            //             return {
+            //                 ...p,
+            //                 likes: newProgress.likes
+            //             }
+            //         }else{
+            //             return p
+            //         }
+            //     })
+            //     return newProgresses
+            // })
             isLiking.current = false;
         })
     }
@@ -337,7 +356,7 @@ function Friends() {
                                     {/* </Link> */}
                                     
                                     <div className='info'>
-                                    <h4>{friend.name}</h4>
+                                    <p>{friend.name}</p>
                                      <p>{formatDate(progress.date)}</p>
                                    
                                     </div>
@@ -349,7 +368,7 @@ function Friends() {
                                 <div className='friend-content' >
                                     <div className='head'>
                                          <h2>{progress.goal.title}</h2>
-                                         <h3 className='progress-amount'>+{getAmountString(progress.amount, progress.goal.type)}</h3>
+                                         <p className='progress-amount'>+{getAmountString(progress.amount, progress.goal.type)}</p>
                                     </div>
                                     
                                      {/* <p>{progress._id}</p> */}

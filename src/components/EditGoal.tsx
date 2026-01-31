@@ -18,6 +18,7 @@ function EditGoal({goal}: {goal: TGoal}) {
     const createGoal = async () => {
         if(!title|| !frequency || !amount) return;
         await editGoal({
+            type: goal.type,
             title,
             userId: user._id,
             frequency,

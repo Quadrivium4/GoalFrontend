@@ -179,7 +179,7 @@ function Settings() {
             </div>
            
             <Select options={["public", "private"]}  placeholder='choose a profile type' selected={user.profileType} onSelect={(selected)=>{
-              if(selected != ""){
+              if(selected != "" && selected != user.profileType){
                 setProfileType(selected);
                 editUser({name, bio, profileType: selected})
               }

@@ -75,17 +75,20 @@ export default function ProgressDays({history,  onChange, goal, addLikeToStats}:
 
     }
     const like = async(progress: TProgress, date: Date) =>{
-        likeProgress(progress).then(res =>{
-         //-- console.log("edit stats");
-            if(addLikeToStats) addLikeToStats(res)
-            setH(prev => prev.map(day =>{
+        let newLike: TLike = {
+            userId: user._id,
+            username: user.name,
+            profileImg: user.profileImg
+        }
+        let newLikes = [...progress.likes, newLike];
+                  setH(prev => prev.map(day =>{
              //-- console.log({day, date})
                 if(day.date.getTime() == date.getTime()){
                  //-- console.log("day found")
                     let newP = day.progresses.map(p =>{
-                        if(p._id == res._id){
+                        if(p._id == progress._id){
                          //-- console.log("PROGRESS FOUND", {res})
-                            return res
+                            return {...progress, likes: newLikes}
                         }else{
                             return p
                         }
@@ -99,6 +102,10 @@ export default function ProgressDays({history,  onChange, goal, addLikeToStats}:
                 }
                 })
             )
+        likeProgress(progress).then(res =>{
+         //-- console.log("edit stats");
+            if(addLikeToStats) addLikeToStats(res)
+  
             
         }).catch(err =>{
          //-- console.log("cannot like");

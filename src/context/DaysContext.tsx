@@ -6,7 +6,7 @@ import {
     useEffect
 } from "react";
 import goalController, { TGoalForm, TGoal } from "../controllers/goals";
-import dayController, { TDay, TGoalDays, TProgress, TProgressForm } from "../controllers/days";
+import dayController, { TDay, TGoalDays, TProgress, TProgressForm, wait } from "../controllers/days";
 import * as likeController from "../controllers/likes"
 import { dayInMilliseconds, todayDate } from "../constants";
 import { getLastMonday, getToday, isToday, nextWeekTime } from "../utils";
@@ -19,7 +19,7 @@ type TDaysContext = {
     loadDays: () => Promise<void>
     addProgress: (goalId: string, progress: number, notes: string, date: number, frequency: TGoal["frequency"]) => Promise<TProgress>
     addGoal: (goal: TGoalForm) => Promise<void>
-    editGoal: (goal: Omit<TGoal, "type">) => Promise<void>,
+    editGoal: (goal: TGoal) => Promise<void>,
     deleteGoal: (id: string) => Promise<void>,
     editProgress: (newProgress: TProgress, frequency: TGoal["frequency"]) => Promise<TProgress>
     deleteProgress: (progressId: string) => Promise<TProgress>,
@@ -150,7 +150,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
 
         setLoading(false)
     }
-    const editGoal = async (goalForm: Omit<TGoal, "type">) => {
+    const editGoal = async (goalForm: TGoal) => {
         setLoading(true)
         let {goal: newGoal, progresses}= await goalController.editGoal(goalForm);
         let newGoals = user.goals.map(goal => {
@@ -234,6 +234,7 @@ const DaysProvider = ({ children, me }: { children: ReactNode, me?: TUser }) => 
         return updatedProgress
     }
     const likeProgress = async (progress: TProgressForm) => {
+        //await wait(2000)
         let updatedDay = await likeController.postLike(progress)
         // let updatedDays;
         // let updatedGoals = goals.map(goal => {

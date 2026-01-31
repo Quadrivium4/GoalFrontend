@@ -15,6 +15,12 @@ export function Day({day, goal, setGoals}: {day: TDay, goal: TGoal, setGoals:  R
     const user = useUser();
     const {unlikeProgress, likeProgress} = useDays();
     const toggleLikeProgress = async(progress: TProgress, isLiked: boolean) =>{
+        let newLike: TLike = {
+            userId: user._id,
+            username: user.name,
+            profileImg: user.profileImg
+        }
+        let newLikes = [...progress.likes, newLike];
         if(isLiked){
             // unlikeProgress({id: day._id, ...progress}).then(res =>{
             //      //-- console.log("unliked")
@@ -29,14 +35,12 @@ export function Day({day, goal, setGoals}: {day: TDay, goal: TGoal, setGoals:  R
             //     })
             // })
         }else{
-            likeProgress({...progress}).then(res =>{
-                 //-- console.log("liked");
-                 setGoals(prev =>{
+            setGoals(prev =>{
                     return prev.map(g =>{
                         if(g._id === goal._id){
                             let newHistory = g.history.map(p =>{
                                 if(p._id === progress._id){
-                                    return res
+                                    return {...progress, likes: newLikes}
                                 }
                                 return  p;
                             })
@@ -48,14 +52,17 @@ export function Day({day, goal, setGoals}: {day: TDay, goal: TGoal, setGoals:  R
                         return g
                     })
                  })
-                 day.progresses = day.progresses.map(pgr =>{
-                    if(pgr.date == progress.date){
-                        let likes: TLike[] = [...pgr.likes, {userId: user._id, username: user.name, profileImg: user.profileImg}];
-                        return {...pgr, likes}
-                    }
-                    return pgr
+            likeProgress({...progress}).then(res =>{
+                 //-- console.log("liked");
+                 
+                //  day.progresses = day.progresses.map(pgr =>{
+                //     if(pgr.date == progress.date){
+                //         let likes: TLike[] = [...pgr.likes, {userId: user._id, username: user.name, profileImg: user.profileImg}];
+                //         return {...pgr, likes}
+                //     }
+                //     return pgr
                         
-                })
+                // })
             })
         }
             

@@ -27,7 +27,14 @@
     font-family: Bungee;
     src: url(../public/fonts/Bungee-Bold.ttf);
 }
-
+@font-face {
+    font-family: Comic-neue;
+    src: url(../public/fonts/ComicNeue-Regular.ttf);
+}
+@font-face {
+    font-family: Outfit;
+    src: url(../public/fonts/Outfit-VariableFont_wght.ttf);
+}
 * {
     margin: 0;
     padding: 0;
@@ -67,7 +74,8 @@ html{
 body{
     background-color: var(--background-dark);
     color: var(--foreground);
-    font-family: Gummy;
+    /* font-family: Gummy; */
+    font-family: Outfit;
     /*padding-top: env(safe-area-inset-top);*/
     padding-right: env(safe-area-inset-right);
     padding-left: env(safe-area-inset-left);

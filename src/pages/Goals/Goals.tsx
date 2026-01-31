@@ -102,7 +102,7 @@ export function SingleGoal({goal}: {goal: TMyGoal}){
       <div className='goal'>
         <div className='header'><div className='progress' style={{width: progressWidth + "%", backgroundColor: getProgressColor(progressWidth)}}></div></div>
         <div className='info'>
-          <h3>{goal.title}</h3>
+          <h2>{goal.title}</h2>
           <p>{goalAmountString} {goal.frequency}</p>
          
           

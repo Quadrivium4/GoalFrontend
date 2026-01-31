@@ -60,12 +60,18 @@ api.interceptors.response.use(function (response) {
     //-- console.log({response});
     return response
 }, function (error: TBackendError) {
+    console.log("error intercepted", error)
     if (error.response) {
-        const { message, errorCode } = error.response.data;
-        throw { message, errorCode }
+        if(error.response.data){
+            const { message, errorCode } = error.response.data;
+            throw { message, errorCode }
+        }else{
+            throw {message: "Server Error, try again later", errorCode: 500}
+        }
+        
     }
-    //-- console.log({error});
-    return error
+    // //-- console.log({error});
+    throw error
 }
 )
 //api.get("https://stackoverflow.com/questions/51447021/how-to-handle-api-call-error-with-jquery-ajax").then(resp=>  //-- console.log({resp})).catch(err =>  //-- console.log(err))
@@ -100,9 +106,15 @@ protectedApi.interceptors.response.use(function (response) {
     // //-- console.log({response});
     return response
 }, function (error: TBackendError) {
+    console.log("error intercepted", error)
     if (error.response) {
-        const { message, errorCode } = error.response.data;
-        throw { message, errorCode }
+        if(error.response.data){
+            const { message, errorCode } = error.response.data;
+            throw { message, errorCode }
+        }else{
+            throw {message: "Server Error, try again later", errorCode: 500}
+        }
+        
     }
     // //-- console.log({error});
     throw error

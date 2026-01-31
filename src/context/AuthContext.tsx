@@ -192,9 +192,16 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
     const register = async({name, email, password}: TRegisterForm) =>{
         setLoading(true)
         //await wait(5000)
-        const {user} : {user: TUser} = await api.post(`${baseUrl}/register`, {name, email, password});
+        try {
+             const {user} : {user: TUser} = await api.post(`${baseUrl}/register`, {name, email, password});
+        } catch (error) {
+            throw error
+        } finally{
+            setLoading(false);
+        }
+       
          //-- console.log("successfully registered", user);
-        setLoading(false)
+   
         //SecureStore.setItemAsync("aToken", aToken);
     }
     const logout = async() =>{

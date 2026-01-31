@@ -19,7 +19,7 @@ const addGoal = async(goalForm: TGoalForm): Promise<TGoal> =>{
     const res =  await protectedApi.post("/goals", {goalForm, date: Date.now()})
     return res.data
 }
-const editGoal = async(goal: Omit<TGoal, "type">, date?: number): Promise<{goal: TGoal, progresses: TProgress[]}> =>{
+const editGoal = async(goal: TGoal, date?: number): Promise<{goal: TGoal, progresses: TProgress[]}> =>{
     const res =  await protectedApi.put("/goals", {...goal, date: date || Date.now()})
     return res.data
 }
