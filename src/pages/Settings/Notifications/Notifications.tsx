@@ -132,7 +132,7 @@ export function Notifications(){
           </div>
 
         )
-      }): <p>no notifications</p>}
+      }): <p>empty</p>}
       </div>
     </div>
   )

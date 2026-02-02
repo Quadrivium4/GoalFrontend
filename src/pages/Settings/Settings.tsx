@@ -268,11 +268,12 @@ const DeleteAccount = () =>{
     message.success("We sent you an email to confim the account deletion")
   }
   return (<div>
+          <div style={{marginBottom: 5}}>
           <h1>Delete account?</h1>
           <p>Your data will be permanently deleted.</p>
           <p>We are going to send you a confirmation email.</p>
+          </div>
           <NetButton className="outline error"  request={deleteAccount}>Delete account</NetButton>
-          
         </div>)
 }
 const AddPassword = () =>{
@@ -325,8 +326,10 @@ const LogOut = () =>{
     window.location.replace("/")
   }
   return (<div>
+    <div style={{marginBottom: 5}}>
           <h1>Log Out</h1>
           <p>Are you sure you want to log out?</p>
+          </div>
           <NetButton className="outline error"  request={logOut}>Log Out</NetButton>
           
         </div>)

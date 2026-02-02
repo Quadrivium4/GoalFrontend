@@ -35,6 +35,7 @@ function DownloadPage() {
         <div className="instructions">
         <Link to={"/"}>{"<"} Back</Link>
         <h1>Download</h1>
+        <p>This web app is installable, but if you would like it to be on the offical App Store and Google Play let us know!</p>
         <section id='iphone'>
             <h2>iPhone</h2>
             <p>In Safari browser, tap on the share button <span className="icon"><MdIosShare  color={colors.primary} style={{marginLeft: 5}} size={20} className='icon'></MdIosShare></span></p>
