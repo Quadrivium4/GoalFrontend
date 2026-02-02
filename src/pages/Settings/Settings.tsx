@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdOutlineInfo, MdOutlineModeEditOutline } from "react-icons/md";
 import ChangeEmail from '../../components/ChangeEmail';
 import ImageUpload from '../../components/ImageUpload';
@@ -82,6 +82,7 @@ function Settings() {
   const {logout, deleteAccountRequest, editUser, googleLogin} = useAuth();
   const {setPop} = usePop();
   const user = useUser();
+
   const [bio, setBio] = useState(user.bio)
   const [name, setName] = useState(user.name)
   const [profileType, setProfileType] = useState(user.profileType?? "public");
@@ -90,7 +91,11 @@ function Settings() {
   const {message} = useMessage();
   const [uploadingProgress, setUploadingProgress] = useState(0);
   const [uploadingImg, setUploadingImage] = useState<File>();
-
+  useEffect(()=>{
+    setBio(user.bio);
+    setName(user.name);
+    setProfileType(user.profileType);
+  },[user])
  
   const handleChange = () =>{
        //-- console.log("handle change")
@@ -178,10 +183,10 @@ function Settings() {
              <MdOutlineInfo size={20} onClick={()=> setPop(<VisibilityInfo />)}/>
             </div>
            
-            <Select options={["public", "private"]}  placeholder='choose a profile type' selected={user.profileType} onSelect={(selected)=>{
+            <Select options={["public", "private"]}  placeholder='choose a profile type' selected={user.profileType} onSelect={async(selected)=>{
               if(selected != "" && selected != user.profileType){
                 setProfileType(selected);
-                editUser({name, bio, profileType: selected})
+                await editUser({name, bio, profileType: selected})
               }
               
             }}/>
