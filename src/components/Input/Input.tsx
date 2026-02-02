@@ -6,7 +6,11 @@ const getStringFromMinutes = (minutes: number) =>{
 const getTimeFromString = (timeString: string):{err: string | undefined, result: number} =>{
         let result;
         let error;
-        let time = timeString.split(":")
+        let time: string[];
+        
+        if(timeString.includes(".")) time = timeString.split(".");
+        else time = timeString.split(":")
+
         if(time.length < 2) {
             if(time[0] === "") result = 0;
             else{
@@ -17,7 +21,8 @@ const getTimeFromString = (timeString: string):{err: string | undefined, result:
             if(time[0] === "") time[0] = "0"
             if(time[1] === "") time[1] = "0"
             let hours = parseInt(time[0]);
-            let minutes = parseInt(time[1]);
+            time[1].padEnd(2, "0")
+            let minutes = parseInt(time[1].padEnd(2, "0"));
             // //-- console.log({minutes, time})
             let timeInMinutes = hours * 60 + minutes;
             result = timeInMinutes

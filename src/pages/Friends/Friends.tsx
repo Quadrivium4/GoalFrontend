@@ -341,7 +341,7 @@ function Friends() {
             <div className='friends-lazy'>
 
             {/* {initialLoading? <Loader size={20}/>:null} */}
-            {progresses.length == 0 && !initialLoading && !loading? <p>no friend activities to show...</p>: null}
+            {progresses.length == 0 && !initialLoading && !loading?  user.following.length == 0?<p>start following some people to show their activities here!</p> : <p>no friend activities to show...</p>: null}
             {
                                    
                                     progresses.map(progress =>{

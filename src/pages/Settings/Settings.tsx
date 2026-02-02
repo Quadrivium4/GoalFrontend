@@ -169,7 +169,7 @@ function Settings() {
             
       </div>
       <div className='edit-bio' onClick={() => setPop(<ChangeBio />)}>
-            {user.bio? <p>{user.bio}</p>: <p style={{color: "gray"}}>write something about you</p>}
+            {user.bio? <p>{user.bio}</p>: <p style={{color: "gray"}}>write something about you...</p>}
     
           </div>
           <div className='account-type'>
