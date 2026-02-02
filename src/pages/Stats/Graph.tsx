@@ -390,7 +390,10 @@ function GraphV2() {
     return (
         <div className='graphs'>
           
-            {loading? <GraphSkeleton graphs={Object.values(stats)}/>: statsLength > 0? Object.entries(stats).map(([key, graph], i)=>{
+            {loading? <GraphSkeleton graphs={Object.values(stats)}/>: statsLength > 0?
+            <>
+            <p>Click on the stats points, to view in detail and edit your activities.</p>
+            {Object.entries(stats).map(([key, graph], i)=>{
                 //if(i == 0)  //-- console.log("RERENDER")
                 let {points, goal} = graph;
               //  console.log({points, goal})
@@ -401,7 +404,7 @@ function GraphV2() {
                         {Object.keys(points).length > 0? <Svg graph={Object.values(points)} />: <p>no stats</p>}
                     </div>
                 )
-            }): isMe? <p>No stats yet, create your goals and add your progress!</p>: <p>No stats yet!</p>}
+            })}</>: isMe? <p>No stats yet, create your goals and add your progress!</p>: <p>No stats yet!</p>}
         </div>
     );
 }
