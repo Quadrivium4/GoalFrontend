@@ -16,7 +16,7 @@ import Loader from "../../../components/Loader/Loader";
 import { getProfile, getUser } from "../../../controllers/user";
 import { Link, useNavigate } from "react-router-dom";
 const offset = 20;
-export type TFilter = "followers" | "following" | "none" | "";
+export type TFilter = "followers" | "following" | "incoming-requests" | "outgoing-requests" | "none" ;
 const useUsers = () =>{
     const [users, setUsers] = useState<TProfile[]>([]);
     const [loading, setLoading] = useState(true);
@@ -247,7 +247,18 @@ export default function SearchUser(){
     <div className={styles.searchPop}> 
         <h2>Search</h2>
         <input type='text' onChange={(e) => search(e.target.value)} placeholder='name or #id' style={{marginTop: 15, marginBottom: 5, textDecoration: "none"}}></input>
-        <Select options={["following", "followers", "none"]} onSelect={addFilter} placeholder='filter' />
+        <Select options={["following", "followers", "incoming requests","outgoing requests", "none" ]} onSelect={(option) =>{
+            if(option == ""){
+                 addFilter("none")
+            }else if(option == "incoming requests"){
+                addFilter("incoming-requests")
+            }else if(option == "outgoing requests"){
+                addFilter("outgoing-requests")
+            }else{
+                 addFilter(option)
+            }
+           
+            }} placeholder='filter' />
 
 
     

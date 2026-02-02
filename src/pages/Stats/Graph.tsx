@@ -301,6 +301,7 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
     const {setPop} = usePop();
     const ref = useRef<HTMLDivElement>(null);
     const svgWidth = (graph.length -1) * gap + paddingHorizontal * 2 < minSvgWidth? minSvgWidth : (graph.length -1) * gap + paddingHorizontal * 2 ;
+    let svgHeight = graph[0].goal.frequency == "daily"? 170 + paddingVertical : 150 + paddingVertical;
    //  //-- console.log({svgWidth, length: graph.length, gap})
     useEffect(() =>{
         
@@ -329,7 +330,7 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
             let scroll = e.currentTarget.scrollLeft;
             if(Math.abs(scroll - monthDayScroll) >0) setMonthDayScroll(scroll)
         }} style={{}}>
-            <svg width={svgWidth} height={150 + paddingVertical}>
+            <svg width={svgWidth} height={svgHeight}>
                 <polygon points={pointsString} fill='rgba(92, 200, 82, 0.25)'></polygon>
                 {graph.map((point, i) =>{
                     let nextPoint = graph[i+1];
@@ -359,6 +360,7 @@ function Svg ({graph}:{graph: TGraphPoint[]}) {
                             <line x1={point.x} y1={point.y} x2={nextPoint.x}y2={nextPoint.y} className='line-connect' stroke={point.color == nextPoint.color? nextPoint.color : `url(#${point.gradientId})` }></line>
                             </>
                         : null}
+                        {point.goal.frequency== "daily" ?<text  x={point.x - 5} y={170} fontSize={12} >{point.date.toLocaleDateString("en", {weekday: "narrow"})}</text>: null}
                         </g>
                     )
                 })}

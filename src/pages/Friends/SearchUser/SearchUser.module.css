@@ -2,6 +2,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 .people {
     padding: 5px;
