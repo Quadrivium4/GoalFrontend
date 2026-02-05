@@ -16,7 +16,7 @@ import Loader from "../../../components/Loader/Loader";
 import { getProfile, getUser } from "../../../controllers/user";
 import { Link, useNavigate } from "react-router-dom";
 const offset = 20;
-export type TFilter = "followers" | "following" | "none" | "";
+export type TFilter = "followers" | "following" | "incoming-requests" | "outgoing-requests" | "none" ;
 const useUsers = () =>{
     const [users, setUsers] = useState<TProfile[]>([]);
     const [loading, setLoading] = useState(true);
@@ -24,6 +24,7 @@ const useUsers = () =>{
     const [searchText, setSearchText] = useState<string>();
     const [filter, setFilter] = useState<TFilter>()
     const [hasMore, setHasMore] = useState(true);
+    const {updateUser} = useAuth()
     
     useEffect(() =>{
        // if(!hasMore) return //-- console.log("has no more users");
@@ -62,15 +63,16 @@ const useUsers = () =>{
              //-- console.log("getting more users", index, offset, searchText)
             
              //-- console.log({res})
+            updateUser(res.user);
             setUsers(users => {
-                if(res.length == 0){
+                if(res.users.length == 0){
                     setHasMore(false);
                     return users;
                 }
                 if(users.length > 20){
                     //  //-- console.log("slicing")
                     // return [...(users.slice(10)), ...res]
-                }return [...users, ...res]})
+                }return [...users, ...res.users]})
             setLoading(false)
         }).catch(err =>{
              //-- console.log({err})
@@ -169,6 +171,7 @@ export function FriendButton({friend}: {friend: TUser | TProfile}){
     const type:TFriendType = getFriendType(user, friend._id);
     const [loading, setLoading] = useState(false);
     useEffect(()=>{
+       // //-- console.log({friend})
         //getUser()
     },[])
     // //-- console.log("friend type", {type})
@@ -228,7 +231,8 @@ export function FriendButton({friend}: {friend: TUser | TProfile}){
             type === "requesting"? <><p>accept</p> <RiUserFollowLine size={iconSize} color={colors.primary}/> </>:
             type ==="follower"? <><p>follow back</p><RiUserAddLine  size={iconSize}  color={colors.primary} /></>: 
              type ==="following"? <><p>following</p> <RiUserFollowLine  size={iconSize}color={colors.primary} /></>: 
-            <><p>request</p><RiUserAddLine  size={iconSize}  color={colors.primary} /></>
+            
+            <><p>{friend.profileType == "public"? "follow": "request"}</p><RiUserAddLine  size={iconSize}  color={colors.primary} /></>
         }
         </button>
     )
@@ -243,7 +247,18 @@ export default function SearchUser(){
     <div className={styles.searchPop}> 
         <h2>Search</h2>
         <input type='text' onChange={(e) => search(e.target.value)} placeholder='name or #id' style={{marginTop: 15, marginBottom: 5, textDecoration: "none"}}></input>
-        <Select options={["following", "followers", "none"]} onSelect={addFilter} placeholder='filter' />
+        <Select options={["following", "followers", "incoming requests","outgoing requests", "none" ]} onSelect={(option) =>{
+            if(option == ""){
+                 addFilter("none")
+            }else if(option == "incoming requests"){
+                addFilter("incoming-requests")
+            }else if(option == "outgoing requests"){
+                addFilter("outgoing-requests")
+            }else{
+                 addFilter(option)
+            }
+           
+            }} placeholder='filter' />
 
 
     

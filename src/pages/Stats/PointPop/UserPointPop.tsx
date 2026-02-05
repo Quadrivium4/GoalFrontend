@@ -11,12 +11,14 @@ import styles from "./PointPop.module.css"
 import { useStatsV2 } from "../../../context/StatsContextV2";
 import { TChangeProps } from "../../../components/EditProgress";
 import { PointHeader } from "./PointPop";
+import { Likes } from "../../../components/Likes/Likes";
 
-export default function UserPointPop ({point}: {point: TGraphPoint}){
+export default function UserPointPop ({point, addLikeToStats}: {point: TGraphPoint, addLikeToStats: (p:TProgress)=>void}){
     let {goal } = point;
     let goalProgress = sumDaysProgress(point.history);
     let goalAmountString = getGoalAmountString(goal, goalProgress )
     let progressWidth = normalizePercentage(getPercentage(goal.amount, goalProgress))
+    
 
     return (
         <div className={styles["point-pop"]}> 
@@ -24,8 +26,8 @@ export default function UserPointPop ({point}: {point: TGraphPoint}){
                 <p>{goalAmountString} {goal.frequency}</p>
             </div>
             <PointHeader progressWidth={progressWidth}/>
-            <ProgressDays history={point.history} goal={point.goal} />
-
+            <ProgressDays history={point.history} goal={point.goal} addLikeToStats={addLikeToStats} />
+          
         </div>
     )
 

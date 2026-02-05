@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 const PrivacyPolicy = () => {
 
     return (
-        <>
-       
         <div className={styles.page}>
-            <Link to={"/"} >{"<"} Back</Link>
+       
+        <div className={styles.content}>
+            {/* <Link to={"/"} >{"<"} Back</Link> */}
             <h1>Privacy Policy</h1>
             <section id="dati-personali" className={styles.section}>
                 <h3 className={styles.title}>Personal Data</h3>
@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
                 </div>
            </section>
         </div>
-        </>
+        </div>
     )
 }
 export default PrivacyPolicy

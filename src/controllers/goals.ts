@@ -2,7 +2,7 @@
 
 import { TUser } from "../context/AuthContext"
 import { protectedApi } from "../utils"
-import { TDay, TGoalAmountType, TGoalDays } from "./days"
+import { TDay, TGoalAmountType, TGoalDays, TProgress } from "./days"
 export type TGoalForm = {
      userId: string,
     progress: number,
@@ -19,7 +19,7 @@ const addGoal = async(goalForm: TGoalForm): Promise<TGoal> =>{
     const res =  await protectedApi.post("/goals", {goalForm, date: Date.now()})
     return res.data
 }
-const editGoal = async(goal: Omit<TGoal, "type">, date?: number): Promise<TGoal> =>{
+const editGoal = async(goal: TGoal, date?: number): Promise<{goal: TGoal, progresses: TProgress[]}> =>{
     const res =  await protectedApi.put("/goals", {...goal, date: date || Date.now()})
     return res.data
 }

@@ -10,10 +10,17 @@ import styles from "./UserDays.module.css"
 import { TGoal } from "../../../controllers/goals";
 import { groupProgressesByDay } from "../../Goals/ProgressDays";
 import { Likes } from "../../../components/Likes/Likes";
-export function Day({day, goal}: {day: TDay, goal: TGoal}){
+import { FaThumbsUp } from "react-icons/fa";
+export function Day({day, goal, setGoals}: {day: TDay, goal: TGoal, setGoals:  React.Dispatch<React.SetStateAction<TMyGoal[]>>}){
     const user = useUser();
     const {unlikeProgress, likeProgress} = useDays();
     const toggleLikeProgress = async(progress: TProgress, isLiked: boolean) =>{
+        let newLike: TLike = {
+            userId: user._id,
+            username: user.name,
+            profileImg: user.profileImg
+        }
+        let newLikes = [...progress.likes, newLike];
         if(isLiked){
             // unlikeProgress({id: day._id, ...progress}).then(res =>{
             //      //-- console.log("unliked")
@@ -28,16 +35,34 @@ export function Day({day, goal}: {day: TDay, goal: TGoal}){
             //     })
             // })
         }else{
+            setGoals(prev =>{
+                    return prev.map(g =>{
+                        if(g._id === goal._id){
+                            let newHistory = g.history.map(p =>{
+                                if(p._id === progress._id){
+                                    return {...progress, likes: newLikes}
+                                }
+                                return  p;
+                            })
+                            return {
+                                ...g,
+                                history: newHistory
+                            }
+                        }
+                        return g
+                    })
+                 })
             likeProgress({...progress}).then(res =>{
                  //-- console.log("liked");
-                 day.progresses = day.progresses.map(pgr =>{
-                    if(pgr.date == progress.date){
-                        let likes: TLike[] = [...pgr.likes, {userId: user._id, username: user.name, profileImg: user.profileImg}];
-                        return {...pgr, likes}
-                    }
-                    return pgr
+                 
+                //  day.progresses = day.progresses.map(pgr =>{
+                //     if(pgr.date == progress.date){
+                //         let likes: TLike[] = [...pgr.likes, {userId: user._id, username: user.name, profileImg: user.profileImg}];
+                //         return {...pgr, likes}
+                //     }
+                //     return pgr
                         
-                })
+                // })
             })
         }
             
@@ -51,7 +76,7 @@ export function Day({day, goal}: {day: TDay, goal: TGoal}){
                     let dateString = sameDay(date, Date.now())? "Today at "+getTime(date): isYesterday(date)? "Yesterday at "+getTime(date): formatDate(date);
                     let youLiked = Boolean(progress.likes.find(like => like.userId === user._id));
                     return (
-                        <div className={styles.progress}>
+                        <div className={styles.progress} key={progress._id}>
                             <div className={styles.header}>
                             <p className={styles.date}>{dateString}</p>
                             <p className={styles["progress-added"]}>+{getAmountString(progress.amount, goal.type)}</p>
@@ -59,7 +84,7 @@ export function Day({day, goal}: {day: TDay, goal: TGoal}){
                             <p>{progress.notes}</p>
                             <div className={styles.footer} >
                              {progress.likes.length>0?  <Likes likes={progress.likes} /> : null}
-                            <MdOutlineThumbUpOffAlt size={24} color={youLiked? colors.primary : ""} onClick={() =>toggleLikeProgress(progress,youLiked)} className={styles['button-icon']}/>
+                            <FaThumbsUp size={20} color={youLiked? colors.primary : ""} onClick={() =>toggleLikeProgress(progress,youLiked)} className={styles['button-icon']}/>
                            
                             
                             </div>
@@ -77,13 +102,13 @@ export function Day({day, goal}: {day: TDay, goal: TGoal}){
             </div>
     )
 }
-export default function UserDays({ days, goals }: {days: TMyGoal[], goals: TGoal[]}){
+export default function UserDays({ days, goals, setGoals }: {days: TMyGoal[], goals: TGoal[], setGoals: React.Dispatch<React.SetStateAction<TMyGoal[]>>}){
     
     return (
         <div className={styles.days}>
         
         {goals.length > 0?  goals.map(info =>{
-            console.log("infog", info)
+            ////-- console.log("infog", info)
             let goal = info
             let myGoal: TMyGoal | undefined = days.find(day => day._id == info._id);
             if(!myGoal) myGoal = {
@@ -105,7 +130,7 @@ export default function UserDays({ days, goals }: {days: TMyGoal[], goals: TGoal
                     </div>
                     <p className={styles.subtitle}> {getAmountString(goal.amount, goal.type)}/{goal.frequency == "daily"?"day" : "week"} </p>
                     {
-                        progresses.map(day =><Day day={day} goal={goal} key={day.date.getTime()}/>)
+                        progresses.map(day =><Day day={day} goal={goal} key={day.date.getTime()} setGoals={setGoals}/>)
                     }
                     <div className={styles.footer}><p>Total: {getAmountString(dayProgress, goal.type)}</p></div>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdOutlineInfo, MdOutlineModeEditOutline } from "react-icons/md";
 import ChangeEmail from '../../components/ChangeEmail';
 import ImageUpload from '../../components/ImageUpload';
@@ -82,6 +82,7 @@ function Settings() {
   const {logout, deleteAccountRequest, editUser, googleLogin} = useAuth();
   const {setPop} = usePop();
   const user = useUser();
+
   const [bio, setBio] = useState(user.bio)
   const [name, setName] = useState(user.name)
   const [profileType, setProfileType] = useState(user.profileType?? "public");
@@ -90,7 +91,11 @@ function Settings() {
   const {message} = useMessage();
   const [uploadingProgress, setUploadingProgress] = useState(0);
   const [uploadingImg, setUploadingImage] = useState<File>();
-
+  useEffect(()=>{
+    setBio(user.bio);
+    setName(user.name);
+    setProfileType(user.profileType);
+  },[user])
  
   const handleChange = () =>{
        //-- console.log("handle change")
@@ -112,7 +117,7 @@ function Settings() {
       url: res.url
     });
     uploadProfileImg(res).then(res=>{
-      console.log("user image changed");
+   //-- console.log("user image changed");
     })
     setUploadingProgress(100);
     setTimeout(()=>setUploadingProgress(0), 100)
@@ -169,7 +174,7 @@ function Settings() {
             
       </div>
       <div className='edit-bio' onClick={() => setPop(<ChangeBio />)}>
-            {user.bio? <p>{user.bio}</p>: <p style={{color: "gray"}}>write something about you</p>}
+            {user.bio? <p>{user.bio}</p>: <p style={{color: "gray"}}>write something about you...</p>}
     
           </div>
           <div className='account-type'>
@@ -178,10 +183,10 @@ function Settings() {
              <MdOutlineInfo size={20} onClick={()=> setPop(<VisibilityInfo />)}/>
             </div>
            
-            <Select options={["public", "private"]}  placeholder='choose a profile type' selected={user.profileType} onSelect={(selected)=>{
-              if(selected != ""){
+            <Select options={["public", "private"]}  placeholder='choose a profile type' selected={user.profileType} onSelect={async(selected)=>{
+              if(selected != "" && selected != user.profileType){
                 setProfileType(selected);
-                editUser({name, bio, profileType: selected})
+                await editUser({name, bio, profileType: selected})
               }
               
             }}/>
@@ -214,6 +219,7 @@ const ChangeName = () =>{
     const handleChange = async () =>{
        //-- console.log("handle change")
      await editUser({name, bio: user.bio, profileType: user.profileType});
+     closePop()
      
   }
   return (
@@ -237,7 +243,7 @@ const ChangeBio = () =>{
          await editUser({name: user.name, bio: bio, profileType: user.profileType});
          closePop();
        } catch (error) {
-          console.log("error editing user",{error})
+       //-- console.log("error editing user",{error})
        }
       
   }
@@ -267,11 +273,12 @@ const DeleteAccount = () =>{
     message.success("We sent you an email to confim the account deletion")
   }
   return (<div>
+          <div style={{marginBottom: 5}}>
           <h1>Delete account?</h1>
           <p>Your data will be permanently deleted.</p>
           <p>We are going to send you a confirmation email.</p>
+          </div>
           <NetButton className="outline error"  request={deleteAccount}>Delete account</NetButton>
-          
         </div>)
 }
 const AddPassword = () =>{
@@ -324,8 +331,10 @@ const LogOut = () =>{
     window.location.replace("/")
   }
   return (<div>
+    <div style={{marginBottom: 5}}>
           <h1>Log Out</h1>
           <p>Are you sure you want to log out?</p>
+          </div>
           <NetButton className="outline error"  request={logOut}>Log Out</NetButton>
           
         </div>)

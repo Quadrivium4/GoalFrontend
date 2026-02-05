@@ -102,7 +102,7 @@ export function SingleGoal({goal}: {goal: TMyGoal}){
       <div className='goal'>
         <div className='header'><div className='progress' style={{width: progressWidth + "%", backgroundColor: getProgressColor(progressWidth)}}></div></div>
         <div className='info'>
-          <h3>{goal.title}</h3>
+          <h2>{goal.title}</h2>
           <p>{goalAmountString} {goal.frequency}</p>
          
           
@@ -131,6 +131,7 @@ export function SingleGoal({goal}: {goal: TMyGoal}){
 function Goals() {
   //-- console.log("hi goals")
     const user = useUser();
+    const {reload: reloadNotifications} = useNotifications();
     const contentRef = useRef<HTMLDivElement>(null);
 
      //-- console.log("goals rendering")
@@ -138,7 +139,10 @@ function Goals() {
     const {goals, addProgress, daysLoading, loadDays} = useDays();
     
     const {setPop} = usePop();
-    usePullRefreshTouch( loadDays)
+    usePullRefreshTouch(  async() =>{
+      await loadDays();
+      await reloadNotifications()
+    })
     useEffect(()=>{
        //-- console.log("------ Goals Render ----")
       // //-- console.log("remount")
@@ -159,10 +163,10 @@ function Goals() {
             let {history, ...goalInfo} = goal;
             let currentGoalInfo = user.goals.find(g => g._id === goal._id);
             if(goal.title == "gil"){
-              //console.log(goal, "cici")
+              ////-- console.log(goal, "cici")
             }
             if(!currentGoalInfo) {
-              console.log("error, goal not found");
+           //-- console.log("error, goal not found");
               return <></>
             }
             //if(!goal) return <SingleGoal goal={{...currentGoalInfo, history: []}} key={goalInfo._id}/>

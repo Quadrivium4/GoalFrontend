@@ -1,4 +1,9 @@
-export const baseUrl =  process.env.NODE_ENV === 'development'? "http://" + window.location.hostname + `:${process.env.REACT_APP_SERVER_PORT}`: process.env.NODE_ENV === "production"? process.env.REACT_APP_API_URL: "";
+
+const SERVER_PORT = 5001;
+
+//export const baseUrl =  process.env.NODE_ENV === 'development'? "http://" + window.location.hostname + `:${SERVER_PORT}`: process.env.NODE_ENV === "production"? process.env.REACT_APP_API_URL: "";
+
+export const baseUrl = "https://goalon-zfa9.onrender.com";
  //-- console.log({baseUrl})
 export const protectedUrl = baseUrl + "/protected";
 export const assetsUrl = baseUrl + "/file/";

@@ -16,7 +16,7 @@ function ResetPassword() {
     const handleResetPass = () =>{
         api.post("/reset-password", {email, password}).then(res =>{
              //-- console.log(res)
-            message.success("We have sent you a confirmatin email");
+            message.success("We sent you a confirmation email");
         }).catch(err =>{
              //-- console.log(err)
              message.error(err.message);

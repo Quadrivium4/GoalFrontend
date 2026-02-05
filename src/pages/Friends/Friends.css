@@ -1,5 +1,6 @@
 #friends{
  width: 100%;
+ overflow: auto;
 }
 #friends>.header{
     display: flex;
@@ -32,13 +33,24 @@
     align-items: center;
     width: 100%;
     gap: 20px;
+    padding-bottom: 10px;
 }
 
 #friends .friend {
     border-radius: 10px 10px 0px 0px;
     border: 1px solid rgb(88, 88, 88);
     width: 100%;
+    animation-name: fadeInAnimation;
+    animation-duration: 500ms;
     /* background-color: var(--background-medium); */
+}
+@keyframes fadeInAnimation {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
 }
 #friends .friend>.header{
     border-radius: 10px 10px 0px 0px;
@@ -51,10 +63,31 @@
     /* background-color: var(--background-dark); */
     /* background-color: var(--background-medium); */
 }
+#friends .friend>.header .date{
+    margin-left: auto;
+    align-self: flex-start;
+}
 
 #friends .friend>.header span.goals{
     font-family: Josefin;
 }
 #friends .friend .friend-content{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     padding: 10px;
+    background-color: var(--background-medium);
+}
+#friends .friend .friend-content .head {
+    display: flex;
+    justify-content: space-between;
+}
+#friends .friend .friend-content .head .progress-amount{
+    color: var(--primary)
+}
+#friends .friend .friend-content .likes{
+    padding-top: 10px;
+    border-top: 1px solid var(--background-light);
+    display: flex;
+    justify-content: space-between;
 }

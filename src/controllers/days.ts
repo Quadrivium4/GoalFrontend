@@ -3,6 +3,7 @@ import { TFile } from "../components/ProfileIcon/ProfileIcon"
 import { TMyGoal } from "../context/DaysContext"
 import { protectedApi } from "../utils"
 import { TGoal } from "./goals"
+import { TFriendProgress } from "../pages/Friends/useLazyProgress"
 
 export type TLike = {
     userId: string,
@@ -53,7 +54,7 @@ export type TProgressForm = Omit<TProgress, "likes">;
 export function wait(duration: number){
     return new Promise((resolve, reject) => setTimeout(resolve, duration))
 }
-const getProgresses = async(index: number, controller?: GenericAbortSignal): Promise<TProgress[]> => {
+const getProgresses = async(index: number, controller?: GenericAbortSignal): Promise<TFriendProgress[]> => {
     let date = new Date()
     let res = await protectedApi.get("/lazy-progress", {params: { index, timestamp: date.getTime()}, signal: controller});
     return res.data;

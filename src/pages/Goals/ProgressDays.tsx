@@ -24,6 +24,8 @@ import { getAmountString, getDate, getTime, isYesterday, sameDay } from './Goals
 import styles from "./ProgressDays.module.css";
 import { MdOutlineThumbUpOffAlt } from "react-icons/md";
 import { postLike } from '../../controllers/likes';
+import { FaThumbsUp } from 'react-icons/fa';
+import { useStatsV2 } from '../../context/StatsContextV2';
 
 
 export const getDay = (d: number) =>{
@@ -58,28 +60,70 @@ export const groupProgressesByDay = (history: TProgress[]) =>{
     return result;
 }
 
-export default function ProgressDays({history,  onChange, goal}:{history: TDay[], onChange?: (res: TChangeProps)=>void, goal: TGoal}){
+export default function ProgressDays({history,  onChange, goal, addLikeToStats}:{history: TDay[], onChange?: (res: TChangeProps)=>void, goal: TGoal, addLikeToStats?: (progress: TProgress)=>void}){
     const user = useUser();
     const {setPop} = usePop();
+    const {likeProgress} = useDays();
+    const [h, setH] = useState(history);
+    useEffect(()=>{
+        setH(history);
+    },[history])
     let noprogress = history.length === 0;
+    
     //const groupedProgress = groupProgressesByDay(history);
     const editProgress = () =>{
 
     }
-    
+    const like = async(progress: TProgress, date: Date) =>{
+        let newLike: TLike = {
+            userId: user._id,
+            username: user.name,
+            profileImg: user.profileImg
+        }
+        let newLikes = [...progress.likes, newLike];
+                  setH(prev => prev.map(day =>{
+             //-- console.log({day, date})
+                if(day.date.getTime() == date.getTime()){
+                 //-- console.log("day found")
+                    let newP = day.progresses.map(p =>{
+                        if(p._id == progress._id){
+
+                            return {...progress, likes: newLikes}
+                        }else{
+                            return p
+                        }
+                    });
+                    return {
+                        date,
+                        progresses: newP
+                    }
+                }else{
+                    return day
+                }
+                })
+            )
+        likeProgress(progress).then(res =>{
+         //-- console.log("edit stats");
+            if(addLikeToStats) addLikeToStats(res)
+  
+            
+        }).catch(err =>{
+         //-- console.log("cannot like");
+        })
+    }
     return (<div className={styles["sub-progresses"]}>
          {noprogress? <p>no progress</p>: 
             
-            history.length > 0 ? history.map(({date, progresses}, dayIndex) =>{
+            h.length > 0 ? h.map(({date: dayDate, progresses}, dayIndex) =>{
                 // //-- console.log(day.date, new Date())
                 return (
                     
-                   history.length >0? 
-                    <div key={date.getTime()} className={styles.day}>
+                   h.length >0? 
+                    <div key={dayDate.getTime()} className={styles.day}>
                    
                           
                     
-                    <p style={{textAlign: "center"}}>{sameDay(date, new Date())? "Today" : isYesterday(date)? "Yesterday": getDate(date) }</p>
+                    <p style={{textAlign: "center"}}>{sameDay(dayDate, new Date())? "Today" : isYesterday(dayDate)? "Yesterday": getDate(dayDate) }</p>
                     
                     
                     {progresses.map((progress, progressIndex) =>{
@@ -87,7 +131,7 @@ export default function ProgressDays({history,  onChange, goal}:{history: TDay[]
                         let date = new Date(progress.date);
                         // //-- console.log({progressIndex, progress: day.history[progressIndex]})
                         // TODO LIKE PAST PROGRESS
-                        let youLiked = Boolean(progress.likes.find(like => like.userId === progress.userId));
+                        let youLiked = Boolean(progress.likes.find(like => like.userId === user._id));
                         return (
                             <div key={progress._id} className={styles.prog}>
                             <div className={`${styles["sub-progress"]} ${progress.userId == user._id? styles["isMe"]: ""}`} key={progress.date} onClick={() =>{
@@ -110,13 +154,18 @@ export default function ProgressDays({history,  onChange, goal}:{history: TDay[]
                             </div>
 
                             </div>
-                            {
-                            progress.likes.length> 0?
-                            <div className='likes' style={{paddingBottom: 5, paddingTop: 5}}>
-                            <Likes likes={progress.likes}/>
-                            </div>: null}
+                         
+                            <div className='likes' style={{paddingBottom: 5, paddingTop: 5, display: "flex", justifyContent: "space-between"}}>
+                            {progress.likes.length > 0? <Likes likes={progress.likes} />: goal.userId !== user._id ?<p>be frist to give like!</p>: null}
+                             {goal.userId !== user._id ?   <FaThumbsUp  size={20}color={youLiked? "var(--primary)" : "white"} onClick={()=>{
+                                    if(youLiked) return;
+                                    like(progress, dayDate)
+                                }
+                                }/>: null}
+                        
                             </div>
-                        )
+                            </div>)
+                        
                         })
                     }</div>: null)
                 }): null

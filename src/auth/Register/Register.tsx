@@ -32,6 +32,7 @@ function Register() {
           register({name, email, password}).then(res =>{
                //-- console.log(res)
               message.success("We sent you a verification email");
+              navigate("/home");
           }).catch(err =>{
             message.error(err.message);
           })

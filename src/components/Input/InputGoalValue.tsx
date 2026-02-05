@@ -75,7 +75,14 @@ function InputProgressValues({type, onChange, initial }: {type:TGoalAmountType, 
         </div>
         {type === "time" ? <Input.TimePicker onSelect={(value) => updateProgress(value)} initialValue={form.amount}/> 
         : type === "distance"? <Input.DistancePicker onSelect={updateProgress} initialValue={form.amount}/> 
-        : <input placeholder='progress' value={form.amount? form.amount: ''} type="number" onChange={(e)=> updateProgress(parseInt(e.target.value))} />}
+        : <input placeholder='progress' value={form.amount? form.amount: ''} onChange={(e)=> {
+            if(!isNaN(Number(e.target.value))){
+                updateProgress(parseInt(e.target.value))
+            }
+                else {
+                    //-- console.log("not a number")
+                }
+            }} />}
             <textarea  placeholder='notes...' value={form.notes}onChange={(e)=> updateNotes(e.target.value)}></textarea>
             </>
     )

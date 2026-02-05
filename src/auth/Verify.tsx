@@ -34,8 +34,6 @@ function Verify() {
   return (
     <div>
       <h1>Verifying... </h1>
-      <p>User Id: {userId}</p>
-      <p>Token: {token}</p>
     </div>
   );
 }

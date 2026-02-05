@@ -6,7 +6,7 @@ import Select from '../../components/Select/Select';
 import Graph, { getPercentage, getProgressColor } from '../Stats/Graph';
 import { useLocation, useParams } from 'react-router-dom';
 import { getProfile, getUser } from '../../controllers/user';
-import { TUser, useUser } from '../../context/AuthContext';
+import { TUser, useAuth, useUser } from '../../context/AuthContext';
 import { StatsProviderV2 } from '../../context/StatsContextV2';
 import ProfileIcon, { TFile } from '../../components/ProfileIcon/ProfileIcon';
 import { Likes } from '../../components/Likes/Likes';
@@ -100,6 +100,7 @@ function User() {
     const [goalsLoading, setGoalsLoading] = useState(false);
     const you = useUser()
     const ref = useRef<HTMLDivElement>(null)
+    const {updateUser} = useAuth();
     const [layerImg, setLayerImg] = useState<TFile>()
     //const hello = useScrollRefresh(ref, ()=>{})
      //-- console.log({userId})
@@ -126,6 +127,9 @@ function User() {
         })
         
     }
+    function updateMe(){
+        getUser(me._id).then(res =>updateUser(res));
+    }
     function fetchDays(){
         if(goalsLoading) return;
         setGoalsLoading(true)
@@ -145,7 +149,9 @@ function User() {
         <>
         <PageHeader title={"Profile"} action={<IoMdRefresh size={24} onClick={()=>{
                 fetchUser();
-                fetchDays()
+                fetchDays();
+                updateMe();
+
             }}/>} goBack={() => window.history.back()}/>
     
       
@@ -175,7 +181,7 @@ function User() {
        <div className='activities'>
         <h2>Goals</h2>
         
-        {goalsLoading? <p>loading</p>: <UserDays days={goals} goals={user?.goals!} />}
+        {goalsLoading? <p>loading</p>: <UserDays days={goals} goals={user?.goals!} setGoals={setGoals} />}
         <h2>Stats</h2>
        <StatsProviderV2 user={user}>
             <Graph/>

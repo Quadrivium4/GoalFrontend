@@ -15,7 +15,10 @@ function Message() {
     },[message])
     useEffect(() =>{
         // //-- console.log({hidden})
-        if(hidden) setClasses(classes => [...classes, "hidden"])
+        if(hidden) {
+            setClasses(classes => [...classes, "hidden"]);
+            
+        }
         else if(!hidden) setClasses(classes => classes.filter(classname => classname !== "hidden"))
     },[hidden])
     return (

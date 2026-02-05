@@ -47,7 +47,10 @@
     flex-direction: column;
     justify-content: flex-end;
 }
-
+.sub-progresses .likes {
+    display: flex;
+    justify-content: space-between;
+}
 .footer {
     display: flex;
     justify-content: space-between;

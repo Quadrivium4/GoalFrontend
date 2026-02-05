@@ -1,6 +1,6 @@
 import AppNavigator from './AppNavigator';
 import { useAuth } from './context/AuthContext';
-import AuthNavigator, { AuthLayout } from './AuthNavigator';
+import AuthNavigator, { AuthLayout, FooterAuth, HeaderAuth } from './AuthNavigator';
 import { useEffect } from 'react';
 import { DaysProvider } from './context/DaysContext';
 import { createBrowserRouter, Link, Navigate, Outlet, Route, RouteObject, RouterProvider, Routes, useRoutes } from 'react-router-dom';
@@ -25,6 +25,9 @@ import Pop from './components/Pop/Pop';
 import Footer from './components/Footer';
 import Loader from './components/Loader/Loader';
 import { NotificationProvider } from './pages/Settings/Notifications/Notifications';
+import { ProgressProvider } from './context/ProgressesContext';
+import Support from './auth/Support';
+import TermsOfUse from './pages/TermsOfUse/TermsOfUse';
 
 const LoadingLayer = () =>{
     const {loading} = useAppLoading();
@@ -39,11 +42,12 @@ const AppLayout = () => {
         <AppLoadingProvider>
             <NotificationProvider>
                 <DaysProvider>
+                    <ProgressProvider>
                     <StatsProviderV2 user={user}>
                        <Header></Header>
          <LoadingLayer />
          <Pop />
-         <div id='app-spinner' style={{maxHeight: 0, overflow: "hidden",  transition: "max-height 0.3s"}}> <Loader size={30}/></div>
+         <div id='app-spinner' style={{maxHeight: 0, overflow: "hidden",  transition: "max-height 1s"}}> <Loader size={30}/></div>
         
          <div id='page'>
             
@@ -53,6 +57,7 @@ const AppLayout = () => {
          </div>
          <Footer></Footer> 
                     </StatsProviderV2>
+                    </ProgressProvider>
               </DaysProvider>
               </NotificationProvider>
             </AppLoadingProvider>
@@ -75,10 +80,7 @@ const appRoutes: RouteObject[] = [{
         path: "/user/:userId",
         element: <User />
     },
-    {
-        path: "/privacy-policy",
-        element: <PrivacyPolicy />
-    }];
+    ];
 const authRoutes: RouteObject[] = [{
 
     index: true,
@@ -106,11 +108,34 @@ const authRoutes: RouteObject[] = [{
 {
     path: "/delete-account/:id/:token",
     element: <DeleteAccount />
-},
+}
+]
+const sharedRoutes: RouteObject[] = [
 {
+    path: "/support",
+    element: <Support />
+},{
+    path: "/terms-of-service",
+    element: <TermsOfUse />
+},{
     path: "/privacy-policy",
     element: <PrivacyPolicy />
-}]
+},
+]
+const SharedLayout = () =>{
+    const {logged, user} = useAuth();
+    return (
+        <>
+        {logged && user? <Header></Header> : <HeaderAuth />}
+        <Outlet />
+         {logged && user? <Footer />: <FooterAuth />}
+        </>
+    )
+}
+const SharedRoutes = () =>{
+    const {logged, user} = useAuth();
+    return 
+}
 const AppRoutes = () =>{
     const {logged, user} = useAuth();
     if(logged && user) return <AppLayout />
@@ -126,9 +151,13 @@ const appRouter = createBrowserRouter([{
 },{
     path: "/verify/:userId/:token",
     element: <Verify />
-}
-]);
+},{
+    children: sharedRoutes,
+    element: <SharedLayout />
+}]);
+
 const loader = document.getElementById("app-loader");
+
 export const removeLoader = () =>{
     if(!loader) return;
     loader.style.display = "none"

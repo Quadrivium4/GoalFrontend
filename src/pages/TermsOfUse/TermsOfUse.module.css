@@ -35,6 +35,8 @@
     width: 100%;
     max-width: 1000px;
 }
-.links a {
+.section a {
     text-decoration: underline;
+    color: rgb(102, 190, 97);
+    font-weight: 300;
 }

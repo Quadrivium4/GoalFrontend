@@ -60,12 +60,18 @@ api.interceptors.response.use(function (response) {
     //-- console.log({response});
     return response
 }, function (error: TBackendError) {
+    //-- console.log("error intercepted", error)
     if (error.response) {
-        const { message, errorCode } = error.response.data;
-        throw { message, errorCode }
+        if(error.response.data){
+            const { message, errorCode } = error.response.data;
+            throw { message, errorCode }
+        }else{
+            throw {message: "Server Error, try again later", errorCode: 500}
+        }
+        
     }
-    //-- console.log({error});
-    return error
+    // //-- console.log({error});
+    throw error
 }
 )
 //api.get("https://stackoverflow.com/questions/51447021/how-to-handle-api-call-error-with-jquery-ajax").then(resp=>  //-- console.log({resp})).catch(err =>  //-- console.log(err))
@@ -100,9 +106,15 @@ protectedApi.interceptors.response.use(function (response) {
     // //-- console.log({response});
     return response
 }, function (error: TBackendError) {
+    //-- console.log("error intercepted", error)
     if (error.response) {
-        const { message, errorCode } = error.response.data;
-        throw { message, errorCode }
+        if(error.response.data){
+            const { message, errorCode } = error.response.data;
+            throw { message, errorCode }
+        }else{
+            throw {message: "Server Error, try again later", errorCode: 500}
+        }
+        
     }
     // //-- console.log({error});
     throw error
@@ -213,7 +225,7 @@ export const uploadImageToCloudinary = async (image: File, onProgress?: (progres
     formData.append("upload_preset", "ml_default")
     const request = new XMLHttpRequest();
     request.upload.addEventListener("progress", (e)=>{
-        console.log("progress", e.loaded, e.total, e.loaded/e.total * 100);
+     //-- console.log("progress", e.loaded, e.total, e.loaded/e.total * 100);
         if(onProgress)onProgress(e.loaded / e.total * 100);
     })
     request.open("post", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
@@ -221,7 +233,7 @@ export const uploadImageToCloudinary = async (image: File, onProgress?: (progres
     const p:TFile =  await new Promise((resolve, rejecct) =>{
          request.addEventListener("loadend", (e)=>{
             if(onProgress) onProgress(100);
-            console.log("loadend", request.response);
+         //-- console.log("loadend", request.response);
             resolve( JSON.parse(request.response));
         })
     })
@@ -244,7 +256,7 @@ function compressImage(file: File, maxWidth = 800, maxHeight = 700, quality = 0.
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-            if(!ctx) return console.log("not context")
+            if(!ctx) return //-- console.log("not context")
           const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
           canvas.width = img.width * ratio;
           canvas.height = img.height * ratio;

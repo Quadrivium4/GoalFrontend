@@ -8,6 +8,11 @@
 # testing
 /coverage
 
+# native
+/android
+/icons
+/ios
+/assets
 # production
 /build
 
