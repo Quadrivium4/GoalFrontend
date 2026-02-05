@@ -156,6 +156,15 @@
     display: flex;
     gap: 10px;
 }
+#settings .bottom-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#settings .bottom-bar #help {
+    font-weight: 300;
+    
+}
 #settings .notifications {
     display: flex;
     flex-direction: column;

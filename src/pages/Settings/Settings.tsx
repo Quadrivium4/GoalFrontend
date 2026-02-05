@@ -15,7 +15,7 @@ import { usePop } from '../../context/PopContext';
 import { NetButton } from '../../components/NetButton/NetButton';
 import GoogleButton from '../../components/GoogleButton';
 import { api, protectedApi, uploadImageToCloudinary } from '../../utils';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { uploadProfileImg } from '../../controllers/user';
 
 // function OldEditing() {
@@ -201,11 +201,13 @@ function Settings() {
             </div>
            
             
-        
+      <div className='bottom-bar'>
      <div className="buttons">
         <button className='outline error' onClick={() =>setPop(<LogOut />)}>logout</button>
         <button className="outline error" onClick={() =>setPop(<DeleteAccount />)}>delete account</button>
-          </div>
+        </div>
+        <Link to={"/support" }><p id='help'>Help</p></Link>
+        </div>
      
     </div>
     </>
