@@ -15,7 +15,11 @@
 #stats .goal {
     position: relative;
 }
-
+#stats .graphs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 #stats .graph::-webkit-scrollbar{
     background-color: var(--background-dark);
     border-radius: 50px;
@@ -25,7 +29,6 @@
     border-radius: 50px;
 }
 #stats .graph-container {
-    padding: 15px 0px 0px 0px;
     max-width: 800px;
 }
 #stats .graph{
