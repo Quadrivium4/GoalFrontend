@@ -87,7 +87,6 @@ export default function ProgressDays({history,  onChange, goal, addLikeToStats}:
                  //-- console.log("day found")
                     let newP = day.progresses.map(p =>{
                         if(p._id == progress._id){
-
                             return {...progress, likes: newLikes}
                         }else{
                             return p
