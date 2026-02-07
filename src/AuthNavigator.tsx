@@ -63,7 +63,7 @@ const authRouter = createBrowserRouter([{
 
 export const HeaderAuth = () =>{
     return (
-    <div id="header" style={{backgroundColor: colors.backgroundDark, width: "100%", padding: "8px 20px", paddingTop: "env(safe-area-inset-top)"}}>
+    <div id="header" style={{backgroundColor: colors.backgroundDark, width: "100%", padding: "8px 20px", paddingTop: "max(env(safe-area-inset-top), 10px)"}}>
         <a href='/'><h1 className="logo">G<span>o</span>al</h1></a>
         <div className="nav-links">
 

@@ -28,6 +28,7 @@ import { NotificationProvider } from './pages/Settings/Notifications/Notificatio
 import { ProgressProvider } from './context/ProgressesContext';
 import Support from './auth/Support';
 import TermsOfUse from './pages/TermsOfUse/TermsOfUse';
+import { Capacitor } from '@capacitor/core';
 
 const LoadingLayer = () =>{
     const {loading} = useAppLoading();
@@ -81,11 +82,12 @@ const appRoutes: RouteObject[] = [{
         element: <User />
     },
     ];
+    console.log(Capacitor.getPlatform());
 const authRoutes: RouteObject[] = [{
 
     index: true,
     path: "/home",
-    element: <LandingPage />
+    element:  Capacitor.getPlatform() == "web" ? <LandingPage /> : <Register />
 
 },
 {
@@ -93,6 +95,7 @@ const authRoutes: RouteObject[] = [{
     element: <DownloadPage />
 },
 {
+    
     path: "/login",
     element: <Login />
 }, {
