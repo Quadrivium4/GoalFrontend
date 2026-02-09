@@ -58,7 +58,7 @@ function GoogleButton({onSuccess = ()=>{}, onError= ()=>{}, children}: {onSucces
     }
   }: {
     google: {
-      webClientId: Capacitor.getPlatform() == "android"? androidClientId : webClientId,
+      webClientId: webClientId,
     }
   }
   useEffect(()=>{

@@ -4,7 +4,7 @@
     justify-content: space-between;
     padding: 10px 40px;
     background-color: var(--background-dark);
-    padding-top: env(safe-area-inset-top);
+    padding-top: max(env(safe-area-inset-top), 10px);
     width: 100%;
 }
 .navLinks {
