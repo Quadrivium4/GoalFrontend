@@ -11,7 +11,6 @@
 # native
 /android
 /icons
-/ios
 /assets
 # production
 /build
