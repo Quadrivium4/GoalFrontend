@@ -122,9 +122,13 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
         if(!root) return;
         
         root.addEventListener("touchstart", onStartTouch, {passive: true})
-        root.addEventListener("scroll", () =>{
-            ////-- console.log("scrolling");
-            root.removeEventListener("touchend", onEndTouch);
+        root.addEventListener("scroll", (e: any) =>{
+            //  console.log("scrolling", {e}, e.target.scrollTop);
+            if(e.target.scrollTop > 0) {
+                root.removeEventListener("touchend", onEndTouch);
+            }
+    
+            
         }, true)
          return ()=> {
             if(!root) return;
@@ -138,13 +142,13 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
     function onStartTouch(e: TouchEvent){
         
         const root = document.getElementById("page");
-        ////-- console.log("touch started target",  e.target)
-        if(!e.target || isScrollableTarget(e.target!)) return ////-- console.log("target isScrollable");
+        console.log("touch started target",  e.target)
+        if(!e.target || isScrollableTarget(e.target!)) return console.log("target isScrollable");
          //-- console.log("touch")
         if(!root) return;
         if(root.scrollTop > 10) return;
          //-- console.log('scroll top', {div: root.scrollTop, root: document.getElementById("root")?.scrollTop});
-         //-- console.log("start touch", e);
+         console.log("start touch tests passed", e);
          if(e && e.touches && e.touches[0]){
             touch.start = e.touches[0].clientY;
         }
@@ -152,13 +156,14 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
         root.addEventListener("touchend", onEndTouch, {passive: true})
     }
     async function onEndTouch(e: TouchEvent){
+        console.log("end touch", e)
         const root = document.getElementById("page");
          if(!root) return;
-         //-- console.log("end touch", e)
+         console.log("end touch", e)
          //-- console.log({touch})
         if(e && e.changedTouches && e.changedTouches[0]){
             let delta = e.changedTouches[0].clientY - touch.start;
-             //-- console.log(e.changedTouches[0].clientY - touch.start)
+             console.log({delta})
 
             if(delta > pullToRefreshDelta){
                const spinner = document.getElementById("app-spinner");
@@ -185,7 +190,7 @@ export const usePullRefreshTouch = (onRefresh: ()=>Promise<any>, ref?: React.Ref
    
 }
 function isScrollableTarget(target: any): boolean{
-    ////-- console.log({target});
+    console.log({target});
 
     ////-- console.log(window.getComputedStyle(target).overflowY)
     if(target.scrollHeight > target.clientHeight && ["scroll", "auto"].includes(window.getComputedStyle(target).overflowY) && target.scrollTop != 0){

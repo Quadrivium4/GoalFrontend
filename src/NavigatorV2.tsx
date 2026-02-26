@@ -48,8 +48,9 @@ const AppLayout = () => {
                        <Header></Header>
          <LoadingLayer />
          <Pop />
-         <div id='app-spinner' style={{maxHeight: 0, overflow: "hidden",  transition: "max-height 1s"}}> <Loader size={30}/></div>
+
         
+                
          <div id='page'>
             
             <div className='page-content'>

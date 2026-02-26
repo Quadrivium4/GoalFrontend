@@ -16,7 +16,7 @@ const TermsOfUse = () => {
             <section id="dati-personali" className={styles.section}>
             <h3 className={styles.title}>Account creation</h3>
 
-            <p>Since the User creates an account on Our Services, agrees his data being collected and used in the way it's defined in our <a href="./privacy-policiy">Privacy Policy</a></p>
+            <p>Since the User creates an account on Our Services, agrees his data being collected and used in the way it's defined in our <a href="/privacy-policy">Privacy Policy</a></p>
             <p>The User can request the deletion of the account, and all the data related to it.</p>
             </section>
             <section className={styles.section}>

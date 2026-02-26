@@ -73,7 +73,7 @@ export const HeaderAuth = () =>{
 }
 export const FooterAuth = () =>{
     return (
-    <div id="auth-footer" style={{display: "flex", width: "100%", justifyContent: "center", gap: 20, backgroundColor: "rgb(30,30,30)", padding: 10, flexWrap: "wrap", marginTop: "auto", paddingBottom: 'max(env(safe-area-inset-bottom), 10px)', }}>
+    <div id="auth-footer" style={{display: "flex", width: "100%", justifyContent: "center", gap: 20, backgroundColor: "var(--background-dark)", padding: 10, flexWrap: "wrap", marginTop: "auto", paddingBottom: 'max(env(safe-area-inset-bottom), 10px)', }}>
         <p>@{new Date().getFullYear()} Goal</p>
         <p>All rights reserved</p>
         <Link to={"/privacy-policy"}>Privacy Policy</Link>
