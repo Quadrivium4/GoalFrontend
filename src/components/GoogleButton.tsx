@@ -15,7 +15,7 @@ const errors = {
 }
 const androidClientId = '487547214-rjii29egdk19ccann40s7bg6r009nq1m.apps.googleusercontent.com';
 const iosClientId = '487547214-9vuupcbd3o4ieahtk4h4t6497r2upjdo.apps.googleusercontent.com' ;
-const webClientId = '487547214-ehru2imfnlr7556i3g9lqqci4ihnmvm1.apps.googleusercontent.com';
+const webClientId = '487547214-baefeuraqc1qj8f1lt89slhc8tudn5s4.apps.googleusercontent.com';
 function GoogleButtonOld({onSuccess = ()=>{}, onError= ()=>{}, children}: {onSuccess?: (res: any)=>void, onError?: (message: string)=>void, children: ReactNode}) {
   const {login, googleLogin} = useAuth();
   const navigate = useNavigate()
