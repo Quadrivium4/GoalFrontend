@@ -70,7 +70,7 @@ button.google-button svg{
     width: 100%;
     top: 0;
     transition: 1s;
-    padding-top: env(safe-area-inset-top);
+    padding-top: max(env(safe-area-inset-top), 10px);
     z-index: 300;
 }
 .app-loader-anim{
