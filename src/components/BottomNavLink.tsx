@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { IconType } from 'react-icons';
+import { IconType } from 'react-icons/lib';
 import { Link, useLocation, NavLink} from 'react-router-dom';
 
 const BottomNavLink = ({href, Icon}: {href: string, Icon: IconType}) =>{

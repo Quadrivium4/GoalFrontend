@@ -6,6 +6,8 @@ import styles from "./Register.module.css"
 import { CredentialResponse, GoogleLogin, useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google';
 import Login from '../Login';
 import GoogleButton from '../../components/GoogleButton';
+import AppleButton from '../../components/AppleButton';
+import { Capacitor } from '@capacitor/core';
 // //-- console.log(styles)
 
 function Register() {
@@ -25,7 +27,7 @@ function Register() {
     <div className={styles.register}>
       <h1 className={styles.title}>Register</h1>
       <div className={'form'} >
-        <input onChange={(e) =>setName(e.target.value)} value={name} type='username' autoComplete='username' placeholder='username'></input>
+        <input onChange={(e) =>setName(e.target.value)} value={name} type='name' autoComplete='name' placeholder='name'></input>
         <input onChange={(e) =>setEmail(e.target.value)} value={email} type='email' autoComplete='email' placeholder='email'></input>
         <input onChange={(e) =>setPassword(e.target.value)} value={password} type='password' placeholder='password'></input>
         <button type='submit' onClick={()=>{
@@ -41,6 +43,7 @@ function Register() {
         }}>Submit</button>
         <p>- or -</p>
         <GoogleButton onSuccess={handleGoogleLogin} onError={message.error} >Sign up With google</GoogleButton>
+         {Capacitor.getPlatform() == "ios" ? <AppleButton onSuccess={()=>{}} onError={message.error}>Sign up with apple</AppleButton> : null}
          <p>Already have an account? <Link to={"/login"}>Login</Link></p>
       </div>
       {/* <Login /> */}

@@ -62,6 +62,7 @@ type ContextProps = TAuthStateProps & {
    // googleLogin: (credentials: CredentialResponse) =>Promise<void>,
     changeEmail: (form: TLoginForm) => Promise<void>,
     googleLogin: (token: string) =>Promise<void>,
+    appleLogin: (token: string) =>Promise<void>,
     register: (form: TRegisterForm) => Promise<void>,
     logout: () => Promise<void>, 
     verify: (credentials: TVerifyProps, controller: AbortController) =>Promise<void>, 
@@ -189,6 +190,26 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
         
         //return { user, aToken };
     }
+    const appleLogin = async(idToken: string) =>{
+         try {
+            setLoading(true);
+            //await wait(5000)
+            const res  = await api.post("/apple-login", {idToken});
+             //-- console.log(res.data)
+            const { user, aToken }: TUserAuthResponse= res.data;
+            // //-- console.log({ user, aToken });
+            localStorage.setItem("aToken", aToken);
+            updateProtectedApiToken(aToken)
+            
+            dispatch({ type: "LOGIN", payload: { aToken, user } });
+            
+         }catch(err){
+            //-- console.log("error in google login")
+            setLoading(false)
+         }
+        
+        //return { user, aToken };
+    }
     const register = async({name, email, password}: TRegisterForm) =>{
         setLoading(true)
         //await wait(5000)
@@ -278,7 +299,7 @@ const AuthProvider = ({children } : {children: ReactNode}) =>{
     }
 
     return (
-        <AuthContext.Provider value={{...state,testGbug, login,googleLogin, register, logout, changeEmail, verify, verifyPassword, deleteAccount,  updateUserProfileImage, updateUser, editUser, setLoading, deleteAccountRequest}}>
+        <AuthContext.Provider value={{...state,testGbug, appleLogin, login,googleLogin, register, logout, changeEmail, verify, verifyPassword, deleteAccount,  updateUserProfileImage, updateUser, editUser, setLoading, deleteAccountRequest}}>
                 {children}
         </AuthContext.Provider>
     )

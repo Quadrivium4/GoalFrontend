@@ -56,7 +56,11 @@ a{
     all: unset;
     cursor: pointer;
     font-size: 18px;
+    transition: 0.2s;
     
+}
+a:hover{
+    opacity: 0.75;
 }
 p{
     color: var(--foreground);

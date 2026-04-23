@@ -57,6 +57,17 @@ height: 100%;
 button.google-button  {
     position: relative;
 }
+button.apple-button {
+    position: relative;
+    color: white;
+}
+button.apple-button svg{
+    position: absolute;
+    left: 10px;
+    width: 24px;
+    height: 24px;
+
+}
 button.google-button svg{
     position: absolute;
     left: 10px;

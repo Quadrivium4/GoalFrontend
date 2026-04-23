@@ -20,7 +20,10 @@ const config: CapacitorConfig = {
         apple: false,      // Apple uses system APIs, no external deps
         twitter: false   // false = disabled (not bundled)
       }
-    }
+    },
+    PushNotifications: {
+      
+    },
   }
 };
 

@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useNavigation, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import goalsImg from '../assets/images/goals.jpg';
-import statsImg from '../assets/images/stats.jpg';
-import friendsImg from '../assets/images/friends.jpg';
+import goalsImg from '../assets/images/home1.jpg';
+import statsImg from '../assets/images/stats1.jpg';
+import friendsImg from '../assets/images/friends.png';
+import appStoreDownload from "../assets/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"
+import googlePlayDownload from "../assets/images/GetItOnGooglePlay_Badge_Web_color_English.svg"
 import "./LandingPage.css"
 
 function LandingPage() {
@@ -46,9 +48,11 @@ function LandingPage() {
                 <h1>Set your goal</h1>
                 <p>stay motivated, work hard and you will achieve it!</p>
                 <div className='buttons'>
-                     {window.matchMedia("(display-mode: standalone)").matches? <Link to={"/login"}><button>Login</button></Link>: <button onClick={handleDownload}>download</button>}
-                    <Link to={"/register"}><button className='outline'>Sign up</button></Link>
-                </div>
+                 <Link to={"/register"}><button>sign up</button></Link>
+                 <Link to={"/login"} ><button className='outline'>login</button></Link>
+                 </div>
+                 <p style={{fontStyle: "italic"}}>- It's free! -</p>
+                
             </div>
             
             <img src={goalsImg} alt='goals screenshot' className='app-screenshot1' />
@@ -80,6 +84,7 @@ function LandingPage() {
             <img src={friendsImg} alt='goals screenshot' className='app-screenshot3' />
         </section>
          </div>
+        
         </div>
     );
 }

@@ -41,13 +41,19 @@ const getCloudinarySignature = async(): Promise<any> =>{
     const res = await protectedApi.get("/cloudinary-signature");
     return res.data
 }
+const postPushNotificationToken = async(token: string): Promise<any> =>{
+    const res = await protectedApi.post("/push-notification-token",{deviceToken: token});
+    console.log("res", res);
+    return res.data;
+}
 
 let controller = {
     uploadProfileImg,
     getUser,
     changeEmail,
     putUser,
-    getCloudinarySignature
+    getCloudinarySignature,
+    postPushNotificationToken
 }
 export  {
     uploadProfileImg,
@@ -55,6 +61,7 @@ export  {
     changeEmail,
     getProfile,
     putUser,
-    getCloudinarySignature
+    getCloudinarySignature,
+    postPushNotificationToken
 }
 export default controller

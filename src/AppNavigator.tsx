@@ -12,6 +12,9 @@ import Pop from './components/Pop/Pop';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import Loader from './components/Loader/Loader';
 import { useAppLoading } from './context/AppLoadingContext';
+import { useEffect } from 'react';
+import { initPushNotifications } from './utils/pushNotifications';
+import { Capacitor } from '@capacitor/core';
 
 const LoadingLayer = () =>{
     const {loading} = useAppLoading();
@@ -70,6 +73,7 @@ const appRouter = createBrowserRouter([{
 ]}]);
 
 const AppNavigator = () =>{
+    
     //usePullRefreshTouch(() => window.location.reload())
     return (
         <>

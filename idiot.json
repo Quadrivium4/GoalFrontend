@@ -1,0 +1,15 @@
+{
+    "result": {
+        "profile": {
+            "familyName": "Giacobbe",
+            "user": "000171.361b1ae6164b45c8b615208ac6f4c3f0.1948",
+            "email": "miguelgiacobbe@gmail.com",
+            "givenName": "Miguel"
+        },
+        "accessToken": {
+            "token": "c8cc49e33d8aa429babe4b19aca0e3390.0.mrxr.vIjXwii9HfsGSCwNa_ZMiA"
+        },
+        "idToken": "eyJraWQiOiI1aXEzM2xKQllqIiwiYWxnIjoiUlMyNTYifQ.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY29tLmdvYWxhcHAuaXQuYXBwIiwiZXhwIjoxNzc2MjQ2NjAzLCJpYXQiOjE3NzYxNjAyMDMsInN1YiI6IjAwMDE3MS4zNjFiMWFlNjE2NGI0NWM4YjYxNTIwOGFjNmY0YzNmMC4xOTQ4IiwiY19oYXNoIjoiQi1haXBIYkNkRXM2b1I2T1lPM2dYZyIsImVtYWlsIjoibWlndWVsZ2lhY29iYmVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF1dGhfdGltZSI6MTc3NjE2MDIwMywibm9uY2Vfc3VwcG9ydGVkIjp0cnVlfQ.IVNfl_24meIA1l8gF-tebVF_S4H-eCqSClDLdoKEXEB2dqnNDRAHP3MdobLNAyUQdFjherPN2XlsqMgenEKT9UgA-YDGL1J18ZpOd7gFJlllWK9YCsu2fd5CiieVzSO1Ytq6Fl8p6zO2mHXfFXgX9iAheW7In-TRngTf6FdWsgTuUsEvzqSFvg1fTqq0iV2hoCO8nYrNPabRNKFVeHR7o6eE76Z3KYLtKOVst7hgh6pXufkK9GvlvNRrWFXCCe81WlBniopWpanARCkiWpYc5bjHQ-DFOsigFCxIEDSboJcljWBsRJUuFrcb0SAt7t0A0z6noH0xawfdb4sLkOBS-A"
+    },
+    "provider": "apple"
+}

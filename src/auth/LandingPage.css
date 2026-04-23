@@ -18,7 +18,7 @@
     display: flex;
     width: 100%;
     max-width: 800px;
-    height: 70vh;
+    height: 80vh;
     align-items: center;
     padding: 0px 20px;
     /* border-left: 1px solid rgb(95, 95, 95);
@@ -32,7 +32,10 @@
     max-width: 240px;
     gap: 10px;
 }
-
+#landing-page section img {
+    box-shadow: 0px 0px 20px black;
+    width: 380px;
+}
 #landing-page section .text .buttons{
     display: flex;
     gap: 10px;
@@ -41,7 +44,6 @@
     transform: rotate(-28deg);
     right: 0px;
     top: -50px;
-    width: 400px;
     position: absolute;
     opacity: 0.7;
 }
@@ -58,7 +60,7 @@
     width: 50%;
 }
 #landing-page section#track-progress img{
-    width: 400px;
+    
     transform: rotate(25deg);
     position: absolute;
     opacity: 0.7;
@@ -69,13 +71,25 @@
 
     right: 0px;
     top: -20px;
-    width: 400px;
     position: absolute;
     opacity: 0.7;
     background-color: rebeccapurple;
 }
 #landing-page #share-friends{
     /* overflow: hidden; */
+}
+.buttons-floating {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(transparent, black);
+    z-index: 100;
 }
 @media(max-width: 800px) {
     #landing-page section img.app-screenshot1 {
@@ -95,13 +109,19 @@
         width: 300px;
         right: -70px;
     }
+    .download-button{
+        height: 45px;
+    }
 
+}
+ .download-button{
+    height: 45px;
 }
 @media(max-width: 500px){
     #landing-page section img.app-screenshot1 {
             width: 300px;
-            right: -120px;
-            top: 0px;
+            right: -180px;
+            top: -20px;
         }
     #landing-page section#track-progress img {
         width: 240px;
@@ -111,8 +131,10 @@
     }
     #landing-page section img.app-screenshot3 {
         width: 300px;
-        right: -90px;
-        top: 0px;
+        right: -180px;
+        top: -20px;
     }
-
+   .download-button{
+        height: 35px;
+    }
 }

@@ -7,6 +7,8 @@ import { AxiosError } from 'axios';
 import classes from "./Form.module.css"
 import GoogleButton from '../components/GoogleButton';
 import styles from "./Login.module.css"
+import AppleButton from '../components/AppleButton';
+import { Capacitor } from '@capacitor/core';
 const errors = {
   INVALID_EMAIL: 1002,
   INVALID_PASSWORD: 1003,
@@ -43,6 +45,7 @@ function Login() {
         <button type='submit' onClick={handleLogin}>Submit</button>
         <p>- or - </p>
         <GoogleButton onSuccess={onGoogleLogin} onError={message.error}>Sign in with google</GoogleButton>
+        {Capacitor.getPlatform() == "ios" ? <AppleButton onSuccess={()=>{}} onError={message.error}>Sign in with apple</AppleButton> : null}
         <p>Don't have an account yet? <Link to={"/register"}>Register</Link></p>
         <p>forgot password? <Link to={"/reset-password"} state={{email}} >Reset</Link></p>
   

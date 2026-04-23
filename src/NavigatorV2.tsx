@@ -29,6 +29,9 @@ import { ProgressProvider } from './context/ProgressesContext';
 import Support from './auth/Support';
 import TermsOfUse from './pages/TermsOfUse/TermsOfUse';
 import { Capacitor } from '@capacitor/core';
+import { InitializeOptions, SocialLogin } from '@capgo/capacitor-social-login';
+import { baseUrl } from './constants';
+import { initPushNotifications } from './utils/pushNotifications';
 
 const LoadingLayer = () =>{
     const {loading} = useAppLoading();
@@ -38,7 +41,14 @@ const LoadingLayer = () =>{
 }
 const AppLayout = () => {
     const {user} = useAuth();
+    useEffect(()=>{
+        console.log("app navigator", Capacitor.getPlatform());
+        if(Capacitor.getPlatform() == "ios" || Capacitor.getPlatform() == "android"){
+            initPushNotifications();
+        }
+    },[])
     if(! user) return <div> invalid</div>
+
     return (
         <AppLoadingProvider>
             <NotificationProvider>
@@ -170,10 +180,38 @@ export const setLoader = () =>{
     if(!loader) return;
     loader.style.display = "flex"
 }
+const iosClientId = '487547214-9vuupcbd3o4ieahtk4h4t6497r2upjdo.apps.googleusercontent.com' ;
+const webClientId = '487547214-baefeuraqc1qj8f1lt89slhc8tudn5s4.apps.googleusercontent.com';
 const NavigatorV2 = () =>{
     const {logged, user, loading} = useAuth();
-    
+    const initializeOptions: InitializeOptions = Capacitor.getPlatform() == "ios"? {
+        google: {
+          iOSClientId: iosClientId,
+          mode: "online"
+        },
+        apple: {
+            //   clientId: "com.goalapp.it.app",
+            //   redirectUrl: baseUrl + "/login-with-apple",
+            }
+          
+      }: {
+        google: {
+          webClientId: webClientId,
+        },
+        apple: {
+            //   clientId: "com.goalapp.it.app",
+            //   redirectUrl: baseUrl + "/login-with-apple",
+            }
+      }
+      useEffect(()=>{
+        console.log("Initializing social login with options", initializeOptions);
+        
+        
+        SocialLogin.initialize(initializeOptions);
+      },[]);
     useEffect(()=>{
+
+        
         //-- console.log("navigator",{logged, user, loading})
     }, [logged, user, loading])
     useEffect(() =>{
